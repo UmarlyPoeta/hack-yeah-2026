@@ -95,6 +95,11 @@ struct SpikePage {
 
   // --- 2. AVSession + background audio
   private async startSession(): Promise<void> {
+    if (this.session !== null) {
+      this.log('AVSESSION już aktywna, gram ponownie');
+      this.player.playRawFile(this.ctx(), 'test.mp3');
+      return;
+    }
     try {
       const s = await avSession.createAVSession(this.ctx(), 'SpacerZHistoria', 'audio');
       this.session = s;
@@ -159,7 +164,9 @@ struct SpikePage {
             keepTime: 15,
             clickAction: await this.agent(),
             layoutData: {
-              layoutType: liveViewManager.LayoutType.LAYOUT_TYPE_NAVIGATION
+              layoutType: liveViewManager.LayoutType.LAYOUT_TYPE_NAVIGATION,
+              currentNavigationIcon: 'spike_nav.png',     // file name in resources/rawfile
+              navigationIcons: ['spike_nav.png']
             }
           }
         }
@@ -209,9 +216,9 @@ struct SpikePage {
       obj.on('status', (sessionId: string, networkId: string, status: string) => {
         this.log('DATA OBJECT status: ' + status + ' (' + networkId.slice(0, 8) + ')');
       });
-      await obj.setSessionId('spacer-spike-0001');
+      await obj.setSessionId('spacer_spike_0001');
       this.dataObject = obj;
-      this.log('DATA OBJECT OK: sesja spacer-spike-0001 (na drugim urządzeniu ta sama sesja = synchronizacja)');
+      this.log('DATA OBJECT OK: sesja spacer_spike_0001 (na drugim urządzeniu ta sama sesja = synchronizacja)');
     } catch (e) {
       this.log('DATA OBJECT ' + describe(e));
     }
