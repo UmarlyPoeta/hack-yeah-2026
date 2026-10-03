@@ -15,10 +15,6 @@ export class NarratorPlayer {
 
       this.avPlayer.on('stateChange', async (state: string) => {
         switch (state) {
-          case 'idle':
-            let fdPath = await context.resourceManager.getRawFd(fileName);
-            this.avPlayer!.fdSrc = { fd: fdPath.fd, offset: fdPath.offset, length: fdPath.length };
-            break;
           case 'initialized':
             this.avPlayer!.prepare();
             break;
@@ -32,6 +28,11 @@ export class NarratorPlayer {
             break;
         }
       });
+
+      // Pobieramy deskryptor i ustawiamy źródło (to przełączy stan z idle na initialized)
+      let fdPath = await context.resourceManager.getRawFd(fileName);
+      this.avPlayer.fdSrc = { fd: fdPath.fd, offset: fdPath.offset, length: fdPath.length };
+
     } catch (error) {
       console.error('Błąd odtwarzania: ' + JSON.stringify(error));
     }
