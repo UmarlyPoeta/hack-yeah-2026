@@ -1,4 +1,9 @@
 import { NarratorPlayer } from '../audio/NarratorPlayer';
+import { Teleprompter } from '../components/Teleprompter';
+import { RouteStrip } from '../components/RouteStrip';
+import { Radar } from '../components/Radar';
+import { SessionBadge } from '../components/SessionBadge';
+import { DeepDiveSheet } from '../components/DeepDiveSheet';
 import common from '@ohos.app.ability.common';
 import router from '@ohos.router';
 
@@ -8,71 +13,96 @@ struct WalkPage {
   private player: NarratorPlayer = new NarratorPlayer();
   @State currentText: string = 'Zaczynamy spacer. Pierwszy przystanek: Barbakan w Krakowie, ok. 120 m przed nami.';
   @State poiName: string = 'Barbakan w Krakowie';
+  @State segmentKind: string = 'WELCOME';
+  @State nextPoiName: string = 'Brama Floriańska';
+  @State distanceM: number = 120;
+  @State etaSeconds: number = 90;
+  @State sessionState: string = 'WALKING';
+  @State bearingAngle: number = 45;
+  @State isDeepDiveOpen: boolean = false;
 
   build() {
-    Column() {
-      // Górny pasek
-      Row() {
-        Text('Spacer z historią')
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(Color.Black)
-        Blank()
-        Text('WALKING')
-          .fontSize(12)
-          .fontColor(Color.Green)
-          .fontWeight(FontWeight.Bold)
-      }
-      .width('100%')
-      .padding(16)
-      .backgroundColor(Color.White)
-
-      // Główna karta z treścią
+    Stack() {
       Column() {
-        Text(this.poiName)
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(Color.Blue)
-          .margin({ bottom: 12 })
+        // Górny pasek statusu z komponentem SessionBadge
+        Row() {
+          Text('Spacer z historią')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(Color.Black)
+          Blank()
+          SessionBadge({ sessionState: this.sessionState })
+        }
+        .width('100%')
+        .padding(16)
+        .backgroundColor(Color.White)
 
-        Text(this.currentText)
-          .fontSize(16)
-          .fontColor('#666666')
-          .lineHeight(24)
-          .margin({ bottom: 20 })
+        // Pasek trasy (RouteStrip)
+        RouteStrip({
+          nextPoiName: this.nextPoiName,
+          distanceM: this.distanceM,
+          etaSeconds: this.etaSeconds
+        })
+          .margin({ top: 12 })
 
-        Button('Odsłuchaj narrację (Test MP3)')
-          .onClick(() => {
+        // Radar kierunkowy przestrzenny (Radar)
+        Radar({
+          poiName: this.nextPoiName,
+          distanceM: this.distanceM,
+          bearingAngle: this.bearingAngle
+        })
+          .margin({ top: 8 })
+
+        Blank()
+
+        // Główny teleprompter z odtwarzaczem
+        Teleprompter({
+          currentText: this.currentText,
+          poiName: this.poiName,
+          segmentKind: this.segmentKind,
+          onPlayClick: () => {
             let context = getContext(this) as common.UIAbilityContext;
             this.player.playRawFile(context, 'test.mp3');
-          })
-          .width('100%')
-          .height(45)
-          .backgroundColor('#007DFF')
-          .fontColor(Color.White)
-      }
-      .width('90%')
-      .padding(20)
-      .backgroundColor(Color.White)
-      .borderRadius(16)
-      .margin({ top: 40 })
-
-      Blank()
-
-      // Przycisk wyjścia
-      Button('Zakończ spacer')
-        .backgroundColor('#FF4D4F')
-        .fontColor(Color.White)
-        .width('80%')
-        .height(45)
-        .margin({ bottom: 30 })
-        .onClick(() => {
-          router.back();
+          }
         })
+
+        // Przycisk testowy otwierający DeepDive (DeepDiveSheet)
+        Button('Opowiedz więcej (Deep Dive)')
+          .width('90%')
+          .height(40)
+          .margin({ top: 16 })
+          .backgroundColor('#52C41A')
+          .fontColor(Color.White)
+          .onClick(() => {
+            this.isDeepDiveOpen = true;
+          })
+
+        Blank()
+
+        // Przycisk wyjścia
+        Button('Zakończ spacer')
+          .backgroundColor('#FF4D4F')
+          .fontColor(Color.White)
+          .width('80%')
+          .height(45)
+          .margin({ bottom: 30 })
+          .onClick(() => {
+            router.back();
+          })
+      }
+      .width('100%')
+      .height('100%')
+      .backgroundColor('#EFEFEF')
+      .alignItems(HorizontalAlign.Center)
+
+      // Nakładka Sheet dla Deep Dive
+      DeepDiveSheet({
+        isShown: $isDeepDiveOpen,
+        title: this.poiName,
+        content: 'Barbakan w Krakowie – historyczny barbakan, zachowany w świetnym stanie bastion obronny będący dawniej częścią murów miejskich Krakowa. Wybudowany pod koniec XV wieku...'
+      })
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#EFEFEF')
-    .alignItems(HorizontalAlign.Center)
   }
 }

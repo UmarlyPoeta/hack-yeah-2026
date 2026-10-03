@@ -1,5 +1,8 @@
 {
   "src": [
-    "pages/WalkPage"
+    "pages/StartPage",
+    "pages/WalkPage",
+    "pages/PrivacyPage",
+    "pages/SettingsPage"
   ]
 }
