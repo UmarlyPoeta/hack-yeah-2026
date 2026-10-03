@@ -1,6 +1,10 @@
+import { Eyebrow, Fonts, Motion, Palette } from '../common/Theme';
+
 @Component
 export struct Teleprompter {
-  @Prop currentText: string = 'Oczekiwanie na narrację...';
+  @Prop @Watch('reveal') currentText: string = 'Oczekiwanie na narrację...';
+  @State private textOpacity: number = 1;
+  @State private textShift: number = 0;
   @Prop poiName: string = 'Najbliższy punkt';
   @Prop segmentKind: string = 'WELCOME';
   onPlayClick: () => void = () => {};
@@ -8,41 +12,84 @@ export struct Teleprompter {
   build() {
     Column() {
       Row() {
-        Text(this.segmentKind)
-          .fontSize(12)
-          .fontColor(Color.White)
-          .backgroundColor('#007DFF')
-          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-          .borderRadius(4)
+        Eyebrow(this.kindLabel(), Palette.BRICK)
         Blank()
         Text(this.poiName)
-          .fontSize(14)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
+          .fontFamily(Fonts.ITALIC)
+          .fontSize(15)
+          .fontColor(Palette.INK_SOFT)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .layoutWeight(1)
+          .textAlign(TextAlign.End)
+          .margin({ left: 12 })
       }
       .width('100%')
-      .margin({ bottom: 12 })
 
       Text(this.currentText)
-        .fontSize(18)
-        .fontColor('#111111')
-        .lineHeight(26)
+        .fontFamily(Fonts.TEXT)
+        .fontSize(22)
+        .lineHeight(32)
+        .fontColor(Palette.INK)
         .maxLines(5)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
         .width('100%')
-        .margin({ bottom: 16 })
+        .margin({ top: 14 })
+        .opacity(this.textOpacity)
+        .translate({ y: this.textShift })
 
-      Button('Odsłuchaj narrację')
-        .onClick(() => this.onPlayClick())
-        .width('100%')
-        .height(40)
-        .backgroundColor('#007DFF')
-        .fontColor(Color.White)
+      Row({ space: 14 }) {
+        Stack() {
+          Circle({ width: 52, height: 52 })
+            .fill(Palette.INK)
+          Polygon({ width: 16, height: 18 })
+            .points([[0, 0], [16, 9], [0, 18]])
+            .fill(Palette.PAPER)
+            .margin({ left: 4 })
+        }
+        Column() {
+          Text('Odsłuchaj narrację')
+            .fontSize(15)
+            .fontWeight(FontWeight.Medium)
+            .fontColor(Palette.INK)
+          Text('głos przewodnika')
+            .fontSize(12)
+            .fontColor(Palette.INK_FAINT)
+            .margin({ top: 2 })
+        }
+        .alignItems(HorizontalAlign.Start)
+      }
+      .width('100%')
+      .margin({ top: 20 })
+      .clickEffect({ level: ClickEffectLevel.LIGHT, scale: 0.97 })
+      .onClick(() => this.onPlayClick())
     }
-    .padding(16)
-    .backgroundColor(Color.White)
-    .borderRadius(12)
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 4 })
-    .width('90%')
+    .width('100%')
+    .padding(22)
+    .backgroundColor(Palette.CARD)
+    .borderRadius(18)
+    .border({ width: 1, color: Palette.RULE, radius: 18 })
+  }
+
+  /** A new narration segment fades in from slightly below. */
+  reveal(): void {
+    this.textOpacity = 0;
+    this.textShift = 10;
+    this.getUIContext().animateTo({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT }, () => {
+      this.textOpacity = 1;
+      this.textShift = 0;
+    });
+  }
+
+  private kindLabel(): string {
+    switch (this.segmentKind) {
+      case 'WELCOME': return 'POWITANIE';
+      case 'APPROACH': return 'ZBLIŻAMY SIĘ';
+      case 'ARRIVAL': return 'NA MIEJSCU';
+      case 'BRIDGE': return 'PO DRODZE';
+      case 'DEEP_DIVE': return 'OPOWIEŚĆ';
+      case 'MISSED': return 'MINĘLIŚMY';
+      default: return this.segmentKind;
+    }
   }
 }

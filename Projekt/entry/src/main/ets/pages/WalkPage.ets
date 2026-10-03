@@ -6,12 +6,17 @@ import { SessionBadge } from '../components/SessionBadge';
 import { DeepDiveSheet } from '../components/DeepDiveSheet';
 import common from '@ohos.app.ability.common';
 import router from '@ohos.router';
+import { Eyebrow, Fonts, Motion, Palette } from '../common/Theme';
 
 @Entry
 @Component
 struct WalkPage {
+  @State private entered: boolean = false;
   private player: NarratorPlayer = new NarratorPlayer();
-  @State currentText: string = 'Zaczynamy spacer. Pierwszy przystanek: Barbakan w Krakowie, ok. 120 m przed nami.';
+
+  @State currentText: string =
+    'Zaczynamy spacer. Pierwszy przystanek: Barbakan w Krakowie, ok. 120 m przed nami.';
+
   @State poiName: string = 'Barbakan w Krakowie';
   @State segmentKind: string = 'WELCOME';
   @State nextPoiName: string = 'Brama Floriańska';
@@ -20,77 +25,124 @@ struct WalkPage {
   @State sessionState: string = 'WALKING';
   @State bearingAngle: number = 45;
   @State isDeepDiveOpen: boolean = false;
+  // mock until WalkViewModel (P2) provides the itinerary
+  @State laterStops: string[] = ['Kościół Mariacki', 'Sukiennice', 'Collegium Maius', 'Wawel'];
 
   // Leaving the walk page (button or system back) must stop the narration.
   aboutToDisappear(): void {
     this.player.release();
   }
 
+  pageTransition() {
+    PageTransitionEnter({ duration: 420, curve: Motion.EASE_OUT })
+      .opacity(0)
+      .translate({ y: 24 })
+    PageTransitionExit({ duration: 220, curve: Curve.EaseIn })
+      .opacity(0)
+  }
+
   build() {
     Stack() {
       Column() {
-        // Górny pasek statusu z komponentem SessionBadge
         Row() {
-          Text('Spacer z historią')
-            .fontSize(18)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(Color.Black)
+          Eyebrow('SPACER · KRAKÓW')
           Blank()
           SessionBadge({ sessionState: this.sessionState })
         }
         .width('100%')
-        .padding(16)
-        .backgroundColor(Color.White)
+        .margin({ top: 8 })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 0 })
 
-        // Pasek trasy (RouteStrip)
-        RouteStrip({
-          nextPoiName: this.nextPoiName,
-          distanceM: this.distanceM,
-          etaSeconds: this.etaSeconds
-        })
-          .margin({ top: 12 })
+        Row() {
+          RouteStrip({
+            nextPoiName: this.nextPoiName,
+            distanceM: this.distanceM,
+            etaSeconds: this.etaSeconds
+          })
+            .layoutWeight(1)
+          Radar({
+            poiName: this.nextPoiName,
+            distanceM: this.distanceM,
+            bearingAngle: this.bearingAngle
+          })
+            .margin({ left: 16 })
+        }
+        .width('100%')
+        .alignItems(VerticalAlign.Top)
+        .margin({ top: 28 })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 1 * Motion.STAGGER_MS })
 
-        // Radar kierunkowy przestrzenny (Radar)
-        Radar({
-          poiName: this.nextPoiName,
-          distanceM: this.distanceM,
-          bearingAngle: this.bearingAngle
-        })
-          .margin({ top: 8 })
+        Column() {
+          Eyebrow('DALEJ NA TRASIE')
+          Text(this.laterStops.join('  ·  '))
+            .fontFamily(Fonts.ITALIC)
+            .fontSize(17)
+            .lineHeight(25)
+            .fontColor(Palette.INK_SOFT)
+            .margin({ top: 6 })
+        }
+        .width('100%')
+        .alignItems(HorizontalAlign.Start)
+        .padding({ top: 16 })
+        .margin({ top: 22 })
+        .border({ width: { top: 1 }, color: Palette.RULE })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 2 * Motion.STAGGER_MS })
 
         Blank()
 
-        // Główny teleprompter z odtwarzaczem
         Teleprompter({
           currentText: this.currentText,
           poiName: this.poiName,
           segmentKind: this.segmentKind,
           onPlayClick: () => {
-            let context = getContext(this) as common.UIAbilityContext;
+            const context = getContext(this) as common.UIAbilityContext;
             this.player.playRawFile(context, 'test.mp3');
           }
         })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 3 * Motion.STAGGER_MS })
 
-        // Przycisk testowy otwierający DeepDive (DeepDiveSheet)
-        Button('Opowiedz więcej (Deep Dive)')
-          .width('90%')
-          .height(40)
-          .margin({ top: 16 })
-          .backgroundColor('#52C41A')
-          .fontColor(Color.White)
-          .onClick(() => {
-            this.isDeepDiveOpen = true;
-          })
+        Button({ type: ButtonType.Normal }) {
+          Row() {
+            Text('Opowiedz więcej o tym miejscu')
+              .fontSize(15)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(Palette.INK)
+            Blank()
+            Text('↑')
+              .fontSize(17)
+              .fontColor(Palette.INK)
+          }
+          .width('100%')
+          .padding({ left: 20, right: 20 })
+        }
+        .width('100%')
+        .height(52)
+        .borderRadius(14)
+        .backgroundColor(Color.Transparent)
+        .border({ width: 1, color: Palette.INK, radius: 14 })
+        .margin({ top: 14 })
+        .clickEffect({ level: ClickEffectLevel.LIGHT, scale: 0.98 })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 4 * Motion.STAGGER_MS })
+        .onClick(() => {
+          this.isDeepDiveOpen = true;
+        })
 
-        Blank()
-
-        // Przycisk wyjścia
-        Button('Zakończ spacer')
-          .backgroundColor('#FF4D4F')
-          .fontColor(Color.White)
-          .width('80%')
-          .height(45)
-          .margin({ bottom: 30 })
+        Text('Zakończ spacer')
+          .fontSize(15)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(Palette.BRICK)
+          .padding(12)
+          .margin({ top: 10, bottom: 8 })
           .onClick(() => {
             this.player.release();
             router.back();
@@ -98,14 +150,18 @@ struct WalkPage {
       }
       .width('100%')
       .height('100%')
-      .backgroundColor('#EFEFEF')
-      .alignItems(HorizontalAlign.Center)
+      .padding({ left: 24, right: 24 })
+      .backgroundColor(Palette.PAPER)
+      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+    .onAppear(() => {
+      this.entered = true;
+    })
 
-      // Nakładka Sheet dla Deep Dive
       DeepDiveSheet({
         isShown: $isDeepDiveOpen,
         title: this.poiName,
-        content: 'Barbakan w Krakowie – historyczny barbakan, zachowany w świetnym stanie bastion obronny będący dawniej częścią murów miejskich Krakowa. Wybudowany pod koniec XV wieku...'
+        content: 'Barbakan (zwany też Rondlem) – barbakan, najbardziej wysunięta na północ część fortyfikacji ' +
+          'miejskich Krakowa. Znajduje się na Plantach, przed Bramą Floriańską, po południowej stronie ul. Basztowej.'
       })
     }
     .width('100%')

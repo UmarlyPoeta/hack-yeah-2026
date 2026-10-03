@@ -1,7 +1,3 @@
-// One location reading. Mirrors `GeoFix` in docs/CONTRACTS.md.
-export interface GeoFix {
-  lat: number;          // WGS84
-  lon: number;
-  accuracyM: number;
-  t: number;            // ms, monotonic clock
-}
+// GeoFix lives in GeoPoint.ets (it extends GeoPoint, so geo functions accept it).
+// Kept as a re-export so existing imports from '../model/GeoFix' keep working.
+export { GeoFix } from './GeoPoint';

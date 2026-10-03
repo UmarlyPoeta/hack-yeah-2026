@@ -7,7 +7,7 @@ cd server
 cp .env.example .env     # optional; defaults work without it
 npm start                # prints localhost and LAN addresses for the emulator
 npm test                 # offline: Wikipedia responses are replayed from test/fixtures/
-npm run record-fixtures  # re-record test/fixtures/ from the live API (needs internet)
+npm run record-fixtures  # re-record test/fixtures/ (Wikipedia + Wikidata) from the live APIs (needs internet)
 ```
 
 ## Endpoints
@@ -21,10 +21,18 @@ npm run record-fixtures  # re-record test/fixtures/ from the live API (needs int
 
 ## `/v1/pois` data flow
 
-1. The position is snapped to a ~100 m grid cell. One cache entry serves the whole cell (`.cache/pois-areas.json`, TTL 24 h).
-2. Cache miss: MediaWiki GeoSearch on pl.wikipedia.org (radius + 100 m margin, continuations followed so every page gets its intro extract). Areas (`city`, `adm*`, `region`, …, `dim ≥ 5000`) and pages without text are dropped.
-3. Wikipedia down or timed out (8 s): expired cache entry, then `fixtures/pois-krakow.json`. The response says which one in `source` (`live` / `cache` / `fixture`). The endpoint never returns 5xx for an upstream failure.
-4. `distanceM` is computed for the real position, filtered by `radius`, sorted, max 50.
+1. The position is snapped to a ~150 m grid cell. One cache entry serves the whole cell (`.cache/pois-areas.json`, TTL 24 h).
+2. Cache miss, two searches around the cell centre (#40):
+   - near: MediaWiki GeoSearch, 150 m, the nearest 50 pages with intro text (continuations followed);
+   - wide: 600 m, page ids only, then language links; only places with `importance ≥ 0.6` get their details fetched.
+   Areas (`city`, `adm*`, `region`, …, `dim ≥ 5000`) and pages without text are dropped.
+3. Signals for every POI (`src/pois/signals.js`, rules in `src/pois/poi-rules.json`, shared with `tools/gen_fixtures.py`):
+   - `importance` = log(1 + language versions) / log(41), clipped to 1;
+   - `role` = `area` for streets, squares, the old town, districts, parks, city walls (Wikidata P31), else `sight`; parishes, dioceses and organisations without a building are dropped;
+   - `partOfId` = Wikidata P361 ("part of") when the parent is in the same response.
+   Wikidata down: role from Polish name prefixes, `partOfId: null`, warning `wikidata_unavailable`. Language links down: importance from summary length, warning `importance_fallback`. A result with a warning is served but not cached as fresh.
+4. Wikipedia down or timed out (8 s): expired cache entry, then `fixtures/pois-krakow.json`. The response says which one in `source` (`live` / `cache` / `fixture`). The endpoint never returns 5xx for an upstream failure.
+5. `distanceM` is computed for the real position, filtered by `radius`, sorted, max 50.
 
 The request log contains only method, path, status and time. Query strings carry the user's position and are never logged.
 

@@ -4,9 +4,11 @@
 Writes:
   fixtures/demo-route-krakow.gpx    walking route (~1.6 km), one point every ~8 m
   fixtures/demo-route-krakow.json   the same route as [{lat, lon, t}] (t = seconds from start, 1.3 m/s)
-  fixtures/pois-krakow.json         real POIs near the route from Polish Wikipedia, in the Poi contract (docs/CONTRACTS.md)
+  fixtures/pois-krakow.json         real POIs near the route from Polish Wikipedia, in the Poi contract (docs/CONTRACTS.md),
+                                    with importance / role / partOfId (#40); also copied to the app's rawfile
 
-Data source: the MediaWiki GeoSearch API of pl.wikipedia.org. We do NOT use the Wikidata SPARQL
+Data source: the MediaWiki GeoSearch and langlinks APIs of pl.wikipedia.org, Wikidata wbgetentities
+(P31 instance of, P361 part of). Rules: server/src/pois/poi-rules.json. We do NOT use the Wikidata SPARQL
 endpoint here: during the hackathon it was rate-limited to 1 request/minute because of an outage.
 
 Usage: python3 tools/gen_fixtures.py   (needs internet)
@@ -14,6 +16,7 @@ Usage: python3 tools/gen_fixtures.py   (needs internet)
 import json
 import math
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -22,9 +25,12 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "fixtures"
 UA = "SpacerZHistoria-hackathon/0.1 (HackYeah 2026; fixture generator)"
 API = "https://pl.wikipedia.org/w/api.php"
+WIKIDATA_API = "https://www.wikidata.org/w/api.php"
+# shared with the server, so fixtures and /v1/pois classify places the same way (#40)
+RULES = json.loads((ROOT / "server" / "src" / "pois" / "poi-rules.json").read_text(encoding="utf-8"))
+APP_RAWFILE = ROOT / "Projekt" / "entry" / "src" / "main" / "resources" / "rawfile"
 WALK_SPEED_MPS = 1.3
 STEP_M = 8.0
-RADIUS_M = 120
 # coordinate types that describe areas, not places you can stand next to
 AREA_TYPES = {"city", "adm1st", "adm2nd", "adm3rd", "country", "region", "isle", "waterbody"}
 MAX_DIM_M = 5000
@@ -64,22 +70,132 @@ def densify(points):
     return out, times
 
 
-def geosearch(lat, lon):
-    params = {
-        "action": "query", "format": "json", "formatversion": "2",
-        "generator": "geosearch", "ggscoord": f"{lat}|{lon}", "ggsradius": RADIUS_M, "ggslimit": 20,
-        "prop": "coordinates|pageprops|extracts|pageimages|info",
-        "coprop": "type|dim", "ppprop": "wikibase_item",
-        "exintro": 1, "explaintext": 1, "exlimit": 20,
-        "piprop": "thumbnail", "pithumbsize": 640, "inprop": "url",
-    }
-    req = urllib.request.Request(API + "?" + urllib.parse.urlencode(params), headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        return json.load(resp).get("query", {}).get("pages", [])
+def api_get(url, params, tries=8):
+    """GET with retries: Wikipedia answers 'cirrussearch-too-busy-error' or 429/503 under load."""
+    for attempt in range(tries):
+        try:
+            req = urllib.request.Request(url + "?" + urllib.parse.urlencode(params), headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = json.load(resp)
+            if "error" not in data:
+                return data
+            err = data["error"].get("code")
+        except urllib.error.HTTPError as e:
+            err = f"http {e.code}"
+        if attempt == tries - 1:
+            raise RuntimeError(err)
+        time.sleep(min(60, 5 * 2 ** attempt))
+
+
+def chunks(items, size=50):
+    for i in range(0, len(items), size):
+        yield items[i:i + size]
+
+
+DETAIL_PROPS = {
+    "prop": "coordinates|pageprops|extracts|pageimages|info",
+    "coprop": "type|dim", "colimit": "max", "ppprop": "wikibase_item",
+    "exintro": 1, "explaintext": 1, "exlimit": "max",
+    "piprop": "thumbnail", "pithumbsize": 640, "pilimit": "max", "inprop": "url",
+}
+
+
+def details(selector):
+    """Pages with coordinates, Wikidata id, intro and image; extracts come 20 at a time, so follow continue."""
+    pages, cont = {}, {}
+    for _ in range(6):
+        data = api_get(API, {"action": "query", "format": "json", "formatversion": "2", **selector, **DETAIL_PROPS, **cont})
+        for p in data.get("query", {}).get("pages", []):
+            pages[p["pageid"]] = {**pages.get(p["pageid"], {}), **p}
+        if "continue" not in data:
+            break
+        cont = data["continue"]
+    return list(pages.values())
+
+
+def geosearch_near(lat, lon):
+    return details({"generator": "geosearch", "ggscoord": f"{lat}|{lon}",
+                    "ggsradius": RULES["nearRadiusM"], "ggslimit": RULES["nearLimit"]})
+
+
+def geosearch_ids(lat, lon):
+    data = api_get(API, {"action": "query", "format": "json", "formatversion": "2", "list": "geosearch",
+                         "gscoord": f"{lat}|{lon}", "gsradius": RULES["farRadiusM"], "gslimit": RULES["farLimit"]})
+    return [g["pageid"] for g in data.get("query", {}).get("geosearch", [])]
+
+
+def langlink_counts(pageids):
+    counts = {}
+    for batch in chunks(pageids):
+        cont = {}
+        for _ in range(40):
+            data = api_get(API, {"action": "query", "format": "json", "formatversion": "2", "prop": "langlinks",
+                                 "lllimit": "max", "pageids": "|".join(map(str, batch)), **cont})
+            for p in data.get("query", {}).get("pages", []):
+                counts[p["pageid"]] = counts.get(p["pageid"], 0) + len(p.get("langlinks", []))
+            if "continue" not in data:
+                break
+            cont = data["continue"]
+    return counts
+
+
+def wikidata_claims(qids):
+    out = {}
+    for batch in chunks(sorted(set(qids))):
+        data = api_get(WIKIDATA_API, {"action": "wbgetentities", "format": "json", "props": "claims", "ids": "|".join(batch)})
+        for qid, e in data.get("entities", {}).items():
+            claims = e.get("claims", {})
+            target = lambda prop: [s["mainsnak"].get("datavalue", {}).get("value", {}).get("id")
+                                   for s in claims.get(prop, []) if s["mainsnak"].get("datavalue")]
+            out[qid] = {"p31": target("P31"), "p361": target("P361")}
+    return out
+
+
+# --- signals (#40): same rules and formulas as server/src/pois/signals.js -----------------------------
+
+def importance_from_langlinks(n):
+    return round(min(1.0, math.log(1 + max(0, n)) / math.log(1 + RULES["importanceLanglinksCap"])), 3)
+
+
+def importance_from_summary(summary):
+    return round(min(1.0, len(summary or "") / RULES["importanceSummaryFallbackChars"]), 3)
+
+
+def classify_by_classes(p31):
+    excluded = len(p31) > 0 and all(c in RULES["excludedClasses"] for c in p31)
+    return ("area" if any(c in RULES["areaClasses"] for c in p31) else "sight"), excluded
+
+
+def classify_by_name(name):
+    role = "area" if any(name.startswith(p) for p in RULES["areaNamePrefixes"]) else "sight"
+    return role, any(name.startswith(p) for p in RULES["excludedNamePrefixes"])
+
+
+def apply_signals(pois, langlinks, claims):
+    id_by_qid = {p["wikidataId"]: p["id"] for p in pois if p["wikidataId"]}
+    out = []
+    for p in pois:
+        pageid = int(p["id"].split(":")[1])
+        importance = (importance_from_langlinks(langlinks.get(pageid, 0)) if langlinks is not None
+                      else importance_from_summary(p["summary"]))
+        c = claims.get(p["wikidataId"]) if claims is not None and p["wikidataId"] else None
+        role, excluded = classify_by_classes(c["p31"]) if c else classify_by_name(p["name"])
+        if excluded:
+            continue
+        part_of = None
+        if c:
+            part_of = next((id_by_qid[q] for q in c["p361"] if q in id_by_qid and id_by_qid[q] != p["id"]), None)
+        out.append({**p, "importance": importance, "role": role, "partOfId": part_of})
+    ids = {p["id"] for p in out}
+    for p in out:
+        if p["partOfId"] and p["partOfId"] not in ids:
+            p["partOfId"] = None
+    return out
 
 
 def to_poi(page):
-    coord = (page.get("coordinates") or [{}])[0]
+    coords = page.get("coordinates") or []
+    coord = next((c for c in coords if c.get("primary")), coords[0] if coords else {})
     if "lat" not in coord:
         return None
     dim = str(coord.get("dim") or "0")   # the API returns dim as an int or a string like "1000"
@@ -98,7 +214,6 @@ def to_poi(page):
         "wikidataId": page.get("pageprops", {}).get("wikibase_item"),
         "imageUrl": page.get("thumbnail", {}).get("source"),
         "sourceUrl": page.get("fullurl"),
-        "summaryChars": len(extract),
     }
 
 
@@ -116,26 +231,40 @@ def main():
         [{"lat": round(lat, 6), "lon": round(lon, 6), "t": round(t, 1)} for (lat, lon), t in zip(route, times)],
         indent=1), encoding="utf-8")
 
-    pois = {}
+    # two searches per waypoint (#40): nearest places + important places in a wide radius
+    pois, far_ids = {}, set()
     for lat, lon in WAYPOINTS:
-        for page in geosearch(lat, lon):
+        for page in geosearch_near(lat, lon):
             poi = to_poi(page)
             if poi:
                 pois[poi["id"]] = poi
-        time.sleep(0.5)
+        far_ids.update(geosearch_ids(lat, lon))
+        time.sleep(0.3)
+    near_ids = {int(i.split(":")[1]) for i in pois}
+    far_ids -= near_ids
+    counts = langlink_counts(sorted(near_ids | far_ids))
+    important = [i for i in sorted(far_ids) if importance_from_langlinks(counts.get(i, 0)) >= RULES["farMinImportance"]]
+    for batch in chunks(important):
+        for page in details({"pageids": "|".join(map(str, batch))}):
+            poi = to_poi(page)
+            if poi:
+                pois[poi["id"]] = poi
+    claims = wikidata_claims([p["wikidataId"] for p in pois.values() if p["wikidataId"]])
+    ranked = sorted(apply_signals(list(pois.values()), counts, claims), key=lambda p: (-p["importance"], p["name"]))
 
-    ranked = sorted(pois.values(), key=lambda p: -p["summaryChars"])
-    for p in ranked:
-        del p["summaryChars"]
     (OUT / "pois-krakow.json").write_text(json.dumps(
         {"source": "plwiki-geosearch", "license": "CC BY-SA 4.0 (Wikipedia text)",
          "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "pois": ranked},
         ensure_ascii=False, indent=1), encoding="utf-8")
+    (APP_RAWFILE / "pois-krakow.json").write_text((OUT / "pois-krakow.json").read_text(encoding="utf-8"), encoding="utf-8")
     route_len = sum(haversine_m(a, b) for a, b in zip(route, route[1:]))
     print(f"route: {len(route)} points, {route_len:.0f} m, {times[-1] / 60:.1f} min walk")
-    print(f"pois: {len(ranked)} (kinds: {sorted({str(p['kind']) for p in ranked})})")
+    print(f"pois: {len(ranked)}, areas: {sum(p['role'] == 'area' for p in ranked)}, "
+          f"with partOfId: {sum(p['partOfId'] is not None for p in ranked)}")
     for p in ranked[:12]:
-        print(f"  {p['name']}")
+        print(f"  {p['importance']:.2f} {p['role']:5} {p['name']}")
+    for must in ("Zamek Królewski na Wawelu", "Bazylika Archikatedralna"):
+        print(f"  {'OK ' if any(p['name'].startswith(must) for p in ranked) else 'MISSING'} {must}")
 
 
 if __name__ == "__main__":

@@ -16,6 +16,7 @@ export function loadConfig(env = process.env) {
     cacheDir: path.resolve(SERVER_DIR, env.CACHE_DIR || './.cache'),
     fixturePoisPath: path.resolve(SERVER_DIR, env.FIXTURE_POIS || '../fixtures/pois-krakow.json'),
     wikiApiUrl: env.WIKI_API_URL || 'https://pl.wikipedia.org/w/api.php',
+    wikidataApiUrl: env.WIKIDATA_API_URL || 'https://www.wikidata.org/w/api.php',
     wikiTimeoutMs: intOr(env.WIKI_TIMEOUT_MS, 8000),
     poiCacheTtlMs: intOr(env.POI_CACHE_TTL_MS, 24 * 3600 * 1000),
     // read by P4 modules (LLM, TTS); kept here so there is one config object.

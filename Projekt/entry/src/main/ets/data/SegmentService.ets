@@ -169,7 +169,7 @@ export class SegmentService {
 
   /** Server segment, or null on any failure (network, status, bad body). */
   private async send(req: SegmentRequest): Promise<Segment | null> {
-    const timeoutMs = req.kind === 'DEEP_DIVE' ? this.options.deepDiveTimeoutMs : this.options.timeoutMs;
+    const timeoutMs = req.kind === SegmentKind.DEEP_DIVE ? this.options.deepDiveTimeoutMs : this.options.timeoutMs;
     try {
       const res = await (this.http as HttpTransport).postJson(`${this.baseUrl}/v1/segment`, JSON.stringify(req),
         timeoutMs);
