@@ -20,8 +20,13 @@ interface Poi {
   wikidataId: string | null;  // "Q1072350"
   imageUrl: string | null;
   sourceUrl: string;          // link do artykułu (licencja CC BY-SA 4.0), pokazywany w UI
+  importance: number;         // 0..1: log(1 + liczba wersji językowych) / log(41), obcięte do 1 (#40)
+  role: "sight" | "area";     // area = ulica, plac, dzielnica: nigdy ARRIVAL, tylko tło (#40)
+  partOfId: string | null;    // id POI, którego ten jest częścią (Wikidata P361), np. galeria → Sukiennice (#40)
   distanceM?: number;         // tylko w odpowiedzi /v1/pois
 }
+// Aplikacja przyjmuje dane bez importance/role/partOfId (starsze fixtures):
+// importance = min(1, długość summary / 2000), role = "sight", partOfId = null.
 
 type SegmentKind = "WELCOME" | "APPROACH" | "ARRIVAL" | "BRIDGE" | "DEEP_DIVE" | "MISSED";
 type Interest = "architektura" | "historia" | "sztuka" | "ludzie" | "legendy";
