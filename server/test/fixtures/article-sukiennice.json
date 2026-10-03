@@ -1,0 +1,37 @@
+[
+ {
+  "params": {
+   "action": "query",
+   "format": "json",
+   "formatversion": "2",
+   "pageids": "19010",
+   "prop": "extracts|info",
+   "explaintext": "1",
+   "exsectionformat": "wiki",
+   "inprop": "url"
+  },
+  "body": {
+   "batchcomplete": true,
+   "query": {
+    "pages": [
+     {
+      "pageid": 19010,
+      "ns": 0,
+      "title": "Sukiennice w Krakowie",
+      "extract": "Sukiennice – zabytkowy budynek sukiennic znajdujący się w Krakowie na Starym Mieście, pośrodku Rynku Głównego.\n\n\n== Historia Sukiennic ==\nSukiennice ulegały przez wieki wielu przemianom i ich obecny kształt w niczym nie przypomina dawnych sukiennic. Już w roku 1257 książę Bolesław Wstydliwy przy lokacji Krakowa zobowiązał się postawić kamienne kramy sukienne. Stanowiły one podwójny rząd kramów, tworzących jakby uliczkę pośrodku Rynku. Sukiennice w tej postaci przetrwały do połowy XIV stulecia.\n\n\n=== Kamienne Sukiennice do połowy XIV w. ===\nPierwowzorem Sukiennic były drewniane kramy sukienne otoczone budami, jatkami i straganami. W akcie lokacyjnym książę zobowiązał się do wystawienia sukiennic kamiennych. Stanowiły one podwójny rząd kramów z uliczką pośrodku, która na noc była zamykana z obydwu stron. Około roku 1300 pasaż z kramami zadaszono, co nadało im wygląd hali targowej. W takiej formie przetrwały do połowy XIV wieku.\n\n\n=== Gotyckie Sukiennice 1358–1555 ===\nNowe, gotyckie sukiennice wystawił król Kazimierz III Wielki przed 1358. Środkowa hala o długości 108 m i szerokości 10 m z dwóch stron miała dostawione dwa rzędy kramów na głębokość 7,5 m. W osi długiej było to 18 kramów, które nakryte były sklepieniami, a otwarte do wnętrza ostrołukowymi lub półkolistymi portalami. Od strony południowej i północnej wybudowano zdwojone, ostrołukowe arkady. Przypominały one już kształtem obecne sukiennice. Budowla ta przetrwała jako do 1555 roku, kiedy spłonęła.\n\n\n=== Renesansowe Sukiennice od 1559 ===\nW latach 1556–1559 przystąpiono do odnowienia spalonych sukiennic. Pracami kierował mistrz Pankracy, który zasklepił kolebkowo wielką halę budynku. Wtedy budynek zwieńczono attyką o podziałach arkadowych i grzebieniu z maszkaronami projektu Santi Gucciego. Dobudowano także kolumnowe loggie, które zaprojektował Jan Maria Padovano. W roku 1601 przebito przejście w poprzek Sukiennic i ozdobiono je ryzalitami.\n\n\n=== XIX-wieczna przebudowa ===\n\nW ramach porządkowania Rynku w latach 1875–1879 sukiennice przebudowano według projektu Tomasza Prylińskiego. Wyburzono przylegające do nich kramy i budynki. Dolna hala została przekształcona w ciąg drewnianych kramów handlowych, rozlokowanych wzdłuż ścian i udekorowana w 1895 herbami miast polskich, godłami cechowymi i pieczęciami. Sala górna została zaadaptowana na potrzeby muzeum.\nDobudowano ryzality na osi wschód-zachód oraz parterowe arkadowe podcienia. Na szczytach ryzalitów od strony wschodniej umieszczono maszkarony przedstawiające karykatury prezydentów Krakowa - Józefa Dietla i Mikołaja Zyblikiewicza (wykonał Walery Gadomski według projektu Jana Matejki).\nNa fasadzie zachodniego ryzalitu, nad oknami, znajdują się kartusze z łacińskimi sentencjami projektu Józefa Szujskiego.\nPo lewej stronie (patrząc z ul. Szewskiej): „NATALE SOLVM DVLCE DINE CVNCTOS DVCIT ET IMMEMORES NON SINIT ESSE SVI” (w tłumaczeniu na język polski: „Nasz kraj przepełnia nas niezwykłą słodyczą i nigdy nie pozwala zapomnieć, że do niego należymy” - cytat z „Listów z Pontu” Owidiusza).\nI po prawej: „ILLA NON EST CIVITAS CVM LEGES IN EA NIHIL VALENT CVM MOS OCCI DIT PATRIVS” („Nie może istnieć państwo, gdy prawa w nim nic nie znaczą i gdy ginie obyczaj ojczysty” - cytat z „Paradoksów” Cycerona).\nSzczyt ryzalitu wieńczy rzeźba projektu Jana Matejki „Dzień i Noc”.\n\n\n== Współczesność ==\nWizerunek Sukiennic w czasie okupacji niemieckiej został umieszczony na banknotach o nominale 50 złotych emitowanych przez Bank Emisyjny w Polsce.\nWspółcześnie w Sukiennicach znajdują się dwa rzędy kramów, głównie z biżuterią, pamiątkami czy rękodziełami. Obecnie na piętrze Sukiennic (w dawnym szmatruzie) znajduje się Galeria Polskiego Malarstwa i Rzeźby XIX wieku. Stanowi ona oddział Muzeum Narodowego. Na parterze Sukiennic znajduje się również słynna kawiarnia Noworolski. Pod zewnętrzną częścią sukiennic zachowane jest zabytkowe i sprawne oświetlenie gazowe.\nW 2010 r. otwarto oddział Muzeum Historycznego Miasta Krakowa, Podziemia Rynku Głównego, do którego wejście znajduje się w Sukiennicach. Zwiedzający wędrują pod ziemią wokół Sukiennic szklanymi pochylniami i kładkami, zawieszonymi ponad dawnymi traktami, w tym brukami średniowiecznych Sukiennic.\n\n\n== Galeria ==\n\n\n== Zobacz też ==\nGaleria Sztuki Polskiej XIX wieku w Sukiennicach\nKramy Dominikańskie w Krakowie\nKawiarnia Noworolski\n\n\n== Przypisy ==\n\n\n== Linki zewnętrzne ==\nSukiennice – dokładny opis zabytku uzupełniony galerią zdjęć\nSukiennicena stronie polska-org.pl\nArchiwalne widoki Sukiennic w bibliotece Polona",
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:10Z",
+      "lastrevid": 80078627,
+      "length": 9837,
+      "fullurl": "https://pl.wikipedia.org/wiki/Sukiennice_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Sukiennice_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Sukiennice_w_Krakowie"
+     }
+    ]
+   }
+  }
+ }
+]

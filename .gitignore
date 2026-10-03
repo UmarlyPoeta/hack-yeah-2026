@@ -8,6 +8,7 @@ oh_modules/
 **/oh_modules/
 .hvigor/
 .preview/
+.cache/
 local.properties
 .idea/
 *.iml
@@ -39,3 +40,6 @@ Thumbs.db
 server/.cache/
 server/voices/
 *.onnx
+
+# Python
+__pycache__/

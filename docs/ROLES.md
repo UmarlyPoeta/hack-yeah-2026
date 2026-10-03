@@ -68,7 +68,7 @@ Kto ma Windows albo Maca z procesorem M, instaluje DevEco Studio według [README
 **Twoje pliki:** `server/src/{segment,llm,tts,validate}/`, `server/scripts/warm.js`, `server/eval/`, sekcja „AI feature disclosure” w `AI_WORKFLOW.md`.
 
 **Jak zacząć (M0):**
-1. Zainstaluj **Ollamę** i Bielika (`Bielik-4.5B-v3.0-Instruct`, GGUF z Hugging Face `speakleash`, kwantyzacja Q4). Zmierz czas generacji 100 słów po polsku na laptopie, który będzie serwerem. Od tego zależy strategia prefetchu.
+1. Wdróż Bielika (`Bielik-4.5B-v3.0-Instruct`, GGUF Q8_0 z Hugging Face `speakleash`) w Ollamie na **Modal** (`server/modal/README.md`). Zmierz czas generacji 100 słów po polsku (`server/modal/smoke_test.py`). Od tego zależy strategia prefetchu.
 2. Konto **ElevenLabs**: wybierz polski głos, zapisz `voice_id`, sprawdź limit znaków. Klucz trafia **tylko** do `server/.env`.
 
 **Potem:**
