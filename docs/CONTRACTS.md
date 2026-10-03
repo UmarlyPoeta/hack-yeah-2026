@@ -34,7 +34,7 @@ interface Segment {
   text: string;               // po polsku, gotowy do przeczytania
   claims: Claim[];            // [] dla szablonów
   origin: "ai" | "template";
-  llmModel: string | null;    // np. "bielik-4.5b-v3.0-instruct:Q4_K_M"
+  llmModel: string | null;    // np. "bielik-4.5b-v3.0-instruct:Q8_0"
   audioUrl: string | null;    // "/v1/audio/<id>.mp3" albo null (brak TTS)
   durationMs: number | null;  // prawdziwa długość audio
   voice: string | null;       // "elevenlabs:<voice>" | "piper:pl_PL-gosia-medium"

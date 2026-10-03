@@ -7,7 +7,7 @@ This project uses AI-assisted development and ships an AI feature. Keep this doc
 | Model, agent, MCP server, or Agent Skill | Version or source | Role in the project |
 | --- | --- | --- |
 | Claude Code (CLI) with Claude Opus 5.5 (`claude-opus-5-5`) | Claude Code 2.1.288 | ideation, research of platform APIs, architecture, task breakdown into GitHub issues, fixture generator |
-| Bielik-4.5B-v3.0-Instruct (SpeakLeash / ACK Cyfronet AGH) via Ollama | GGUF, Hugging Face `speakleash` | product feature: local LLM writing grounded tour-guide narration (`POST /v1/segment`) |
+| Bielik-4.5B-v3.0-Instruct (SpeakLeash / ACK Cyfronet AGH) via Ollama | GGUF, Hugging Face `speakleash` | product feature: self-hosted LLM (Ollama on Modal GPU) writing grounded tour-guide narration (`POST /v1/segment`) |
 | ElevenLabs text-to-speech | REST API, multilingual model | product feature: Polish voice of the guide |
 | Piper TTS (`pl_PL` voices) | rhasspy/piper | product feature: offline fallback voice |
 
@@ -24,6 +24,7 @@ This project uses AI-assisted development and ships an AI feature. Keep this doc
 | 2026-10-03 | Claude Code / Opus 5.5 | Research `LocationButton` semantics, data sources, emulator limits | `docs/ARCHITECTURE.md`, `docs/CONTRACTS.md`, `docs/TESTING.md`, `docs/TEAM.md` | Claims checked against OpenHarmony docs; open questions marked as spikes in issues |
 | 2026-10-03 | Claude Code / Opus 5.5 | Sequential guide design, local LLM + TTS choice, backlog of 32 issues for 5 roles | `docs/*` (rewrite), `docs/ROLES.md`, `tools/issues.md`, `tools/create_issues.py`, `server/.env.example` | Script dry-run validated references/labels; Piper Polish voices, Bielik GGUF, Ollama JSON schema and AVPlayer MP3 support checked in public docs; Core Speech Kit found to lack Polish |
 | 2026-10-03 | Claude Code / Opus 5.5 | Generate real demo data | `tools/gen_fixtures.py`, `fixtures/*` | Script run against live Wikipedia API; output inspected (77 POIs, 1.46 km route) |
+| 2026-10-03 | Claude Code / Opus 5.5 | Host Bielik on Modal instead of a local Ollama (#6) | `server/modal/bielik_ollama.py`, `server/modal/smoke_test.py`, `server/modal/README.md`, `server/.env.example`, docs | Model files and chat template checked on the Hugging Face model card; Modal API signatures checked in the installed SDK; deploy + smoke test results to be added to #6 |
 
 ## Workflow
 
@@ -46,8 +47,8 @@ _To be filled._
 
 ## AI feature disclosure
 
-- Model or service: **Bielik-4.5B-v3.0-Instruct** (Polish open-source LLM by SpeakLeash and ACK Cyfronet AGH), quantised GGUF, served **locally** by Ollama on the team laptop. Voice: **ElevenLabs** text-to-speech (cloud); offline fallback **Piper** with a `pl_PL` voice.
-- Inference flow: the app sends only a segment request (kind, place id(s), interests, word budget) to our server. The server loads the Wikipedia source text of the place(s), builds a prompt per segment kind, calls Ollama `/api/chat` with a JSON Schema `format`, validates the result, then synthesises audio and returns text + MP3 URL.
+- Model or service: **Bielik-4.5B-v3.0-Instruct** (Polish open-source LLM by SpeakLeash and ACK Cyfronet AGH), GGUF Q8_0, served by Ollama on our own **Modal** GPU deployment (`server/modal/`), not a third-party LLM API. Voice: **ElevenLabs** text-to-speech (cloud); offline fallback **Piper** with a `pl_PL` voice.
+- Inference flow: the app sends only a segment request (kind, place id(s), interests, word budget) to our server. The server loads the Wikipedia source text of the place(s), builds a prompt per segment kind, calls Ollama `/api/chat` on Modal with a JSON Schema `format`, validates the result, then synthesises audio and returns text + MP3 URL.
 - Data handling and privacy: the user's location stays on the phone, apart from a coarse `/v1/pois` query to our own server, which does not log positions. LLM inference is local. Only the generated text about a public monument is sent to ElevenLabs, with no location and no user data. The ElevenLabs key lives only in `server/.env`.
 - Failure and fallback behavior: a grounding validator rejects claims whose quotes are not in the source and numbers/years absent from the source; one retry, then a template built from the source. TTS chain ElevenLabs -> Piper -> text only. The app keeps working fully offline with bundled data and templates. The UI labels every segment (AI/template, voice) and links the source (CC BY-SA).
 - Evaluation: `server/eval/` (issue AI-EVAL): first-pass validation rate, generation latency, manual 1-5 rating.
