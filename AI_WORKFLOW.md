@@ -24,6 +24,7 @@ This project uses AI-assisted development and ships an AI feature. Keep this doc
 | 2026-10-03 | Claude Code / Opus 5.5 | Research `LocationButton` semantics, data sources, emulator limits | `docs/ARCHITECTURE.md`, `docs/CONTRACTS.md`, `docs/TESTING.md`, `docs/TEAM.md` | Claims checked against OpenHarmony docs; open questions marked as spikes in issues |
 | 2026-10-03 | Claude Code / Opus 5.5 | Sequential guide design, local LLM + TTS choice, backlog of 32 issues for 5 roles | `docs/*` (rewrite), `docs/ROLES.md`, `tools/issues.md`, `tools/create_issues.py`, `server/.env.example` | Script dry-run validated references/labels; Piper Polish voices, Bielik GGUF, Ollama JSON schema and AVPlayer MP3 support checked in public docs; Core Speech Kit found to lack Polish |
 | 2026-10-03 | Claude Code / Opus 5.5 | Generate real demo data | `tools/gen_fixtures.py`, `fixtures/*` | Script run against live Wikipedia API; output inspected (77 POIs, 1.46 km route) |
+| 2026-10-03 | Claude Code / Opus 5.5 | ElevenLabs + Piper spike (#7) | `server/scripts/tts-smoke.js`, `server/.env.example` | Ran against the live ElevenLabs API (plan, Polish voices, MP3) and local Piper `pl_PL-gosia-medium` + ffmpeg; samples listened to by a human; found that free plan blocks library voices via API (HTTP 402) |
 
 ## Workflow
 
