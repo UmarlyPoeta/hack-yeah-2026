@@ -18,9 +18,12 @@ export function loadConfig(env = process.env) {
     wikiApiUrl: env.WIKI_API_URL || 'https://pl.wikipedia.org/w/api.php',
     wikiTimeoutMs: intOr(env.WIKI_TIMEOUT_MS, 8000),
     poiCacheTtlMs: intOr(env.POI_CACHE_TTL_MS, 24 * 3600 * 1000),
-    // read by P4 modules (LLM, TTS); kept here so there is one config object
+    // read by P4 modules (LLM, TTS); kept here so there is one config object.
+    // Bielik runs in Ollama on Modal (server/modal/): every LLM request needs the Modal-Key / Modal-Secret headers.
     ollamaUrl: env.OLLAMA_URL || 'http://localhost:11434',
     llmModel: env.LLM_MODEL || '',
+    modalKey: env.MODAL_KEY || '',
+    modalSecret: env.MODAL_SECRET || '',
     ttsProvider: env.TTS_PROVIDER || 'none',
   };
 }
