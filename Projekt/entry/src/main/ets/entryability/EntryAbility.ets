@@ -12,6 +12,27 @@ export default class EntryAbility extends UIAbility {
       hilog.error(DOMAIN, 'testTag', 'Failed to set colorMode. Cause: %{public}s', JSON.stringify(err));
     }
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onCreate');
+    this.restoreContinuation(want, launchParam);
+    // SPIKE: let the system offer this walk on another device of the same account
+    this.context.setMissionContinueState(AbilityConstant.ContinueState.ACTIVE, () => {});
+  }
+
+  onNewWant(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+    this.restoreContinuation(want, launchParam);
+  }
+
+  // SPIKE: source side of App Continuation; only essential, synchronous data
+  onContinue(wantParam: Record<string, Object>): AbilityConstant.OnContinueResult {
+    wantParam['spikeProgress'] = 'spokenStops=3;lastStop=plwiki:19010;t=' + Date.now();
+    hilog.info(DOMAIN, 'testTag', 'onContinue: sending progress');
+    return AbilityConstant.OnContinueResult.AGREE;
+  }
+
+  private restoreContinuation(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+    if (launchParam.launchReason === AbilityConstant.LaunchReason.CONTINUATION && want.parameters !== undefined) {
+      AppStorage.setOrCreate('continuationData', String(want.parameters['spikeProgress']));
+      this.context.restoreWindowStage(new LocalStorage());
+    }
   }
 
   onDestroy(): void {
@@ -22,7 +43,8 @@ export default class EntryAbility extends UIAbility {
     // Główny start aplikacji – ładuje ekran powitalny StartPage
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
-    windowStage.loadContent('pages/StartPage', (err) => {
+    // SPIKE branch: start on the feature test page (main keeps StartPage)
+    windowStage.loadContent('pages/SpikePage', (err) => {
       if (err.code) {
         hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
         return;

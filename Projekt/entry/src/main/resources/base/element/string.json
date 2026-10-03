@@ -11,6 +11,14 @@
     {
       "name": "EntryAbility_label",
       "value": "Spacer z historią"
+    },
+    {
+      "name": "distributed_reason",
+      "value": "Synchronizacja spaceru między telefonem a zegarkiem"
+    },
+    {
+      "name": "location_reason",
+      "value": "Przewodnik opowiada o miejscach, obok których idziesz"
     }
   ]
 }
