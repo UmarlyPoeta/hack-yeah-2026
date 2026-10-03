@@ -1,9 +1,7 @@
 {
   "src": [
-    "pages/StartPage",
+    "pages/MainPage",
     "pages/WalkPage",
-    "pages/PrivacyPage",
-    "pages/SettingsPage",
     "pages/Index",
     "pages/GuideDebugPage"
   ]

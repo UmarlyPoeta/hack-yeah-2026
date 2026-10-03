@@ -1,8 +1,36 @@
 {
   "float": [
-    {
-      "name": "page_text_font_size",
-      "value": "50fp"
-    }
+    { "name": "page_text_font_size", "value": "50fp" },
+    { "name": "touch_min", "value": "44vp" },
+    { "name": "page_padding", "value": "20vp" },
+    { "name": "button_primary_height", "value": "54vp" },
+    { "name": "button_primary_radius", "value": "27vp" },
+    { "name": "button_secondary_height", "value": "44vp" },
+    { "name": "button_secondary_radius", "value": "22vp" },
+    { "name": "round_button_size", "value": "44vp" },
+    { "name": "round_button_radius", "value": "22vp" },
+    { "name": "sheet_radius", "value": "22vp" },
+    { "name": "sheet_radius_large", "value": "24vp" },
+    { "name": "hero_height", "value": "330vp" },
+    { "name": "hero_sheet_overlap", "value": "16vp" },
+    { "name": "card_radius", "value": "16vp" },
+    { "name": "stop_card_width", "value": "150vp" },
+    { "name": "stop_card_image_height", "value": "118vp" },
+    { "name": "stop_card_radius", "value": "14vp" },
+    { "name": "tab_bar_height", "value": "64vp" },
+    { "name": "badge_size", "value": "24vp" },
+    { "name": "play_button_size", "value": "48vp" },
+    { "name": "thumb_size", "value": "52vp" },
+    { "name": "progress_height", "value": "4vp" },
+    { "name": "font_hero_title", "value": "30fp" },
+    { "name": "font_title", "value": "19fp" },
+    { "name": "font_distance", "value": "26fp" },
+    { "name": "font_place", "value": "17fp" },
+    { "name": "font_body", "value": "15fp" },
+    { "name": "font_button", "value": "16fp" },
+    { "name": "font_label", "value": "14fp" },
+    { "name": "font_small", "value": "13fp" },
+    { "name": "font_caption", "value": "12fp" },
+    { "name": "font_tab", "value": "11.5fp" }
   ]
 }

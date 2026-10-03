@@ -19,16 +19,32 @@ export default class EntryAbility extends UIAbility {
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
-    // Główny start aplikacji – ładuje ekran powitalny StartPage
+    // Main window: tabs (MainPage). Full-screen layout so photos and maps go under the status bar.
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
-    windowStage.loadContent('pages/StartPage', (err) => {
+    windowStage.loadContent('pages/MainPage', (err) => {
       if (err.code) {
         hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
         return;
       }
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.');
+      this.useFullScreenLayout(windowStage.getMainWindowSync());
     });
+  }
+
+  // Screens read AppStorage 'topInset' / 'bottomInset' (vp) to keep buttons clear of the status bar
+  // and the navigation indicator.
+  private useFullScreenLayout(win: window.Window): void {
+    try {
+      win.setWindowLayoutFullScreen(true);
+      const ui = win.getUIContext();
+      const top = win.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM).topRect.height;
+      const bottom = win.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR).bottomRect.height;
+      AppStorage.setOrCreate<number>('topInset', ui.px2vp(top));
+      AppStorage.setOrCreate<number>('bottomInset', ui.px2vp(bottom));
+    } catch (err) {
+      hilog.error(DOMAIN, 'testTag', 'Full-screen layout failed: %{public}s', JSON.stringify(err));
+    }
   }
 
   onWindowStageDestroy(): void {

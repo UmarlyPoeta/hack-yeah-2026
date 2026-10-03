@@ -11,6 +11,138 @@
     {
       "name": "EntryAbility_label",
       "value": "Spacer z historią"
+    },
+    {
+      "name": "tab_discover",
+      "value": "Odkrywaj"
+    },
+    {
+      "name": "tab_map",
+      "value": "Mapa"
+    },
+    {
+      "name": "tab_saved",
+      "value": "Zapisane"
+    },
+    {
+      "name": "badge_narrated",
+      "value": "Spacer z narracją"
+    },
+    {
+      "name": "on_the_way",
+      "value": "Po drodze"
+    },
+    {
+      "name": "route_map",
+      "value": "Mapa trasy"
+    },
+    {
+      "name": "start_walk",
+      "value": "Rozpocznij spacer"
+    },
+    {
+      "name": "location_hint",
+      "value": "Z lokalizacją opowieść startuje sama, gdy dojdziesz na miejsce."
+    },
+    {
+      "name": "metric_places",
+      "value": "%d miejsc"
+    },
+    {
+      "name": "metric_time",
+      "value": "ok. %d min"
+    },
+    {
+      "name": "a11y_back",
+      "value": "Wróć"
+    },
+    {
+      "name": "a11y_save",
+      "value": "Zapisz trasę"
+    },
+    {
+      "name": "a11y_share",
+      "value": "Udostępnij"
+    },
+    {
+      "name": "a11y_my_location",
+      "value": "Pokaż moją lokalizację"
+    },
+    {
+      "name": "a11y_play",
+      "value": "Odtwórz"
+    },
+    {
+      "name": "a11y_pause",
+      "value": "Pauza"
+    },
+    {
+      "name": "stop_of",
+      "value": "przystanek %d z %d"
+    },
+    {
+      "name": "more_about_place",
+      "value": "Więcej o tym miejscu"
+    },
+    {
+      "name": "skip",
+      "value": "Pomiń"
+    },
+    {
+      "name": "finish",
+      "value": "Zakończ"
+    },
+    {
+      "name": "then",
+      "value": "Potem: %s, %s"
+    },
+    {
+      "name": "last_stop",
+      "value": "To ostatni przystanek"
+    },
+    {
+      "name": "saved_title",
+      "value": "Zapisane trasy"
+    },
+    {
+      "name": "saved_hint",
+      "value": "Podgląd: zapisywanie tras będzie dostępne wkrótce."
+    },
+    {
+      "name": "saved_empty_title",
+      "value": "Nic tu jeszcze nie ma"
+    },
+    {
+      "name": "saved_empty_body",
+      "value": "Trasy, które zapiszesz, pojawią się tutaj."
+    },
+    {
+      "name": "saved_show_empty",
+      "value": "Pokaż stan pusty"
+    },
+    {
+      "name": "saved_show_list",
+      "value": "Pokaż listę"
+    },
+    {
+      "name": "map_title",
+      "value": "Mapa trasy"
+    },
+    {
+      "name": "map_hint",
+      "value": "Podgląd trasy, bez nawigacji"
+    },
+    {
+      "name": "close",
+      "value": "Zamknij"
+    },
+    {
+      "name": "source_wikipedia",
+      "value": "Na podstawie Wikipedii · CC BY-SA 4.0"
+    },
+    {
+      "name": "enable",
+      "value": "Włącz"
     }
   ]
 }

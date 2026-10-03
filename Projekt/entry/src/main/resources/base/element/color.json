@@ -1,8 +1,36 @@
 {
   "color": [
-    {
-      "name": "start_window_background",
-      "value": "#F3EEE4"
-    }
+    { "name": "start_window_background", "value": "#FFFFFF" },
+    { "name": "accent", "value": "#0F7B6C" },
+    { "name": "accent_dark", "value": "#0B5E53" },
+    { "name": "accent_bg", "value": "#E8F4F1" },
+    { "name": "accent_on_bg", "value": "#134E46" },
+    { "name": "accent_soft", "value": "#8CCBC0" },
+    { "name": "text", "value": "#1C1C1E" },
+    { "name": "text_secondary", "value": "#6B6B70" },
+    { "name": "text_muted", "value": "#8A8A8A" },
+    { "name": "separator", "value": "#EDEDED" },
+    { "name": "surface", "value": "#FFFFFF" },
+    { "name": "surface_muted", "value": "#F1F1F1" },
+    { "name": "handle", "value": "#D6D6D6" },
+    { "name": "progress_track", "value": "#E8E8E8" },
+    { "name": "map_bg", "value": "#F2EFE9" },
+    { "name": "map_block", "value": "#E5E0D6" },
+    { "name": "map_park", "value": "#CFE3C3" },
+    { "name": "map_park_path", "value": "#E8F0DF" },
+    { "name": "map_road", "value": "#FFFFFF" },
+    { "name": "map_wall", "value": "#CDB69C" },
+    { "name": "map_tower", "value": "#C7AE92" },
+    { "name": "map_tower_stroke", "value": "#A88E72" },
+    { "name": "map_label", "value": "#77726A" },
+    { "name": "button_primary", "value": "#1C1C1E" },
+    { "name": "on_primary", "value": "#FFFFFF" },
+    { "name": "round_button_bg", "value": "#EBFFFFFF" },
+    { "name": "photo_badge_bg", "value": "#59000000" },
+    { "name": "photo_chip_bg", "value": "#99000000" },
+    { "name": "hero_gradient_end", "value": "#8C000000" },
+    { "name": "scrim", "value": "#66000000" },
+    { "name": "danger", "value": "#C42B1C" },
+    { "name": "placeholder", "value": "#E4DFD6" }
   ]
 }
