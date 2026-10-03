@@ -6,6 +6,7 @@ import { distributedDataObject } from '@kit.ArkData';
 import { distributedDeviceManager } from '@kit.DistributedServiceKit';
 import { liveViewManager } from '@kit.LiveViewKit';
 import { geoLocationManager } from '@kit.LocationKit';
+import { hilog } from '@kit.PerformanceAnalysisKit';
 import { NarratorPlayer } from '../audio/NarratorPlayer';
 
 // SPIKE (branch spike/super-device): checks on the emulator which HarmonyOS features the
@@ -38,6 +39,20 @@ struct SpikePage {
     if (this.continuationData.length > 0) {
       this.log('KONTYNUACJA: otrzymano ' + this.continuationData);
     }
+    if (deviceInfo.deviceType === 'wearable') {
+      // the round screen shows only the first button: run every check in sequence instead
+      setTimeout(() => this.runAll(), 1500);
+    }
+  }
+
+  private async runAll(): Promise<void> {
+    this.log('ZEGAREK: uruchamiam wszystkie testy po kolei');
+    await this.startSession();
+    await this.startBackground();
+    await this.startLiveView();
+    await this.distributed();
+    await this.askLocation();
+    this.log('ZEGAREK: koniec testów');
   }
 
   aboutToDisappear(): void {
@@ -50,6 +65,7 @@ struct SpikePage {
 
   private log(line: string): void {
     const time = new Date().toTimeString().slice(0, 8);
+    hilog.info(0x5350, 'SPIKE', '%{public}s', line);   // readable with: hdc hilog -T SPIKE
     this.lines = [time + '  ' + line].concat(this.lines).slice(0, 60);
   }
 
