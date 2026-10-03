@@ -39,3 +39,6 @@ Thumbs.db
 server/.cache/
 server/voices/
 *.onnx
+
+# Python
+__pycache__/
