@@ -11,7 +11,10 @@ import router from '@ohos.router';
 @Component
 struct WalkPage {
   private player: NarratorPlayer = new NarratorPlayer();
-  @State currentText: string = 'Zaczynamy spacer. Pierwszy przystanek: Barbakan w Krakowie, ok. 120 m przed nami.';
+
+  @State currentText: string =
+    'Zaczynamy spacer. Pierwszy przystanek: Barbakan w Krakowie, ok. 120 m przed nami.';
+
   @State poiName: string = 'Barbakan w Krakowie';
   @State segmentKind: string = 'WELCOME';
   @State nextPoiName: string = 'Brama Floriańska';
@@ -24,20 +27,25 @@ struct WalkPage {
   build() {
     Stack() {
       Column() {
+
         // Górny pasek statusu z komponentem SessionBadge
         Row() {
           Text('Spacer z historią')
             .fontSize(18)
             .fontWeight(FontWeight.Bold)
             .fontColor(Color.Black)
+
           Blank()
-          SessionBadge({ sessionState: this.sessionState })
+
+          SessionBadge({
+            sessionState: this.sessionState
+          })
         }
         .width('100%')
         .padding(16)
         .backgroundColor(Color.White)
 
-        // Pasek trasy (RouteStrip)
+        // Pasek trasy
         RouteStrip({
           nextPoiName: this.nextPoiName,
           distanceM: this.distanceM,
@@ -45,7 +53,7 @@ struct WalkPage {
         })
           .margin({ top: 12 })
 
-        // Radar kierunkowy przestrzenny (Radar)
+        // Radar kierunkowy
         Radar({
           poiName: this.nextPoiName,
           distanceM: this.distanceM,
@@ -60,13 +68,18 @@ struct WalkPage {
           currentText: this.currentText,
           poiName: this.poiName,
           segmentKind: this.segmentKind,
+
           onPlayClick: () => {
             let context = getContext(this) as common.UIAbilityContext;
-            this.player.playRawFile(context, 'test.mp3');
+
+            this.player.playRawFile(
+              context,
+              'test.mp3'
+            );
           }
         })
 
-        // Przycisk testowy otwierający DeepDive (DeepDiveSheet)
+        // Przycisk otwierający Deep Dive
         Button('Opowiedz więcej (Deep Dive)')
           .width('90%')
           .height(40)
@@ -87,6 +100,7 @@ struct WalkPage {
           .height(45)
           .margin({ bottom: 30 })
           .onClick(() => {
+            this.player.release();
             router.back();
           })
       }
@@ -95,11 +109,12 @@ struct WalkPage {
       .backgroundColor('#EFEFEF')
       .alignItems(HorizontalAlign.Center)
 
-      // Nakładka Sheet dla Deep Dive
+      // Nakładka Deep Dive
       DeepDiveSheet({
         isShown: $isDeepDiveOpen,
         title: this.poiName,
-        content: 'Barbakan w Krakowie – historyczny barbakan, zachowany w świetnym stanie bastion obronny będący dawniej częścią murów miejskich Krakowa. Wybudowany pod koniec XV wieku...'
+        content:
+        'Barbakan w Krakowie – historyczny barbakan, zachowany w świetnym stanie bastion obronny będący dawniej częścią murów miejskich Krakowa. Wybudowany pod koniec XV wieku...'
       })
     }
     .width('100%')

@@ -15,7 +15,8 @@ export struct Radar {
           .fontSize(10)
           .fontColor('#888888')
           .fontWeight(FontWeight.Bold)
-        Text(`\({this.poiName} (\){this.distanceM} m)`)
+
+        Text(`${this.poiName} (${this.distanceM} m)`)
           .fontSize(13)
           .fontWeight(FontWeight.Bold)
           .fontColor('#333333')
@@ -33,6 +34,11 @@ export struct Radar {
     .padding(12)
     .backgroundColor(Color.White)
     .borderRadius(10)
-    .shadow({ radius: 4, color: '#05000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 4,
+      color: '#05000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 }
