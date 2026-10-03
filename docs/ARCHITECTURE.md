@@ -47,7 +47,7 @@
 
 ### 2.1 MotionTracker: z surowych fixów robi „jak idzie użytkownik”
 - Odrzuca fixy z `accuracy > 50 m` i skoki niemożliwe dla pieszego (> 5 m/s).
-- Prędkość: EMA z ~10 s. Kurs: azymut przemieszczenia na ostatnich ≥ 15 m (pojedynczy fix za bardzo szumi).
+- Prędkość: przemieszczenie netto w oknie ~10 s (sumowanie kroków kumuluje szum GPS). Kurs: azymut przemieszczenia na ostatnich ≥ 25 m (przy 15 m szum ±5 m daje wahania ±30°).
 - Stan ruchu z histerezą: `STOPPED`, gdy prędkość < 0,3 m/s przez ≥ 8 s; `MOVING`, gdy > 0,6 m/s.
 
 ### 2.2 Itinerary: co jest przed tobą
@@ -55,8 +55,8 @@ Dla każdego POI w promieniu 250 m, gdzie θ to kąt między kursem a kierunkiem
 - `along = d·cos θ` (ile zostało do POI wzdłuż kierunku marszu), `cross = d·sin θ` (znak to lewo albo prawo),
 - POI jest przed tobą, gdy `along > 0` i `|cross| ≤ 60 m`, albo zawsze, gdy `d < 40 m`,
 - `upcoming` jest posortowane po `along`, a `ETA = along / max(prędkość, 0,8 m/s)`,
-- `passed`: `along < −20 m`. `missed`: minięty bez przybycia (nigdy nie był < 35 m),
-- „następny” zmienia się tylko po minięciu albo gdy inny POI ma ETA krótsze o > 15 s (ochrona przed szumem kursu).
+- `passed`: `along < −20 m`; wraca do gry, gdy po zakręcie jest znów < 40 m i przed tobą (`along ≥ 0`). `missed`: minięty bez przybycia (nigdy nie był < 35 m),
+- „następny” zmienia się tylko po minięciu, gdy inny POI ma ETA krótsze o > 15 s, albo gdy obecny cel wypadł z korytarza, a inny jest bliżej (ochrona przed szumem kursu i „przyklejeniem” do długich obiektów, np. murów).
 
 ### 2.3 NarrationPlanner: co powiedzieć, kiedy i jak długo
 Narrator mówi **jeden segment naraz**. Czas trwania segmentu to **prawdziwa długość audio** (`durationMs`). Zanim audio jest gotowe, planner szacuje go z tempa ok. 2,5 słowa/s.
