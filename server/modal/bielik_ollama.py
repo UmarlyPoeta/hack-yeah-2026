@@ -19,7 +19,7 @@ GGUF_FILE = "Bielik-4.5B-v3.0-Instruct.Q8_0.gguf"  # the official repo ships onl
 MODEL_NAME = "bielik-4.5b-v3.0-instruct:Q8_0"  # = LLM_MODEL in server/.env
 
 OLLAMA_PORT = 11434
-GPU = os.environ.get("BIELIK_GPU", "L4")
+GPU = os.environ.get("BIELIK_GPU", "T4")  # cheapest Modal GPU; 16 GB VRAM is plenty for Q8_0
 MIN_CONTAINERS = int(os.environ.get("BIELIK_MIN_CONTAINERS", "0"))
 
 # Chat template from the model card (speakleash/Bielik-4.5B-v3.0-Instruct-GGUF, "Ollama Modfile")
@@ -93,7 +93,8 @@ def _preload_model() -> None:
     urllib.request.urlopen(req, timeout=300)
 
 
-@app.function(gpu=GPU, scaledown_window=300, timeout=600, min_containers=MIN_CONTAINERS)
+# max_containers=1 and a short scaledown keep the bill small: at most one GPU, off after 2 min idle
+@app.function(gpu=GPU, scaledown_window=120, timeout=600, min_containers=MIN_CONTAINERS, max_containers=1)
 @modal.concurrent(max_inputs=8)
 @modal.web_server(port=OLLAMA_PORT, startup_timeout=300, requires_proxy_auth=True)
 def serve():

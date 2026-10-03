@@ -39,7 +39,8 @@ Sprawdza `/api/version` i `/api/tags`, potem 3× `ARRIVAL` ~100 słów dla Kamie
 
 ## Koszt i zimny start
 
-- GPU: domyślnie `L4` (zmiana: `BIELIK_GPU=T4 modal deploy ...`). Model Q8_0 zajmuje ~5 GB VRAM.
-- Kontener gaśnie po 5 min bezczynności, więc płacimy tylko za czas pracy. Pierwsze zapytanie po przerwie czeka na zimny start (start kontenera + załadowanie modelu do GPU).
+- GPU: domyślnie `T4`, najtańsze na Modalu (ok. 0,6 USD/h, tylko gdy kontener działa). Zmiana: `BIELIK_GPU=L4 modal deploy ...`. Model Q8_0 zajmuje ~5 GB VRAM. Maksymalnie 1 kontener naraz.
+- Kontener gaśnie po 2 min bezczynności, więc płacimy tylko za czas pracy. Pierwsze zapytanie po przerwie czeka na zimny start (start kontenera + załadowanie modelu do GPU).
 - **Przed demo:** `BIELIK_MIN_CONTAINERS=1 python -m modal deploy server/modal/bielik_ollama.py` trzyma jeden ciepły kontener (płatny także bez ruchu). Po demo wdróż ponownie bez tej zmiennej.
+- Limit wydatków: w panelu Modala *Settings → Usage & Billing* ustaw miesięczny budżet workspace.
 - Logi: `python -m modal app logs bielik-ollama`. Zatrzymanie: `python -m modal app stop bielik-ollama`.
