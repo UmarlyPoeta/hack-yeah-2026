@@ -1,22 +1,22 @@
 import { describe, expect, it } from '@ohos/hypium';
-import { Segment } from '../../main/ets/model/Segment';
+import { Interest, Segment, SegmentKind, SegmentOrigin } from '../../main/ets/model/Segment';
 import { SegmentFallback, SegmentRequest, SegmentService } from '../../main/ets/data/SegmentService';
 import { FakeCall, FakeReply, FakeTransport, networkError, reply, sleep } from './Fakes';
 
 const BASE = 'http://10.0.0.5:8787';
 
-function req(poiId: string, kind: 'ARRIVAL' | 'BRIDGE' | 'DEEP_DIVE' = 'ARRIVAL'): SegmentRequest {
+function req(poiId: string, kind: SegmentKind = SegmentKind.ARRIVAL): SegmentRequest {
   const r: SegmentRequest = {
-    kind: kind, poiId: poiId, fromPoiId: null, interests: ['historia'], maxWords: 90, voice: true,
+    kind: kind, poiId: poiId, fromPoiId: null, interests: [Interest.HISTORY], maxWords: 90, voice: true,
   };
   return r;
 }
 
-function segment(r: SegmentRequest, origin: 'ai' | 'template', text: string): Segment {
+function segment(r: SegmentRequest, origin: SegmentOrigin, text: string): Segment {
   const s: Segment = {
     id: `seg-${r.poiId}`, kind: r.kind, poiId: r.poiId, fromPoiId: r.fromPoiId, text: text, claims: [],
-    origin: origin, llmModel: origin === 'ai' ? 'bielik' : null,
-    audioUrl: origin === 'ai' ? `/v1/audio/seg-${r.poiId}.mp3` : null,
+    origin: origin, llmModel: origin === SegmentOrigin.AI ? 'bielik' : null,
+    audioUrl: origin === SegmentOrigin.AI ? `/v1/audio/seg-${r.poiId}.mp3` : null,
     durationMs: null, voice: null, sourceUrls: [], warnings: [],
   };
   return s;
@@ -27,14 +27,14 @@ class TemplateStub implements SegmentFallback {
 
   build(r: SegmentRequest): Segment {
     this.built++;
-    return segment(r, 'template', 'szablon');
+    return segment(r, SegmentOrigin.TEMPLATE, 'szablon');
   }
 }
 
 function aiReply(delayMs: number): (call: FakeCall) => FakeReply {
   return (call: FakeCall) => {
     const r = JSON.parse(call.body) as SegmentRequest;
-    return reply(200, JSON.stringify(segment(r, 'ai', 'tekst AI')), delayMs);
+    return reply(200, JSON.stringify(segment(r, SegmentOrigin.AI, 'tekst AI')), delayMs);
   };
 }
 
@@ -49,7 +49,7 @@ export default function segmentServiceTest() {
     it('answer_before_deadline_returns_server_segment', 0, async () => {
       const t = new FakeTransport(aiReply(10));
       const s = await service(t).request(req('plwiki:1'), 500);
-      expect(s.origin).assertEqual('ai');
+      expect(s.origin).assertEqual(SegmentOrigin.AI);
       expect(s.audioUrl).assertEqual(`${BASE}/v1/audio/seg-plwiki:1.mp3`);
       expect(t.calls[0].method).assertEqual('POST');
       expect(t.calls[0].url).assertEqual(`${BASE}/v1/segment`);
@@ -67,13 +67,13 @@ export default function segmentServiceTest() {
       });
       const started = Date.now();
       const first = await svc.request(req('plwiki:2'), 30);
-      expect(first.origin).assertEqual('template');
+      expect(first.origin).assertEqual(SegmentOrigin.TEMPLATE);
       expect(Date.now() - started < 140).assertTrue();
       await sleep(200);
-      expect((upgraded as Segment | null)?.origin).assertEqual('ai');
+      expect((upgraded as Segment | null)?.origin).assertEqual(SegmentOrigin.AI);
       // the late answer is cached: next request gets it at once, without a new call
       const second = await svc.request(req('plwiki:2'), 30);
-      expect(second.origin).assertEqual('ai');
+      expect(second.origin).assertEqual(SegmentOrigin.AI);
       expect(t.calls.length).assertEqual(1);
     });
 
@@ -81,18 +81,18 @@ export default function segmentServiceTest() {
       const t = new FakeTransport(() => networkError(5));
       const started = Date.now();
       const s = await service(t).request(req('plwiki:3'), 1000);
-      expect(s.origin).assertEqual('template');
+      expect(s.origin).assertEqual(SegmentOrigin.TEMPLATE);
       expect(Date.now() - started < 500).assertTrue();
     });
 
     it('bad_status_or_body_returns_template', 0, async () => {
       const s1 = await service(new FakeTransport(() => reply(404, '{"error":{}}'))).request(req('plwiki:4'), 500);
-      expect(s1.origin).assertEqual('template');
+      expect(s1.origin).assertEqual(SegmentOrigin.TEMPLATE);
       const s2 = await service(new FakeTransport(() => reply(200, 'nope'))).request(req('plwiki:4'), 500);
-      expect(s2.origin).assertEqual('template');
-      const wrongKind = (call: FakeCall) => reply(200, JSON.stringify(segment(req('plwiki:4', 'BRIDGE'), 'ai', 'x')));
+      expect(s2.origin).assertEqual(SegmentOrigin.TEMPLATE);
+      const wrongKind = (call: FakeCall) => reply(200, JSON.stringify(segment(req('plwiki:4', SegmentKind.BRIDGE), SegmentOrigin.AI, 'x')));
       const s3 = await service(new FakeTransport(wrongKind)).request(req('plwiki:4'), 500);
-      expect(s3.origin).assertEqual('template');
+      expect(s3.origin).assertEqual(SegmentOrigin.TEMPLATE);
     });
 
     it('offline_mode_never_calls_http', 0, async () => {
@@ -102,7 +102,7 @@ export default function segmentServiceTest() {
       });
       svc.prefetch(req('plwiki:5'), 1000);
       const s = await svc.request(req('plwiki:5'), 1000);
-      expect(s.origin).assertEqual('template');
+      expect(s.origin).assertEqual(SegmentOrigin.TEMPLATE);
       expect(t.calls.length).assertEqual(0);
     });
 
@@ -112,7 +112,7 @@ export default function segmentServiceTest() {
       svc.prefetch(req('plwiki:6'), 1000);
       await sleep(50);
       const s = await svc.request(req('plwiki:6'), 1000);
-      expect(s.origin).assertEqual('ai');
+      expect(s.origin).assertEqual(SegmentOrigin.AI);
       expect(t.calls.length).assertEqual(1);
     });
 
@@ -133,7 +133,7 @@ export default function segmentServiceTest() {
       const svc = service(t, 1);
       svc.prefetch(req('plwiki:9'), 1000);
       const late = await svc.request(req('plwiki:10'), 20);
-      expect(late.origin).assertEqual('template');
+      expect(late.origin).assertEqual(SegmentOrigin.TEMPLATE);
       await sleep(200);
       expect(t.calls.length).assertEqual(1);
     });

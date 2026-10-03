@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@ohos/hypium';
 import { GeoFix } from '../../main/ets/model/GeoFix';
-import { Poi } from '../../main/ets/model/Poi';
+import { Poi, PoiRole } from '../../main/ets/model/Poi';
 import { PoiRepository } from '../../main/ets/data/PoiRepository';
 import { FakeCall, FakeReply, FakeTransport, networkError, reply, StringSource } from './Fakes';
 
@@ -14,6 +14,7 @@ function poi(id: string, name: string, lat: number, lon: number): Poi {
   const p: Poi = {
     id: id, name: name, summary: `${name}.`, lat: lat, lon: lon, kind: 'building',
     wikidataId: null, imageUrl: null, sourceUrl: `https://pl.wikipedia.org/?curid=${id}`,
+    importance: 0.5, role: PoiRole.SIGHT, partOfId: null,
   };
   return p;
 }
