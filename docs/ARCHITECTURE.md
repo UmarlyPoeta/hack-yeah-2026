@@ -1,12 +1,12 @@
 # Spacer z historią: architektura
 
-> Przewodnik, który **idzie razem z tobą** i mówi prawdziwym polskim głosem. Wie, w którą stronę idziesz, co jest przed tobą i ile czasu zostało do następnego zabytku, więc płynnie łączy kolejne miejsca w jedną opowieść. Gdy się zatrzymasz, proponuje pogłębienie. Lokalizację dostaje **tylko po kliknięciu `LocationButton`**, bez stałego uprawnienia. Tekst pisze **Bielik** (polski open-source LLM) uruchomiony lokalnie w **Ollamie**, a czyta go **ElevenLabs**. Zapasowy głos offline to **Piper**.
+> Przewodnik, który **idzie razem z tobą** i mówi prawdziwym polskim głosem. Wie, w którą stronę idziesz, co jest przed tobą i ile czasu zostało do następnego zabytku, więc płynnie łączy kolejne miejsca w jedną opowieść. Gdy się zatrzymasz, proponuje pogłębienie. Lokalizację dostaje **tylko po kliknięciu `LocationButton`**, bez stałego uprawnienia. Tekst pisze **Bielik** (polski open-source LLM) serwowany przez **Ollamę** na GPU w **Modal**, a czyta go **ElevenLabs**. Zapasowy głos offline to **Piper**.
 
 - **Temat prowadzący:** Human-Centric Technology (doświadczenie kulturowe, odpowiedzialna technologia).
 - **Drugi:** Intelligent Experiences (kontekstowy przewodnik: ruch, kierunek, tempo, zatrzymania).
 - **Platforma w centrum:** HarmonyOS **Security Components** (`LocationButton`: autoryzacja tymczasowa, ważna do wygaszenia ekranu, przejścia w tło albo wyjścia z aplikacji), Location Kit, Media Kit (AVPlayer), Network Kit, ArkUI.
-- **Suwerenność:** dane z polskiej Wikipedii (CC BY-SA), polski otwarty model (Bielik, SpeakLeash i ACK Cyfronet AGH) uruchomiony lokalnie, otwarty system.
-- **Środowisko:** jeden emulator telefonu w DevEco Studio (compatible API 20, compile 23, target 24) z symulowanym GPS + laptop z `server/` i Ollamą.
+- **Suwerenność:** dane z polskiej Wikipedii (CC BY-SA), polski otwarty model (Bielik, SpeakLeash i ACK Cyfronet AGH) na własnym wdrożeniu (Modal, bez zewnętrznego API LLM), otwarty system.
+- **Środowisko:** jeden emulator telefonu w DevEco Studio (compatible API 20, compile 23, target 24) z symulowanym GPS + laptop z `server/`; Bielik w Ollamie na Modalu (`server/modal/`).
 
 ## 1. Obraz całości
 
@@ -38,7 +38,7 @@
 │ GET  /v1/audio/:id  → plik MP3 z cache                                              (P4) │
 │ npm run warm        → pre-generacja tekstu i audio dla trasy demo                   (P4) │
 │                                                                                          │
-│ LlmProvider:  Ollama /api/chat (http://localhost:11434) + Bielik-4.5B-v3.0-Instruct GGUF │
+│ LlmProvider:  Ollama /api/chat na Modal (GPU, OLLAMA_URL) + Bielik-4.5B-v3.0-Instruct    │
 │ TtsProvider:  ElevenLabs (domyślny, chmura, klucz w .env)  |  Piper pl_PL (offline)      │
 └──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -47,7 +47,7 @@
 
 ### 2.1 MotionTracker: z surowych fixów robi „jak idzie użytkownik”
 - Odrzuca fixy z `accuracy > 50 m` i skoki niemożliwe dla pieszego (> 5 m/s).
-- Prędkość: EMA z ~10 s. Kurs: azymut przemieszczenia na ostatnich ≥ 15 m (pojedynczy fix za bardzo szumi).
+- Prędkość: przemieszczenie netto w oknie ~10 s (sumowanie kroków kumuluje szum GPS). Kurs: azymut przemieszczenia na ostatnich ≥ 25 m (przy 15 m szum ±5 m daje wahania ±30°).
 - Stan ruchu z histerezą: `STOPPED`, gdy prędkość < 0,3 m/s przez ≥ 8 s; `MOVING`, gdy > 0,6 m/s.
 
 ### 2.2 Itinerary: co jest przed tobą
@@ -55,8 +55,8 @@ Dla każdego POI w promieniu 250 m, gdzie θ to kąt między kursem a kierunkiem
 - `along = d·cos θ` (ile zostało do POI wzdłuż kierunku marszu), `cross = d·sin θ` (znak to lewo albo prawo),
 - POI jest przed tobą, gdy `along > 0` i `|cross| ≤ 60 m`, albo zawsze, gdy `d < 40 m`,
 - `upcoming` jest posortowane po `along`, a `ETA = along / max(prędkość, 0,8 m/s)`,
-- `passed`: `along < −20 m`. `missed`: minięty bez przybycia (nigdy nie był < 35 m),
-- „następny” zmienia się tylko po minięciu albo gdy inny POI ma ETA krótsze o > 15 s (ochrona przed szumem kursu).
+- `passed`: `along < −20 m`; wraca do gry, gdy po zakręcie jest znów < 40 m i przed tobą (`along ≥ 0`). `missed`: minięty bez przybycia (nigdy nie był < 35 m),
+- „następny” zmienia się tylko po minięciu, gdy inny POI ma ETA krótsze o > 15 s, albo gdy obecny cel wypadł z korytarza, a inny jest bliżej (ochrona przed szumem kursu i „przyklejeniem” do długich obiektów, np. murów).
 
 ### 2.3 NarrationPlanner: co powiedzieć, kiedy i jak długo
 Narrator mówi **jeden segment naraz**. Czas trwania segmentu to **prawdziwa długość audio** (`durationMs`). Zanim audio jest gotowe, planner szacuje go z tempa ok. 2,5 słowa/s.
@@ -71,16 +71,30 @@ Narrator mówi **jeden segment naraz**. Czas trwania segmentu to **prawdziwa dł
 | `DEEP_DIVE` | po akceptacji | 200–350 słów, sekcje wg zainteresowań | 4 |
 | `MISSED` | minięty POI, narrator wolny | 1 zdanie: „Po lewej minęliśmy …” | 1 |
 
-- **Nie przerywamy w pół zdania.** Wyższy priorytet czeka na koniec bieżącego zdania.
-- **Segmenty się przeterminowują:** `APPROACH` do minionego POI wypada z kolejki.
-- **Dwa zabytki blisko siebie:** `ARRIVAL` pierwszego dostaje krótki budżet, `BRIDGE` jest pomijany, a `APPROACH` drugiego zaczyna się od „Tuż obok…”.
-- **Prefetch:** gdy zmienia się `upcoming[0]`, planner zleca `ARRIVAL(next)` i `BRIDGE(current→next)` z **deadline = ETA**. Jeśli AI albo TTS nie zdąży, używa szablonu (tekst bez głosu albo z Piperem).
+- **Nie przerywamy w ogóle.** Segment zawsze kończy się w całości; kolejka z priorytetami czeka (`WELCOME` 5, `ARRIVAL`/`DEEP_DIVE` 4, `APPROACH` 3, `BRIDGE` 2, `MISSED` 1).
+- **Czas liczony do startu opowieści,** nie do drzwi zabytku: `ARRIVAL` zaczyna się w promieniu 35 m, więc ETA, budżety słów i zapowiedzi liczą czas do tego momentu.
+- **Segmenty się przeterminowują:** `APPROACH` do osiągniętego przystanku i `ARRIVAL` przystanku oddalonego o > 80 m wypadają z kolejki; `MISSED` żyje 60 s.
+- **Prefetch:** gdy zmienia się następny główny przystanek, planner zleca `ARRIVAL(next)` z **deadline = czas do startu opowieści**; `BRIDGE(current→next)` zleca w chwili startu `ARRIVAL`. Gdy AI albo TTS nie zdąży, gra szablon.
 
-`GuideDirector` to czysta funkcja `step(stan, wejście, tNow) → (stan, akcje[])`. Test: odtworzenie `fixtures/demo-route-krakow.json` i sprawdzenie sekwencji segmentów.
+### 2.4 Przystanki i wybór, o czym mówić (`Stops`)
+
+Na trasie demo jest 77 miejsc, z czego 67 w zasięgu: kamienice, obszary, duplikaty. Przewodnik opowiada o **przystankach**, nie o każdym punkcie:
+- **Grupowanie:** miejsca w promieniu 40 m od siebie oraz połączone przez `partOfId` tworzą jeden przystanek; główne jest to z najwyższym `importance`, reszta trafia do zdania „Obok: …”. Obszary (`role: area`) nigdy nie są przystankami.
+- **Próg względny:** przystanek jest główny, gdy należy do górnych 30% ważności w promieniu 500 m, z dolnym minimum 0,15 i górnym limitem 0,6. Dzięki temu w Krakowie mówimy o najważniejszych, a w małym mieście też jest o czym mówić.
+- **Wypełniacze:** przystanek poniżej progu dostaje `ARRIVAL` tylko wtedy, gdy przewodnik milczał ≥ 30 s, a do następnego głównego jest ≥ 90 s.
+- **Spóźnione przybycie:** główny przystanek minięty bliżej niż 60 m albo wcześniej zapowiedziany dostaje `ARRIVAL` zamiast „już za nami”. `MISSED` tylko dla miejsc bliżej niż 120 m, najwyżej jedno na minutę.
+- **Szablony** trzymają nazwy w mianowniku („Za nami: X, przed nami: Y”), bo bez modelu nie odmienimy poprawnie dowolnej nazwy.
+
+Wynik na trasie demo: 15 przystanków w 19 minut, segmenty nigdy się nie nakładają, kolejność zgodna z trasą także przy szumie GPS ±5–8 m.
+
+### 2.5 Silnik w aplikacji
+
+`GuideDirector.step(zdarzenie) → akcje[]` łączy `MotionTracker`, `Itinerary` i `NarrationPlanner`. Zdarzenia: `FIX`, `TICK` (co ~1 s), `SEGMENT_READY`, `PLAYBACK_FINISHED`, `DEEP_DIVE_ACCEPTED`. Akcje: `REQUEST_SEGMENT`, `PLAY_SEGMENT`, `OFFER_DEEP_DIVE`, `WITHDRAW_DEEP_DIVE`.
+`WalkController` wykonuje akcje przez trzy porty: `SegmentClient` (adapter na `SegmentService` P3), `NarrationOutput` (adapter na `NarratorPlayer` P5), `Clock`. Wystawia `WalkUiState` z polami, których używa `WalkPage`. `WalkViewModel.ets` (`@ObservedV2`) tylko odbija ten stan do ArkUI i odpala tick. `GuideDebugPage` odtwarza trasę demo ×10 (oznaczona jako symulacja).
 
 ## 3. AI i głos (serwer)
 
-- **LLM:** Ollama + **Bielik-4.5B-v3.0-Instruct** (GGUF, Q4, ok. 3 GB RAM). `POST /api/chat` z `format` = JSON Schema segmentu, `stream: false`, `keep_alive: "30m"`. Model wybiera `LLM_MODEL` w `.env`.
+- **LLM:** Ollama + **Bielik-4.5B-v3.0-Instruct** (GGUF Q8_0, ok. 5 GB VRAM) na GPU w Modal (`server/modal/`, endpoint z proxy auth: nagłówki `Modal-Key`/`Modal-Secret`). `POST /api/chat` z `format` = JSON Schema segmentu, `stream: false`, `keep_alive: "30m"`. Model wybiera `LLM_MODEL` w `.env`.
 - **Ugruntowanie:** prompt dostaje wyłącznie tekst źródłowy POI (streszczenia, a dla `DEEP_DIVE` pełniejszy artykuł, przycięty). Każde twierdzenie ma dosłowny cytat. Walidator odrzuca cytaty spoza źródła i liczby/lata spoza źródła. Po odrzuceniu następuje 1 retry, potem szablon.
 - **TTS:** `TtsProvider` z dwiema implementacjami:
   - `elevenlabs` (domyślny): REST text-to-speech, model wielojęzyczny, wynik w MP3. Klucz `ELEVENLABS_API_KEY` i `ELEVENLABS_VOICE_ID` tylko w `server/.env`.
@@ -95,7 +109,7 @@ Narrator mówi **jeden segment naraz**. Czas trwania segmentu to **prawdziwa dł
 2. **Zero stałych uprawnień do lokalizacji.** Jedyna droga to `LocationButton`. Utrata autoryzacji to stan `PAUSED`, nie błąd. Manifest ma tylko `INTERNET` (system_grant).
 3. **Czysty rdzeń, czas jako parametr:** testy Hypium są deterministyczne.
 4. **Każde źródło za interfejsem**, z wersją live i zastępczą.
-5. **Przejrzystość w UI:** etykieta „AI: Bielik (lokalnie) · głos: ElevenLabs” albo „szablon”, plus link do źródła.
+5. **Przejrzystość w UI:** etykieta „AI: Bielik · głos: ElevenLabs” albo „szablon”, plus link do źródła.
 
 ## 5. `WalkSession`
 
