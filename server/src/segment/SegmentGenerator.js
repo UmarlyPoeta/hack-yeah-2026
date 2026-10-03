@@ -12,6 +12,7 @@ export const INTERESTS = ['architektura', 'historia', 'sztuka', 'ludzie', 'legen
 const TEMPLATE_ONLY = new Set(['APPROACH', 'MISSED']);
 const MAX_WORDS_RANGE = [5, 400];
 const SHORT_SUMMARY_CHARS = 600;
+export const MAX_WORDS_BUCKET = 10;
 
 /** Checks the request body; the client never sends source text (prompt-injection guard), unknown fields are ignored. */
 export function parseSegmentRequest(body) {
@@ -34,7 +35,9 @@ export function parseSegmentRequest(body) {
     poiId,
     fromPoiId: kind === 'BRIDGE' ? fromPoiId : null,
     interests: [...new Set(interests)].sort(),
-    maxWords,
+    // rounded up to a multiple of 10: the planner's budget changes with every GPS fix, and without buckets
+    // almost no request would hit the cache filled by `npm run warm`
+    maxWords: Math.ceil(maxWords / MAX_WORDS_BUCKET) * MAX_WORDS_BUCKET,
     voice,
   };
 }
@@ -45,14 +48,18 @@ export class SegmentGenerator {
    *   poiService: import('../pois/PoiService.js').PoiService,
    *   llm: import('../llm/OllamaClient.js').OllamaClient | null,   null = no LLM configured, templates only
    *   cache: import('../cache/JsonCache.js').JsonCache,
+   *   tts?: import('../tts/TtsService.js').TtsService | null,   null = no voice, `tts_unavailable`
+   *   cloudVoiceForTemplates?: boolean,   false: template segments are voiced by Piper only (saves ElevenLabs characters)
    *   timeouts?: { default: number, deepDive: number },
    *   log?: (msg: string) => void,
    * }} deps
    */
-  constructor({ poiService, llm, cache, timeouts = { default: 45_000, deepDive: 90_000 }, log = () => {} }) {
+  constructor({ poiService, llm, cache, tts = null, cloudVoiceForTemplates = false, timeouts = { default: 45_000, deepDive: 90_000 }, log = () => {} }) {
     this.poiService = poiService;
     this.llm = llm;
     this.cache = cache;
+    this.tts = tts;
+    this.cloudVoiceForTemplates = cloudVoiceForTemplates;
     this.timeouts = timeouts;
     this.log = log;
     this.inFlight = new Map();   // the app prefetches; identical concurrent requests share one LLM call
@@ -67,12 +74,31 @@ export class SegmentGenerator {
 
     const id = segmentId(req, this.llm?.model ?? 'template');
     const cached = this.cache.get(id);
-    if (cached) return withVoice(cached, req);
+    if (cached) return this.#withVoice(cached, req);
     if (!this.inFlight.has(id)) {
       const job = this.#build(id, req, poi, fromPoi).finally(() => this.inFlight.delete(id));
       this.inFlight.set(id, job);
     }
-    return withVoice(await this.inFlight.get(id), req);
+    return this.#withVoice(await this.inFlight.get(id), req);
+  }
+
+  /** Adds audio (#19). The text segment is cached on its own, so a TTS outage never costs another LLM call. */
+  async #withVoice(segment, req) {
+    const out = { ...segment, audioUrl: null, durationMs: null, voice: null, warnings: [...segment.warnings] };
+    if (!req.voice) return out;
+    if (!this.tts) {
+      out.warnings.push('tts_unavailable');
+      return out;
+    }
+    const allowCloud = segment.origin === 'ai' || this.cloudVoiceForTemplates;
+    const audio = await this.tts.speak(segment.text, { allowCloud });
+    if (audio.audioId) {
+      out.audioUrl = `/v1/audio/${audio.audioId}.mp3`;
+      out.durationMs = audio.durationMs;
+      out.voice = audio.voice;
+    }
+    out.warnings.push(...audio.warnings);
+    return out;
   }
 
   async #build(id, req, poi, fromPoi) {
@@ -150,15 +176,8 @@ export class SegmentGenerator {
   }
 }
 
-/** Stable id = hash of the cache key from docs/ARCHITECTURE.md §3 (voice is added by TTS in #19). */
+/** Stable id = hash of the cache key from docs/ARCHITECTURE.md §3. Audio is keyed separately by hash(voice, text). */
 export function segmentId(req, model) {
   const key = [req.kind, req.poiId, req.fromPoiId ?? '', req.interests.join(','), req.maxWords, PROMPT_VERSION, model].join('|');
   return createHash('sha256').update(key).digest('hex').slice(0, 20);
-}
-
-/** TTS lands in #19; until then a request with voice=true says so in warnings. */
-function withVoice(segment, req) {
-  const out = { ...segment, audioUrl: null, durationMs: null, voice: null, warnings: [...segment.warnings] };
-  if (req.voice) out.warnings.push('tts_unavailable');
-  return out;
 }

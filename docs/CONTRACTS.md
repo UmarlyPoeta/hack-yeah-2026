@@ -35,7 +35,7 @@ interface Segment {
   claims: Claim[];            // [] dla szablonów
   origin: "ai" | "template";
   llmModel: string | null;    // np. "bielik-4.5b-v3.0-instruct:Q8_0"
-  audioUrl: string | null;    // "/v1/audio/<id>.mp3" albo null (brak TTS)
+  audioUrl: string | null;    // "/v1/audio/<audioId>.mp3" (audioId = hash głosu i tekstu) albo null (brak TTS)
   durationMs: number | null;  // prawdziwa długość audio
   voice: string | null;       // "elevenlabs:<voice>" | "piper:pl_PL-gosia-medium"
   sourceUrls: string[];
@@ -65,11 +65,13 @@ Odpowiedzi to JSON w UTF-8 (poza `/v1/audio`). Błędy mają format `{ "error": 
 - Serwer sam bierze tekst źródłowy z cache POI. **Nie przyjmuje tekstu źródłowego od klienta** (ochrona przed prompt injection).
 - `APPROACH` i `MISSED` są generowane z szablonu (krótkie, deterministyczne), a TTS jest opcjonalny.
 - `200 Segment` także przy awarii LLM albo TTS, wtedy z `origin`/`warnings` odpowiednio.
+- `maxWords` serwer zaokrągla w górę do wielokrotności 10 (cache i `npm run warm` działają na tych przedziałach).
+- `voice: true`: tekst AI czyta ElevenLabs (zapasowo Piper), tekst z szablonu tylko Piper (oszczędza limit znaków ElevenLabs). `warnings`: `tts_fallback_piper`, `tts_unavailable`.
 - `404 unknown_poi`, `400 invalid_params`.
 - Timeouty serwera: LLM 45 s (`DEEP_DIVE` 90 s), TTS 20 s. Klient ma deadline z plannera; po nim używa szablonu lokalnie.
 
-### `GET /v1/audio/<segmentId>.mp3`
-`200 audio/mpeg` z cache albo `404`.
+### `GET /v1/audio/<audioId>.mp3`
+`200 audio/mpeg` z cache albo `404`. Adres bierzemy wyłącznie z `Segment.audioUrl`; ten sam tekst tym samym głosem ma zawsze ten sam `audioId`.
 
 ## Szablony (identyczne w aplikacji i na serwerze)
 
