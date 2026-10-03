@@ -71,12 +71,26 @@ Narrator mówi **jeden segment naraz**. Czas trwania segmentu to **prawdziwa dł
 | `DEEP_DIVE` | po akceptacji | 200–350 słów, sekcje wg zainteresowań | 4 |
 | `MISSED` | minięty POI, narrator wolny | 1 zdanie: „Po lewej minęliśmy …” | 1 |
 
-- **Nie przerywamy w pół zdania.** Wyższy priorytet czeka na koniec bieżącego zdania.
-- **Segmenty się przeterminowują:** `APPROACH` do minionego POI wypada z kolejki.
-- **Dwa zabytki blisko siebie:** `ARRIVAL` pierwszego dostaje krótki budżet, `BRIDGE` jest pomijany, a `APPROACH` drugiego zaczyna się od „Tuż obok…”.
-- **Prefetch:** gdy zmienia się `upcoming[0]`, planner zleca `ARRIVAL(next)` i `BRIDGE(current→next)` z **deadline = ETA**. Jeśli AI albo TTS nie zdąży, używa szablonu (tekst bez głosu albo z Piperem).
+- **Nie przerywamy w ogóle.** Segment zawsze kończy się w całości; kolejka z priorytetami czeka (`WELCOME` 5, `ARRIVAL`/`DEEP_DIVE` 4, `APPROACH` 3, `BRIDGE` 2, `MISSED` 1).
+- **Czas liczony do startu opowieści,** nie do drzwi zabytku: `ARRIVAL` zaczyna się w promieniu 35 m, więc ETA, budżety słów i zapowiedzi liczą czas do tego momentu.
+- **Segmenty się przeterminowują:** `APPROACH` do osiągniętego przystanku i `ARRIVAL` przystanku oddalonego o > 80 m wypadają z kolejki; `MISSED` żyje 60 s.
+- **Prefetch:** gdy zmienia się następny główny przystanek, planner zleca `ARRIVAL(next)` z **deadline = czas do startu opowieści**; `BRIDGE(current→next)` zleca w chwili startu `ARRIVAL`. Gdy AI albo TTS nie zdąży, gra szablon.
 
-`GuideDirector` to czysta funkcja `step(stan, wejście, tNow) → (stan, akcje[])`. Test: odtworzenie `fixtures/demo-route-krakow.json` i sprawdzenie sekwencji segmentów.
+### 2.4 Przystanki i wybór, o czym mówić (`Stops`)
+
+Na trasie demo jest 77 miejsc, z czego 67 w zasięgu: kamienice, obszary, duplikaty. Przewodnik opowiada o **przystankach**, nie o każdym punkcie:
+- **Grupowanie:** miejsca w promieniu 40 m od siebie oraz połączone przez `partOfId` tworzą jeden przystanek; główne jest to z najwyższym `importance`, reszta trafia do zdania „Obok: …”. Obszary (`role: area`) nigdy nie są przystankami.
+- **Próg względny:** przystanek jest główny, gdy należy do górnych 30% ważności w promieniu 500 m, z dolnym minimum 0,15 i górnym limitem 0,6. Dzięki temu w Krakowie mówimy o najważniejszych, a w małym mieście też jest o czym mówić.
+- **Wypełniacze:** przystanek poniżej progu dostaje `ARRIVAL` tylko wtedy, gdy przewodnik milczał ≥ 30 s, a do następnego głównego jest ≥ 90 s.
+- **Spóźnione przybycie:** główny przystanek minięty bliżej niż 60 m albo wcześniej zapowiedziany dostaje `ARRIVAL` zamiast „już za nami”. `MISSED` tylko dla miejsc bliżej niż 120 m, najwyżej jedno na minutę.
+- **Szablony** trzymają nazwy w mianowniku („Za nami: X, przed nami: Y”), bo bez modelu nie odmienimy poprawnie dowolnej nazwy.
+
+Wynik na trasie demo: 15 przystanków w 19 minut, segmenty nigdy się nie nakładają, kolejność zgodna z trasą także przy szumie GPS ±5–8 m.
+
+### 2.5 Silnik w aplikacji
+
+`GuideDirector.step(zdarzenie) → akcje[]` łączy `MotionTracker`, `Itinerary` i `NarrationPlanner`. Zdarzenia: `FIX`, `TICK` (co ~1 s), `SEGMENT_READY`, `PLAYBACK_FINISHED`, `DEEP_DIVE_ACCEPTED`. Akcje: `REQUEST_SEGMENT`, `PLAY_SEGMENT`, `OFFER_DEEP_DIVE`, `WITHDRAW_DEEP_DIVE`.
+`WalkController` wykonuje akcje przez trzy porty: `SegmentClient` (adapter na `SegmentService` P3), `NarrationOutput` (adapter na `NarratorPlayer` P5), `Clock`. Wystawia `WalkUiState` z polami, których używa `WalkPage`. `WalkViewModel.ets` (`@ObservedV2`) tylko odbija ten stan do ArkUI i odpala tick. `GuideDebugPage` odtwarza trasę demo ×10 (oznaczona jako symulacja).
 
 ## 3. AI i głos (serwer)
 
