@@ -6,6 +6,7 @@ import { SessionBadge } from '../components/SessionBadge';
 import { DeepDiveSheet } from '../components/DeepDiveSheet';
 import common from '@ohos.app.ability.common';
 import router from '@ohos.router';
+import { Eyebrow, Fonts, Palette } from '../common/Theme';
 
 @Entry
 @Component
@@ -23,6 +24,8 @@ struct WalkPage {
   @State sessionState: string = 'WALKING';
   @State bearingAngle: number = 45;
   @State isDeepDiveOpen: boolean = false;
+  // mock until WalkViewModel (P2) provides the itinerary
+  @State laterStops: string[] = ['Kościół Mariacki', 'Sukiennice', 'Collegium Maius', 'Wawel'];
 
   // Leaving the walk page (button or system back) must stop the narration.
   aboutToDisappear(): void {
@@ -32,78 +35,89 @@ struct WalkPage {
   build() {
     Stack() {
       Column() {
-
-        // Górny pasek statusu z komponentem SessionBadge
         Row() {
-          Text('Spacer z historią')
-            .fontSize(18)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(Color.Black)
-
+          Eyebrow('SPACER · KRAKÓW')
           Blank()
-
-          SessionBadge({
-            sessionState: this.sessionState
-          })
+          SessionBadge({ sessionState: this.sessionState })
         }
         .width('100%')
-        .padding(16)
-        .backgroundColor(Color.White)
+        .margin({ top: 8 })
 
-        // Pasek trasy
-        RouteStrip({
-          nextPoiName: this.nextPoiName,
-          distanceM: this.distanceM,
-          etaSeconds: this.etaSeconds
-        })
-          .margin({ top: 12 })
+        Row() {
+          RouteStrip({
+            nextPoiName: this.nextPoiName,
+            distanceM: this.distanceM,
+            etaSeconds: this.etaSeconds
+          })
+            .layoutWeight(1)
+          Radar({
+            poiName: this.nextPoiName,
+            distanceM: this.distanceM,
+            bearingAngle: this.bearingAngle
+          })
+            .margin({ left: 16 })
+        }
+        .width('100%')
+        .alignItems(VerticalAlign.Top)
+        .margin({ top: 28 })
 
-        // Radar kierunkowy
-        Radar({
-          poiName: this.nextPoiName,
-          distanceM: this.distanceM,
-          bearingAngle: this.bearingAngle
-        })
-          .margin({ top: 8 })
+        Column() {
+          Eyebrow('DALEJ NA TRASIE')
+          Text(this.laterStops.join('  ·  '))
+            .fontFamily(Fonts.ITALIC)
+            .fontSize(17)
+            .lineHeight(25)
+            .fontColor(Palette.INK_SOFT)
+            .margin({ top: 6 })
+        }
+        .width('100%')
+        .alignItems(HorizontalAlign.Start)
+        .padding({ top: 16 })
+        .margin({ top: 22 })
+        .border({ width: { top: 1 }, color: Palette.RULE })
 
         Blank()
 
-        // Główny teleprompter z odtwarzaczem
         Teleprompter({
           currentText: this.currentText,
           poiName: this.poiName,
           segmentKind: this.segmentKind,
-
           onPlayClick: () => {
-            let context = getContext(this) as common.UIAbilityContext;
-
-            this.player.playRawFile(
-              context,
-              'test.mp3'
-            );
+            const context = getContext(this) as common.UIAbilityContext;
+            this.player.playRawFile(context, 'test.mp3');
           }
         })
 
-        // Przycisk otwierający Deep Dive
-        Button('Opowiedz więcej (Deep Dive)')
-          .width('90%')
-          .height(40)
-          .margin({ top: 16 })
-          .backgroundColor('#52C41A')
-          .fontColor(Color.White)
-          .onClick(() => {
-            this.isDeepDiveOpen = true;
-          })
+        Button({ type: ButtonType.Normal }) {
+          Row() {
+            Text('Opowiedz więcej o tym miejscu')
+              .fontSize(15)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(Palette.INK)
+            Blank()
+            Text('↑')
+              .fontSize(17)
+              .fontColor(Palette.INK)
+          }
+          .width('100%')
+          .padding({ left: 20, right: 20 })
+        }
+        .width('100%')
+        .height(52)
+        .borderRadius(14)
+        .backgroundColor(Color.Transparent)
+        .border({ width: 1, color: Palette.INK, radius: 14 })
+        .margin({ top: 14 })
+        .onClick(() => {
+          this.isDeepDiveOpen = true;
+        })
 
-        Blank()
-
-        // Przycisk wyjścia
-        Button('Zakończ spacer')
-          .backgroundColor('#FF4D4F')
-          .fontColor(Color.White)
-          .width('80%')
-          .height(45)
-          .margin({ bottom: 30 })
+        Text('Zakończ spacer')
+          .fontSize(15)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(Palette.BRICK)
+          .padding(12)
+          .margin({ top: 10, bottom: 8 })
           .onClick(() => {
             this.player.release();
             router.back();
@@ -111,15 +125,15 @@ struct WalkPage {
       }
       .width('100%')
       .height('100%')
-      .backgroundColor('#EFEFEF')
-      .alignItems(HorizontalAlign.Center)
+      .padding({ left: 24, right: 24 })
+      .backgroundColor(Palette.PAPER)
+      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
 
-      // Nakładka Deep Dive
       DeepDiveSheet({
         isShown: $isDeepDiveOpen,
         title: this.poiName,
-        content:
-        'Barbakan w Krakowie – historyczny barbakan, zachowany w świetnym stanie bastion obronny będący dawniej częścią murów miejskich Krakowa. Wybudowany pod koniec XV wieku...'
+        content: 'Barbakan (zwany też Rondlem) – barbakan, najbardziej wysunięta na północ część fortyfikacji ' +
+          'miejskich Krakowa. Znajduje się na Plantach, przed Bramą Floriańską, po południowej stronie ul. Basztowej.'
       })
     }
     .width('100%')

@@ -1,3 +1,5 @@
+import { Eyebrow, Fonts, Palette } from '../common/Theme';
+
 @Component
 export struct RouteStrip {
   @Prop nextPoiName: string = 'Brama Floriańska';
@@ -5,36 +7,33 @@ export struct RouteStrip {
   @Prop etaSeconds: number = 90;
 
   build() {
-    Row() {
-      Column() {
-        Text('NASTĘPNY PUNKT')
-          .fontSize(10)
-          .fontColor('#888888')
-          .fontWeight(FontWeight.Bold)
-        Text(this.nextPoiName)
+    Column() {
+      Eyebrow('NASTĘPNY PRZYSTANEK')
+      Text(this.nextPoiName)
+        .fontFamily(Fonts.DISPLAY)
+        .fontSize(32)
+        .lineHeight(36)
+        .fontColor(Palette.INK)
+        .maxLines(2)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .margin({ top: 6 })
+      Row({ space: 10 }) {
+        Text(`${Math.round(this.distanceM)} m`)
+          .fontFamily(Fonts.TEXT_MEDIUM)
+          .fontSize(20)
+          .fontColor(Palette.BRICK)
+        Text(this.etaText())
           .fontSize(14)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
+          .fontColor(Palette.INK_SOFT)
       }
-      .alignItems(HorizontalAlign.Start)
-
-      Blank()
-
-      Column() {
-        Text(`${this.distanceM} m`)
-          .fontSize(14)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#007DFF')
-        Text(`~${Math.round(this.etaSeconds / 60)} min`)
-          .fontSize(11)
-          .fontColor('#666666')
-      }
-      .alignItems(HorizontalAlign.End)
+      .alignItems(VerticalAlign.Bottom)
+      .margin({ top: 8 })
     }
-    .width('90%')
-    .padding(12)
-    .backgroundColor(Color.White)
-    .borderRadius(10)
-    .shadow({ radius: 4, color: '#05000000', offsetX: 0, offsetY: 2 })
+    .alignItems(HorizontalAlign.Start)
+  }
+
+  private etaText(): string {
+    const min = Math.max(1, Math.round(this.etaSeconds / 60));
+    return `ok. ${min} min pieszo`;
   }
 }
