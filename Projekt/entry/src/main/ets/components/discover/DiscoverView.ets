@@ -1,5 +1,6 @@
 // "Odkrywaj" tab: route details, after docs/design/start.html.
 import { Fonts } from '../../common/Fonts';
+import { placesLabel } from '../../common/Labels';
 import { Route, RouteStop } from '../../model/Route';
 
 @Component
@@ -103,7 +104,7 @@ export struct DiscoverView {
           Row() {
             this.Metric($r('app.media.ic_route'), route.distanceLabel())
             this.Metric($r('app.media.ic_clock'), $r('app.string.metric_time', route.durationMin))
-            this.Metric($r('app.media.ic_pin'), $r('app.string.metric_places', route.stops.length))
+            this.Metric($r('app.media.ic_pin'), placesLabel(this.getUIContext(), route.stops.length))
           }
           .width('100%')
           .padding({ left: 20, right: 20 })

@@ -63,7 +63,7 @@ struct WalkPage {
     .height('100%')
     .backgroundColor($r('app.color.map_bg'))
     .bindSheet($$this.showMore, this.MoreSheet(), {
-      height: SheetSize.MEDIUM,
+      height: SheetSize.FIT_CONTENT,
       backgroundColor: $r('app.color.surface'),
       dragBar: true,
       showClose: false,

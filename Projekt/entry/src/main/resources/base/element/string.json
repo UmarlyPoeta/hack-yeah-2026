@@ -45,10 +45,6 @@
       "value": "Z lokalizacją opowieść startuje sama, gdy dojdziesz na miejsce."
     },
     {
-      "name": "metric_places",
-      "value": "%d miejsc"
-    },
-    {
       "name": "metric_time",
       "value": "ok. %d min"
     },
@@ -147,6 +143,18 @@
     {
       "name": "a11y_walk_map",
       "value": "Mapa: jesteś między Barbakanem a Bramą Floriańską"
+    },
+    {
+      "name": "places_one",
+      "value": "%d miejsce"
+    },
+    {
+      "name": "places_few",
+      "value": "%d miejsca"
+    },
+    {
+      "name": "places_many",
+      "value": "%d miejsc"
     }
   ]
 }
