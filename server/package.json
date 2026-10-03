@@ -1,0 +1,16 @@
+{
+  "name": "spacer-z-historia-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend for Spacer z historią: POIs from Polish Wikipedia, narration segments, audio",
+  "type": "module",
+  "engines": {
+    "node": ">=22.9"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/index.js",
+    "dev": "node --watch --env-file-if-exists=.env src/index.js",
+    "test": "node --test test/*.test.js",
+    "record-fixtures": "node scripts/record-wiki-fixtures.js"
+  }
+}
