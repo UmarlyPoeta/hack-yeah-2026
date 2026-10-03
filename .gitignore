@@ -1,0 +1,41 @@
+# planning material from the abandoned first idea, kept locally only
+archive/
+
+# DevEco / hvigor / ohpm
+build/
+**/build/
+oh_modules/
+**/oh_modules/
+.hvigor/
+.preview/
+local.properties
+.idea/
+*.iml
+.cxx/
+.clangd/
+
+# signing material and secrets: never commit
+*.p12
+*.cer
+*.p7b
+*.csr
+*.keystore
+.ohos-system-signing/
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+
+# server runtime data: generated audio/text cache, downloaded voices
+server/.cache/
+server/voices/
+*.onnx
