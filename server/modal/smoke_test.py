@@ -29,6 +29,7 @@ SEGMENT_SCHEMA = {
         "text": {"type": "string"},
         "claims": {
             "type": "array",
+            "maxItems": 3,
             "items": {
                 "type": "object",
                 "properties": {"text": {"type": "string"}, "quote": {"type": "string"}},
@@ -42,7 +43,8 @@ SEGMENT_SCHEMA = {
 SYSTEM = (
     "Jesteś przewodnikiem miejskim, który idzie razem ze słuchaczem po Krakowie. "
     "Mówisz po polsku, krótkimi zdaniami, ciepło i konkretnie. "
-    "Używasz WYŁĄCZNIE faktów z podanego źródła. Do każdego faktu dodajesz w polu claims "
+    "Używasz WYŁĄCZNIE faktów z podanego źródła, ale opowiadasz własnymi słowami: nie przepisuj źródła. "
+    "Wybierz 2-3 najciekawsze fakty. Dla każdego dodaj w polu claims krótki (do 12 słów) "
     "dosłowny cytat ze źródła (quote). Nie podawaj liczb ani dat, których nie ma w źródle. "
     "Odpowiadasz wyłącznie JSON-em zgodnym ze schematem."
 )
@@ -83,7 +85,8 @@ def arrival(base, poi, max_words):
         "format": SEGMENT_SCHEMA,
         "stream": False,
         "keep_alive": "30m",
-        "options": {"temperature": 0.2, "num_predict": int(max_words * 4)},
+        # Polish is ~2.5 tokens/word; claims add ~150 tokens
+        "options": {"temperature": 0.2, "num_predict": int(max_words * 3 + 250)},
     }
     t0 = time.time()
     resp = request(base, "/api/chat", body)
@@ -133,6 +136,8 @@ def main():
             f"quotes outside source {len(bad_quotes)} | numbers outside source {bad_numbers}"
         )
         print("  " + result.get("text", content)[:600])
+        if not schema_ok:
+            print(f"  done_reason={resp.get('done_reason')} (length = cut off by num_predict)")
         failures += not schema_ok
     sys.exit(1 if failures else 0)
 

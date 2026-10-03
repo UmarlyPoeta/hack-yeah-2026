@@ -22,15 +22,16 @@ OLLAMA_PORT = 11434
 GPU = os.environ.get("BIELIK_GPU", "T4")  # cheapest Modal GPU; 16 GB VRAM is plenty for Q8_0
 MIN_CONTAINERS = int(os.environ.get("BIELIK_MIN_CONTAINERS", "0"))
 
-# Chat template from the model card (speakleash/Bielik-4.5B-v3.0-Instruct-GGUF, "Ollama Modfile")
+# ChatML, as stored in the GGUF metadata (tokenizer.chat_template). The "Ollama Modfile" on the
+# model card shows a Llama-3 style template, but the model was trained on ChatML: with the Llama-3
+# template it answered far too briefly and some JSON-constrained requests failed with HTTP 500.
 MODELFILE = f'''FROM /tmp/{GGUF_FILE}
-TEMPLATE """<s>{{{{ if .System }}}}<|start_header_id|>system<|end_header_id|>
-{{{{ .System }}}}<|eot_id|>{{{{ end }}}}{{{{ if .Prompt }}}}<|start_header_id|>user<|end_header_id|>
-{{{{ .Prompt }}}}<|eot_id|>{{{{ end }}}}<|start_header_id|>assistant<|end_header_id|>
-{{{{ .Response }}}}<|eot_id|>"""
-PARAMETER stop "<|start_header_id|>"
-PARAMETER stop "<|end_header_id|>"
-PARAMETER stop "<|eot_id|>"
+TEMPLATE """{{{{- range .Messages }}}}<|im_start|>{{{{ .Role }}}}
+{{{{ .Content }}}}<|im_end|>
+{{{{ end }}}}<|im_start|>assistant
+"""
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "<|im_start|>"
 PARAMETER temperature 0.2
 PARAMETER num_ctx 8192
 '''

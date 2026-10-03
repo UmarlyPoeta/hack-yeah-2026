@@ -37,6 +37,20 @@ BIELIK_URL=https://... MODAL_KEY=wk-... MODAL_SECRET=ws-... python server/modal/
 
 Sprawdza `/api/version` i `/api/tags`, potem 3× `ARRIVAL` ~100 słów dla Kamienicy Czyncielów z `fixtures/pois-krakow.json`. Pokazuje czas (pierwszy = zimny start), tokeny/s, zgodność ze schematem i czy cytaty oraz liczby są w źródle (te same reguły co walidator z #18).
 
+### Wyniki (2026-10-03, T4, Ollama 0.35.1, Q8_0, `ARRIVAL` Kamienica Czyncielów)
+
+| | zimny start | ciepły |
+|---|---|---|
+| czas całego zapytania | ~86 s (10 s kontener + 40 s ładowanie modelu + generacja) | 9,7–11,6 s |
+| szybkość generacji | 20 tok/s | 39 tok/s |
+| tokeny odpowiedzi (tekst + claims) | 493 | 355–430 |
+
+- Schemat JSON: 4/4 OK. Długość tekstu 47–60 słów przy prośbie o ~100 (do dostrojenia promptem w #18).
+- Liczby i lata w tekście: wszystkie występują w źródle. Cytaty: 1–2 z 3 nie są dosłowne (model lekko je parafrazuje), więc walidator z #18 jest potrzebny.
+- Drobne przekłamania słów („sklep galaretowy” zamiast „galanteryjny”). `temperature` 0,2.
+- Wniosek dla prefetchu (#20): ciepły `ARRIVAL` ~10 s mieści się w ETA; po przerwie > 2 min pierwsze zapytanie trwa ~1,5 min, więc przed spacerem trzeba „obudzić” model (np. `GET /api/version` + 1 zapytanie przy starcie sesji) albo użyć `BIELIK_MIN_CONTAINERS=1`.
+- **Szablon czatu:** Bielik v3 używa ChatML (`<|im_start|>`). Szablon w stylu Llama 3 z karty modelu na HF jest błędny: z nim odpowiedzi były ucinane, a część zapytań kończyła się HTTP 500.
+
 ## Koszt i zimny start
 
 - GPU: domyślnie `T4`, najtańsze na Modalu (ok. 0,6 USD/h, tylko gdy kontener działa). Zmiana: `BIELIK_GPU=L4 modal deploy ...`. Model Q8_0 zajmuje ~5 GB VRAM. Maksymalnie 1 kontener naraz.
