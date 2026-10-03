@@ -4,6 +4,7 @@ import path from 'node:path';
 import { JsonCache } from './cache/JsonCache.js';
 import { OllamaClient } from './llm/OllamaClient.js';
 import { loadFixturePois, PoiService } from './pois/PoiService.js';
+import { WikidataClient } from './pois/wikidata.js';
 import { WikipediaClient } from './pois/wikipedia.js';
 import { SegmentGenerator } from './segment/SegmentGenerator.js';
 import { ElevenLabsTts, PiperTts } from './tts/providers.js';
@@ -27,6 +28,7 @@ export function ttsProviders(config) {
 export function createServices(config, log = () => {}) {
   const poiService = new PoiService({
     wiki: new WikipediaClient({ apiUrl: config.wikiApiUrl, timeoutMs: config.wikiTimeoutMs }),
+    wikidata: new WikidataClient({ apiUrl: config.wikidataApiUrl, timeoutMs: config.wikiTimeoutMs }),
     areaCache: new JsonCache({ file: path.join(config.cacheDir, 'pois-areas.json'), ttlMs: config.poiCacheTtlMs }),
     articleCache: new JsonCache({ file: path.join(config.cacheDir, 'articles.json'), ttlMs: 7 * config.poiCacheTtlMs }),
     fixturePois: loadFixturePois(config.fixturePoisPath),

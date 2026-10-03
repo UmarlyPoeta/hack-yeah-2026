@@ -20,8 +20,13 @@ interface Poi {
   wikidataId: string | null;  // "Q1072350"
   imageUrl: string | null;
   sourceUrl: string;          // link do artykułu (licencja CC BY-SA 4.0), pokazywany w UI
+  importance: number;         // 0..1: log(1 + liczba wersji językowych) / log(41), obcięte do 1 (#40)
+  role: "sight" | "area";     // area = ulica, plac, dzielnica: nigdy ARRIVAL, tylko tło (#40)
+  partOfId: string | null;    // id POI, którego ten jest częścią (Wikidata P361), np. galeria → Sukiennice (#40)
   distanceM?: number;         // tylko w odpowiedzi /v1/pois
 }
+// Aplikacja przyjmuje dane bez importance/role/partOfId (starsze fixtures):
+// importance = min(1, długość summary / 2000), role = "sight", partOfId = null.
 
 type SegmentKind = "WELCOME" | "APPROACH" | "ARRIVAL" | "BRIDGE" | "DEEP_DIVE" | "MISSED";
 type Interest = "architektura" | "historia" | "sztuka" | "ludzie" | "legendy";
@@ -54,7 +59,9 @@ Odpowiedzi to JSON w UTF-8 (poza `/v1/audio`). Błędy mają format `{ "error": 
 
 ### `GET /v1/pois?lat=&lon=&radius=`
 - `radius` 50–1000 m, domyślnie 300.
-- `200 { "pois": Poi[], "source": "live"|"cache"|"fixture" }`, posortowane po `distanceM`, maks. 50.
+- `200 { "pois": Poi[], "source": "live"|"cache"|"fixture", "warnings": string[] }`, posortowane po `distanceM`, maks. 50.
+- Serwer szuka w dwóch zasięgach wokół środka komórki ~150 m (#40): najbliższe miejsca (150 m, do 50) oraz ważne miejsca dalej (600 m, tylko `importance ≥ 0.6`), połączone bez duplikatów. Dzięki temu Wawel i katedra nie przegrywają z kamienicami. Parafie, diecezje i organizacje bez budynku są odrzucane (Wikidata P31). Reguły: `server/src/pois/poi-rules.json` (te same w `tools/gen_fixtures.py`).
+- `warnings`: `"wikidata_unavailable"` (role z prefiksów nazw, `partOfId: null`), `"importance_fallback"` (importance z długości streszczenia, bez wyszukiwania dalekiego). Wynik z ostrzeżeniem nie jest zapamiętywany jako świeży.
 - `400 invalid_params`. Gdy upstream nie działa: `200` z `source: "cache"|"fixture"`, nigdy 5xx, jeśli są jakiekolwiek dane.
 
 ### `POST /v1/segment`

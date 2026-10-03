@@ -1,3 +1,5 @@
+import { Eyebrow, Fonts, Motion, Palette } from '../common/Theme';
+
 @Component
 export struct DeepDiveSheet {
   @Link isShown: boolean;
@@ -5,69 +7,86 @@ export struct DeepDiveSheet {
   @Prop content: string;
 
   build() {
-    if (this.isShown) {
-      Stack({ alignContent: Alignment.Bottom }) {
-        // Półprzezroczyste tło – kliknięcie zamyka arkusz
+    Stack({ alignContent: Alignment.Bottom }) {
+      if (this.isShown) {
+        // scrim: tap outside closes the sheet
         Column()
           .width('100%')
           .height('100%')
-          .backgroundColor('#60000000')
+          .backgroundColor(Palette.SCRIM)
+          .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
           .onClick(() => {
             this.isShown = false;
           })
+          .transition(TransitionEffect.OPACITY.animation({ duration: 300, curve: Curve.EaseOut }))
+      }
 
-        // Właściwy panel dolny
+      if (this.isShown) {
         Column() {
-          // Uchwyt arkusza
           Row()
-            .width(40)
+            .width(36)
             .height(4)
-            .backgroundColor('#CCCCCC')
+            .backgroundColor(Palette.RULE)
             .borderRadius(2)
-            .margin({ top: 8, bottom: 16 })
+            .margin({ top: 10, bottom: 22 })
 
-          // Nagłówek i przycisk zamknięcia
           Row() {
-            Text(this.title)
-              .fontSize(18)
-              .fontWeight(FontWeight.Bold)
-              .fontColor('#111111')
+            Eyebrow('OPOWIEŚĆ', Palette.BRICK)
             Blank()
-            Button('✕')
-              .backgroundColor(Color.Transparent)
-              .fontColor('#666666')
-              .fontSize(16)
+            Text('Zamknij')
+              .fontSize(14)
+              .fontColor(Palette.INK_SOFT)
               .onClick(() => {
                 this.isShown = false;
               })
           }
           .width('100%')
-          .padding({ left: 16, right: 16 })
-          .margin({ bottom: 12 })
 
-          // Treść przewijana
+          Text(this.title)
+            .fontFamily(Fonts.DISPLAY)
+            .fontSize(34)
+            .lineHeight(38)
+            .fontColor(Palette.INK)
+            .width('100%')
+            .margin({ top: 8 })
+
+          Text('Na podstawie Wikipedii · CC BY-SA 4.0')
+            .fontFamily(Fonts.ITALIC)
+            .fontSize(13)
+            .fontColor(Palette.INK_FAINT)
+            .width('100%')
+            .margin({ top: 6, bottom: 16 })
+
           Scroll() {
             Text(this.content)
-              .fontSize(15)
-              .fontColor('#333333')
-              .lineHeight(22)
+              .fontFamily(Fonts.TEXT)
+              .fontSize(19)
+              .lineHeight(30)
+              .fontColor(Palette.INK)
               .width('100%')
-              .padding({ left: 16, right: 16 })
           }
           .layoutWeight(1)
-          .margin({ bottom: 20 })
+          .scrollBar(BarState.Off)
+          .align(Alignment.Top)
+          .margin({ bottom: 24 })
         }
         .width('100%')
-        .height('50%')
-        .backgroundColor(Color.White)
-        .borderRadius({ topLeft: 20, topRight: 20 })
+        .height('62%')
+        .padding({ left: 24, right: 24 })
+        .backgroundColor(Palette.PAPER)
+        .borderRadius({ topLeft: 24, topRight: 24 })
+        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
         .onClick(() => {
-          // Zapobiega zamknięciu arkusza po kliknięciu wewnątrz jego białego obszaru
+          // taps inside the sheet do not close it
         })
+        .transition(TransitionEffect.move(TransitionEdge.BOTTOM)
+          .animation({ duration: 420, curve: Motion.EASE_OUT }))
       }
-      .width('100%')
-      .height('100%')
-      .position({ x: 0, y: 0 })
     }
+    .width('100%')
+    .height('100%')
+    .position({ x: 0, y: 0 })
+    .hitTestBehavior(this.isShown ? HitTestMode.Default : HitTestMode.Transparent)
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 }
