@@ -127,7 +127,7 @@ describe('SegmentGenerator', () => {
   it('APPROACH and MISSED never call the LLM', async () => {
     const { fetch, generator } = setup([GOOD]);
     assert.equal((await generator.generate(req({ kind: 'APPROACH' }))).text, 'Tuż przed nami: Kamienica Czyncielów w Krakowie.');
-    assert.equal((await generator.generate(req({ kind: 'MISSED' }))).text, 'Minęliśmy Kamienica Czyncielów w Krakowie.');
+    assert.equal((await generator.generate(req({ kind: 'MISSED' }))).text, 'Właśnie minęliśmy: Kamienica Czyncielów w Krakowie.');
     assert.equal(fetch.calls.length, 0);
   });
 

@@ -70,6 +70,11 @@ describe('grounding validator', () => {
 
   it('cleanText strips Markdown and list numbering', () => {
     assert.equal(cleanText('1. Tu napisał **Wesele**.\n2. A _potem_ odszedł.'), 'Tu napisał Wesele. A potem odszedł.');
+    // emoji Bielik produced in the #25 eval (castle, crown, smiley), written as code points
+    assert.equal(cleanText('Słuchaczu, zatrzymajmy się przy Barbakanie.'), 'Zatrzymajmy się przy Barbakanie.');
+    assert.equal(cleanText('Drogi słuchaczu! oto Sukiennice.'), 'Oto Sukiennice.');
+    assert.equal(cleanText('Wyspiański pisał dla słuchaczy teatru.'), 'Wyspiański pisał dla słuchaczy teatru.');
+    assert.equal(cleanText('Brama \u{1F3F0} przetrwała. \u{1F451} Kościół** stoi.\\nDziś \u{1F60A}'), 'Brama przetrwała. Kościół stoi. Dziś');
   });
 
   it('normalizes typography and splits number groups', () => {

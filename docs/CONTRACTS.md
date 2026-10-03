@@ -91,6 +91,8 @@ Odpowiedzi to JSON w UTF-8 (poza `/v1/audio`). Błędy mają format `{ "error": 
 | DEEP_DIVE | pierwsze ~6 zdań `summary` |
 | MISSED | „Po {lewej/prawej} minęliśmy {name}.” |
 
+Nazwy miejsc są w mianowniku, więc szablon nie może ich odmieniać („minęliśmy {name}” daje „minęliśmy Kamienica Czyncielów”). Serwer (nie zna pozycji, #25) używa form z dwukropkiem: BRIDGE „Za nami: {from.name}. Idziemy dalej, przed nami: {name}.”, MISSED „Właśnie minęliśmy: {name}.”, APPROACH „Tuż przed nami: {name}.”. Aplikacja powinna przejść na ten sam wzorzec.
+
 ## Konfiguracja aplikacji
 `Projekt/entry/src/main/ets/data/ApiConfig.ets`: `API_BASE_URL` (np. `http://192.168.x.y:8787`; pusty = tryb offline), `REQUEST_TIMEOUT_MS = 20000` (`/v1/pois`), `SEGMENT_TIMEOUT_MS = 50000` i `DEEP_DIVE_TIMEOUT_MS = 95000` (`/v1/segment`: dłuższe niż timeouty LLM serwera, żeby spóźniona odpowiedź mogła jeszcze zastąpić szablon). Deadline z plannera jest krótszy: po nim `SegmentService` od razu oddaje lokalny szablon. `SegmentService` zamienia względny `audioUrl` na pełny adres (`API_BASE_URL + audioUrl`), gotowy dla AVPlayera. HTTP bez TLS działa w modelu Stage bez dodatkowej konfiguracji (FAQ Network Kit), wystarczy uprawnienie `INTERNET`.
 
