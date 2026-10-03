@@ -1,4 +1,5 @@
 import router from '@ohos.router';
+import common from '@ohos.app.ability.common';
 
 @Entry
 @Component
@@ -26,8 +27,22 @@ struct StartPage {
         .fontSize(16)
         .fontWeight(FontWeight.Bold)
         .borderRadius(25)
+        .margin({ bottom: 16 })
         .onClick(() => {
           router.pushUrl({ url: 'pages/WalkPage' });
+        })
+
+      Button('Wyjdź z aplikacji')
+        .width('85%')
+        .height(50)
+        .backgroundColor('#FF4D4F')
+        .fontColor(Color.White)
+        .fontSize(16)
+        .fontWeight(FontWeight.Bold)
+        .borderRadius(25)
+        .onClick(() => {
+          let context = getContext(this) as common.UIAbilityContext;
+          context.terminateSelf();
         })
     }
     .width('100%')
