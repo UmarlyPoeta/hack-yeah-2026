@@ -1,12 +1,12 @@
 # Spacer z historią: architektura
 
-> Przewodnik, który **idzie razem z tobą** i mówi prawdziwym polskim głosem. Wie, w którą stronę idziesz, co jest przed tobą i ile czasu zostało do następnego zabytku, więc płynnie łączy kolejne miejsca w jedną opowieść. Gdy się zatrzymasz, proponuje pogłębienie. Lokalizację dostaje **tylko po kliknięciu `LocationButton`**, bez stałego uprawnienia. Tekst pisze **Bielik** (polski open-source LLM) uruchomiony lokalnie w **Ollamie**, a czyta go **ElevenLabs**. Zapasowy głos offline to **Piper**.
+> Przewodnik, który **idzie razem z tobą** i mówi prawdziwym polskim głosem. Wie, w którą stronę idziesz, co jest przed tobą i ile czasu zostało do następnego zabytku, więc płynnie łączy kolejne miejsca w jedną opowieść. Gdy się zatrzymasz, proponuje pogłębienie. Lokalizację dostaje **tylko po kliknięciu `LocationButton`**, bez stałego uprawnienia. Tekst pisze **Bielik** (polski open-source LLM) serwowany przez **Ollamę** na GPU w **Modal**, a czyta go **ElevenLabs**. Zapasowy głos offline to **Piper**.
 
 - **Temat prowadzący:** Human-Centric Technology (doświadczenie kulturowe, odpowiedzialna technologia).
 - **Drugi:** Intelligent Experiences (kontekstowy przewodnik: ruch, kierunek, tempo, zatrzymania).
 - **Platforma w centrum:** HarmonyOS **Security Components** (`LocationButton`: autoryzacja tymczasowa, ważna do wygaszenia ekranu, przejścia w tło albo wyjścia z aplikacji), Location Kit, Media Kit (AVPlayer), Network Kit, ArkUI.
-- **Suwerenność:** dane z polskiej Wikipedii (CC BY-SA), polski otwarty model (Bielik, SpeakLeash i ACK Cyfronet AGH) uruchomiony lokalnie, otwarty system.
-- **Środowisko:** jeden emulator telefonu w DevEco Studio (compatible API 20, compile 23, target 24) z symulowanym GPS + laptop z `server/` i Ollamą.
+- **Suwerenność:** dane z polskiej Wikipedii (CC BY-SA), polski otwarty model (Bielik, SpeakLeash i ACK Cyfronet AGH) na własnym wdrożeniu (Modal, bez zewnętrznego API LLM), otwarty system.
+- **Środowisko:** jeden emulator telefonu w DevEco Studio (compatible API 20, compile 23, target 24) z symulowanym GPS + laptop z `server/`; Bielik w Ollamie na Modalu (`server/modal/`).
 
 ## 1. Obraz całości
 
@@ -38,7 +38,7 @@
 │ GET  /v1/audio/:id  → plik MP3 z cache                                              (P4) │
 │ npm run warm        → pre-generacja tekstu i audio dla trasy demo                   (P4) │
 │                                                                                          │
-│ LlmProvider:  Ollama /api/chat (http://localhost:11434) + Bielik-4.5B-v3.0-Instruct GGUF │
+│ LlmProvider:  Ollama /api/chat na Modal (GPU, OLLAMA_URL) + Bielik-4.5B-v3.0-Instruct    │
 │ TtsProvider:  ElevenLabs (domyślny, chmura, klucz w .env)  |  Piper pl_PL (offline)      │
 └──────────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -94,7 +94,7 @@ Wynik na trasie demo: 15 przystanków w 19 minut, segmenty nigdy się nie nakła
 
 ## 3. AI i głos (serwer)
 
-- **LLM:** Ollama + **Bielik-4.5B-v3.0-Instruct** (GGUF, Q4, ok. 3 GB RAM). `POST /api/chat` z `format` = JSON Schema segmentu, `stream: false`, `keep_alive: "30m"`. Model wybiera `LLM_MODEL` w `.env`.
+- **LLM:** Ollama + **Bielik-4.5B-v3.0-Instruct** (GGUF Q8_0, ok. 5 GB VRAM) na GPU w Modal (`server/modal/`, endpoint z proxy auth: nagłówki `Modal-Key`/`Modal-Secret`). `POST /api/chat` z `format` = JSON Schema segmentu, `stream: false`, `keep_alive: "30m"`. Model wybiera `LLM_MODEL` w `.env`.
 - **Ugruntowanie:** prompt dostaje wyłącznie tekst źródłowy POI (streszczenia, a dla `DEEP_DIVE` pełniejszy artykuł, przycięty). Każde twierdzenie ma dosłowny cytat. Walidator odrzuca cytaty spoza źródła i liczby/lata spoza źródła. Po odrzuceniu następuje 1 retry, potem szablon.
 - **TTS:** `TtsProvider` z dwiema implementacjami:
   - `elevenlabs` (domyślny): REST text-to-speech, model wielojęzyczny, wynik w MP3. Klucz `ELEVENLABS_API_KEY` i `ELEVENLABS_VOICE_ID` tylko w `server/.env`.
@@ -109,7 +109,7 @@ Wynik na trasie demo: 15 przystanków w 19 minut, segmenty nigdy się nie nakła
 2. **Zero stałych uprawnień do lokalizacji.** Jedyna droga to `LocationButton`. Utrata autoryzacji to stan `PAUSED`, nie błąd. Manifest ma tylko `INTERNET` (system_grant).
 3. **Czysty rdzeń, czas jako parametr:** testy Hypium są deterministyczne.
 4. **Każde źródło za interfejsem**, z wersją live i zastępczą.
-5. **Przejrzystość w UI:** etykieta „AI: Bielik (lokalnie) · głos: ElevenLabs” albo „szablon”, plus link do źródła.
+5. **Przejrzystość w UI:** etykieta „AI: Bielik · głos: ElevenLabs” albo „szablon”, plus link do źródła.
 
 ## 5. `WalkSession`
 

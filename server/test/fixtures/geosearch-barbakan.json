@@ -1,0 +1,2394 @@
+[
+ {
+  "params": {
+   "action": "query",
+   "format": "json",
+   "formatversion": "2",
+   "generator": "geosearch",
+   "ggscoord": "50.06553|19.9417",
+   "ggsradius": "300",
+   "ggslimit": "50",
+   "prop": "coordinates|pageprops|extracts|pageimages|info",
+   "coprop": "type|dim",
+   "colimit": "max",
+   "ppprop": "wikibase_item",
+   "exintro": "1",
+   "explaintext": "1",
+   "exlimit": "max",
+   "piprop": "thumbnail",
+   "pithumbsize": "640",
+   "pilimit": "max",
+   "inprop": "url"
+  },
+  "body": {
+   "continue": {
+    "excontinue": 20,
+    "continue": "||coordinates|pageprops|pageimages|info"
+   },
+   "query": {
+    "pages": [
+     {
+      "pageid": 18947,
+      "ns": 0,
+      "title": "Brama Floriańska w Krakowie",
+      "index": -1,
+      "coordinates": [
+       {
+        "lat": 50.064861,
+        "lon": 19.941389,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q1363724"
+      },
+      "extract": "Brama Floriańska (Brama św. Floriana) – średniowieczna brama miejska z basztą, położona w Krakowie na Starym Mieście przy ulicy Pijarskiej, zamyka od północy perspektywę ulicy Floriańskiej. \nStanowi pozostałość po dawnych murach miejskich. Jest jedną z ośmiu krakowskich bram obronnych obok Sławkowskiej, Grodzkiej, Wiślnej, Mikołajskiej, Rzeźniczej (na Gródku), Szewskiej, Nowej i Pobocznej.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/St._Florian%27s_Gate%2C_view_from_S%2C_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-St._Florian%27s_Gate%2C_view_from_S%2C_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 928
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:10Z",
+      "lastrevid": 80846536,
+      "length": 7670,
+      "fullurl": "https://pl.wikipedia.org/wiki/Brama_Floria%C5%84ska_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Brama_Floria%C5%84ska_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Brama_Floria%C5%84ska_w_Krakowie"
+     },
+     {
+      "pageid": 18948,
+      "ns": 0,
+      "title": "Mury miejskie w Krakowie",
+      "index": 0,
+      "coordinates": [
+       {
+        "lat": 50.064864,
+        "lon": 19.941272,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q11786728"
+      },
+      "extract": "Mury miejskie w Krakowie – ciąg murów miejskich wraz z budowlami o charakterze obronnym (m.in. bramami i basztami), otaczający niegdyś obszar całego Krakowa (obecnie Stare Miasto), a którego niewielki odcinek zachowany został do dziś wzdłuż ulicy Pijarskiej.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/City_walls%2C_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-City_walls%2C_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 404
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:10Z",
+      "lastrevid": 76170760,
+      "length": 11914,
+      "fullurl": "https://pl.wikipedia.org/wiki/Mury_miejskie_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Mury_miejskie_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Mury_miejskie_w_Krakowie"
+     },
+     {
+      "pageid": 19617,
+      "ns": 0,
+      "title": "Barbakan w Krakowie",
+      "index": 1,
+      "coordinates": [
+       {
+        "lat": 50.065514,
+        "lon": 19.941617,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q807309"
+      },
+      "extract": "Barbakan (zwany też Rondlem) – barbakan, najbardziej wysunięta na północ część fortyfikacji miejskich Krakowa. Znajduje się na Plantach, przed Bramą Floriańską, po południowej stronie ul. Basztowej.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/Barbakan-WidokZUlicyBasztowej-POL%2C_Krak%C3%B3w.jpg/960px-Barbakan-WidokZUlicyBasztowej-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 407
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:10Z",
+      "lastrevid": 77935006,
+      "length": 7902,
+      "fullurl": "https://pl.wikipedia.org/wiki/Barbakan_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Barbakan_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Barbakan_w_Krakowie"
+     },
+     {
+      "pageid": 21603,
+      "ns": 0,
+      "title": "Kościół Przemienienia Pańskiego w Krakowie (ul. Pijarska)",
+      "index": 2,
+      "coordinates": [
+       {
+        "lat": 50.065,
+        "lon": 19.939917,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q11745742"
+      },
+      "extract": "Kościół Przemienienia Pańskiego – zabytkowy kompleks sakralny, rzymskokatolicki kościół konwentualny pijarów oraz przylegający do niego klasztor, znajdujący się w Krakowie, w dzielnicy I Stare Miasto przy ulicy Pijarskiej 4, na Starym Mieście.\nPijarzy przybyli do Polski z Moraw w 1642, część z nich otrzymała fundację wojewody krakowskiego Stanisława Lubomirskiego. Późnobarokowy (właściwie rokokowy) kościół Przemienienia Pańskiego został zaprojektowany przez Kacpra Bażankę i wzniesiony w latach 1718–1728, a fasada zaprojektowana przez Franciszka Placidiego powstała w latach 1759–1761. Wybudowany na planie prostokąta, posiada jedną nawę i – otwarte ku niej – kaplice boczne. Wyraźne są nawiązania do kościoła w typie Il Gesù. Efekt integracji nawy głównej z prezbiterium osiągnięty został poprzez zastosowanie wydatnego gzymsu przebiegającego wokół osi kościoła. \nIluzjonistyczne polichromie we wnętrzu, nawiązujące do rzymskiej tradycji Andrea del Pozzo, są dziełem dwóch artystów przybyłych z Moraw – Franciszka Ecksteina i Józefa Piltza i, podobnie jak jednolite wyposażenie wnętrza, wykonane pod kierunkiem Ecksteina, powstały w 1733. Dziełem Ecksteina jest także iluzjonistyczny ołtarz główny oraz freski na sklepieniu nawy głównej. Freski na sklepieniu – przedstawiające apoteozę kluczy św. Piotra – wykonane zostały zgodnie z założeniami kwadratury.\nPo prawej stronie ołtarza wmurowane jest serce ks. Stanisława Konarskiego, a przed wejściem do kościoła znajduje się jego popiersie.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/Church_of_the_Transfiguration_of_Our_Lord%2C_facade%2C_2_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Church_of_the_Transfiguration_of_Our_Lord%2C_facade%2C_2_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 976
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:10Z",
+      "lastrevid": 76061620,
+      "length": 7254,
+      "fullurl": "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_Przemienienia_Pa%C5%84skiego_w_Krakowie_(ul._Pijarska)",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Ko%C5%9Bci%C3%B3%C5%82_Przemienienia_Pa%C5%84skiego_w_Krakowie_(ul._Pijarska)&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_Przemienienia_Pa%C5%84skiego_w_Krakowie_(ul._Pijarska)"
+     },
+     {
+      "pageid": 28862,
+      "ns": 0,
+      "title": "Planty Krakowskie",
+      "index": 3,
+      "coordinates": [
+       {
+        "lat": 50.065556,
+        "lon": 19.94,
+        "primary": true,
+        "type": "city",
+        "dim": "10000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q1945780"
+      },
+      "extract": "Planty Krakowskie, Planty – zabytkowy park miejski w Krakowie otaczający Stare Miasto. Został założony w latach 1822–1830, ma powierzchnię 21 ha i ok. 4 km długości.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Planty_Park%2C_autumn%2C_Old_Town%2C_Krakow%2C_Poland.jpg/960px-Planty_Park%2C_autumn%2C_Old_Town%2C_Krakow%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 397
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:10Z",
+      "lastrevid": 79982860,
+      "length": 28943,
+      "fullurl": "https://pl.wikipedia.org/wiki/Planty_Krakowskie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Planty_Krakowskie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Planty_Krakowskie"
+     },
+     {
+      "pageid": 65958,
+      "ns": 0,
+      "title": "Akademia Sztuk Pięknych im. Jana Matejki w Krakowie",
+      "index": 4,
+      "coordinates": [
+       {
+        "lat": 50.06625,
+        "lon": 19.941583,
+        "primary": true,
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q414034"
+      },
+      "extract": "Akademia Sztuk Pięknych im. Jana Matejki w Krakowie (ASP) – najstarsza polska uczelnia artystyczna. Rozpoczęła działalność w 1818 roku na mocy statutu Uniwersytetu Jagiellońskiego, choć pierwsze próby utworzenia ASP w oparciu o UJ (ówcześnie Akademię Krakowską) sięgają 1745 roku, a Józef Brodowski i Józef Peszka, pierwsi profesorowie ASP, zostali profesorami rysunku i malarstwa UJ już w 1816 roku. Nazwa „Akademia Sztuk Pięknych” używana była w odniesieniu do uczelni od chwili powołania jej do istnienia.\nW 1833 roku, w wyniku represji po upadku powstania listopadowego, Akademia Sztuk Pięknych w Krakowie została odłączona od Uniwersytetu Jagiellońskiego i utraciła swój akademicki charakter. Przez kolejne czterdzieści lat jako Szkoła Rysunku i Malarstwa funkcjonowała jako część Instytutu Technicznego.\nW 1873 roku Szkoła Rysunku i Malarstwa, wyodrębniona z Instytutu Technicznego, stała się samodzielną Szkołą Sztuk Pięknych. Stanowisko dyrektora objął Jan Matejko, który kierował SSP przez dwadzieścia lat. Zainicjował budowę gmachu Akademii przy dzisiejszym placu Jana Matejki w Krakowie.\nW 1895 roku dyrektorem Szkoły Sztuk Pięknych został Julian Fałat. Dzięki jego staraniom szkoła w 1900 roku otrzymała status uczelni wyższej, powracając do nazwy Akademia Sztuk Pięknych. Fałat powołał na profesorów ASP wybitnych artystów Młodej Polski. W 1905 roku został pierwszym rektorem ASP. W czasie I wojny Austriacy przejęli większość gmachu ASP na cele wojskowe, ale samej uczelni nie zamknęli.\nOkres międzywojenny, na początku którego ASP obchodziła stulecie swej działalności, otworzył nowy rozdział w historii Akademii, która utrwaliła swój wizerunek czołowej polskiej uczelni plastycznej i instytucji kulturotwórczej o ogólnopolskim zasięgu. W 1919 roku prawo studiowania w krakowskiej ASP przyznano kobietom. Studenci i absolwenci ASP tworzyli grupy artystyczne, wytyczające sztuce drogi dalszego rozwoju (formiści, kapiści, Grupa Krakowska).\nW 1945 roku Akademia została reaktywowana po zamknięciu przez okupacyjne władze niemieckie. W 1950 roku z połączenia ASP z Państwową Wyższą Szkołą Sztuk Plastycznych powstała Akademia Sztuk Plastycznych o nowej strukturze wielowydziałowej obejmującej sztuki wizualne, sztuki projektowe oraz konserwację dzieł sztuki, a także poszerzeniem bazy lokalowej uczelni. W 1957 roku powrócono do nazwy Akademia Sztuk Pięknych, a w 1979 roku nadano uczelni imię Jana Matejki.\nKształcenie w Akademii odbywa się na siedmiu wydziałach: Wydziale Malarstwa, Wydziale Rzeźby, Wydziale Grafiki, Wydziale Architektury Wnętrz, Wydziale Form Przemysłowych, Wydziale Konserwacji i Restauracji Dzieł Sztuki oraz Wydziale Intermediów.\nSymbolem dalszego rozwoju uczelni, pamiętającej o tradycji i projektującej programy na przyszłość, stał się od 2021 roku Open Eyes Art Festival.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Akademia_Sztuk_Pi%C4%99knych_w_Krakowie_logo.svg/960px-Akademia_Sztuk_Pi%C4%99knych_w_Krakowie_logo.svg.png?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 785
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:12Z",
+      "lastrevid": 80855507,
+      "length": 67915,
+      "fullurl": "https://pl.wikipedia.org/wiki/Akademia_Sztuk_Pi%C4%99knych_im._Jana_Matejki_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Akademia_Sztuk_Pi%C4%99knych_im._Jana_Matejki_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Akademia_Sztuk_Pi%C4%99knych_im._Jana_Matejki_w_Krakowie"
+     },
+     {
+      "pageid": 134070,
+      "ns": 0,
+      "title": "Muzeum Książąt Czartoryskich w Krakowie",
+      "index": 5,
+      "coordinates": [
+       {
+        "lat": 50.064706,
+        "lon": 19.940039,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q1450630"
+      },
+      "extract": "Muzeum Książąt Czartoryskich w Krakowie – jedno z najstarszych muzeów w Polsce, oddział Muzeum Narodowego w Krakowie. W jego skład wchodzą trzy budynki: Pałac Czartoryskich przy ul. św. Jana 17-19 (na rogu z ul. Pijarską 15), Klasztorek przy ul. Pijarskiej 6 oraz budynek dawnego Arsenału Miejskiego przy ul. Pijarskiej 8.\nZostało otwarte w Krakowie w 1876 roku, zaś jego początki sięgają roku 1801 i zbiorów księżnej Izabeli Czartoryskiej, prezentowanych w Puławach.\nPo II wojnie światowej muzeum było pod opieką Muzeum Narodowego w Krakowie, a w 1991 pieczę nad zbiorami przejęła Fundacja Książąt Czartoryskich. 29 grudnia 2016 roku Fundacja Książąt Czartoryskich sprzedała Skarbowi Państwa całą kolekcję wraz z budynkami muzealnymi za łączną kwotę 100 mln euro. Od tej pory kolekcja książąt Czartoryskich stała się integralną częścią Muzeum Narodowego w Krakowie.\nMuzeum gromadzi dzieła malarstwa europejskiego XIII–XVIII w., zabytki europejskiego i islamskiego rzemiosła artystycznego od średniowiecza do XIX w., grafiki, sztuki starożytnej oraz militaria. Najcenniejszym dziełem w muzeum jest Dama z gronostajem Leonarda da Vinci.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Czartoryski_Palace%2C_17-19_%C5%9Bwi%C4%99tego_Jana_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Czartoryski_Palace%2C_17-19_%C5%9Bwi%C4%99tego_Jana_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 430
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:15Z",
+      "lastrevid": 80084827,
+      "length": 45384,
+      "fullurl": "https://pl.wikipedia.org/wiki/Muzeum_Ksi%C4%85%C5%BC%C4%85t_Czartoryskich_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Muzeum_Ksi%C4%85%C5%BC%C4%85t_Czartoryskich_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Muzeum_Ksi%C4%85%C5%BC%C4%85t_Czartoryskich_w_Krakowie"
+     },
+     {
+      "pageid": 320705,
+      "ns": 0,
+      "title": "Dzielnica I Stare Miasto",
+      "index": 6,
+      "coordinates": [
+       {
+        "lat": 50.066583,
+        "lon": 19.940139,
+        "primary": true,
+        "type": "city",
+        "dim": "10000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q11695631"
+      },
+      "extract": "Dzielnica I Stare Miasto – dzielnica, jednostka pomocnicza gminy miejskiej Kraków. Do 1990 roku wchodziła w skład dzielnicy Śródmieście. Przewodniczącym Rady i Zarządu Dzielnicy w IX kadencji 2023–2028 jest Jan Hoffman\n\n",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Krakow_wawel.JPG/960px-Krakow_wawel.JPG?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 360
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:36Z",
+      "lastrevid": 80188071,
+      "length": 7668,
+      "fullurl": "https://pl.wikipedia.org/wiki/Dzielnica_I_Stare_Miasto",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Dzielnica_I_Stare_Miasto&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Dzielnica_I_Stare_Miasto"
+     },
+     {
+      "pageid": 426971,
+      "ns": 0,
+      "title": "Jama Michalika",
+      "index": 7,
+      "coordinates": [
+       {
+        "lat": 50.064042,
+        "lon": 19.940917,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q672804"
+      },
+      "extract": "Jama Michalika (zwana także Jamą Michalikową) pierwotnie nosząca nazwę Cukiernia Lwowska, a później także Cukiernia Zielonego Balonika – kawiarnia i restauracja w Krakowie, przy ul. Floriańskiej 45 w kamienicy Bełzińskiej, na Starym Mieście.\nNa początku XX w. w lokalu powstał kabaret literacki Zielony Balonik, a w latach 1960–1991 funkcjonował kabaret literacko-artystyczny Jama Michalika.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Kawiarnia_Jama_Michalika_01_AB.jpg/960px-Kawiarnia_Jama_Michalika_01_AB.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 357
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:43Z",
+      "lastrevid": 80097941,
+      "length": 30128,
+      "fullurl": "https://pl.wikipedia.org/wiki/Jama_Michalika",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Jama_Michalika&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Jama_Michalika"
+     },
+     {
+      "pageid": 468530,
+      "ns": 0,
+      "title": "Plac Jana Matejki w Krakowie",
+      "index": 8,
+      "coordinates": [
+       {
+        "lat": 50.06648,
+        "lon": 19.942391,
+        "primary": true,
+        "type": "landmark",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q11819069"
+      },
+      "extract": "Plac Jana Matejki – plac w Krakowie w dzielnicy I Stare Miasto, znajdujący się pomiędzy ulicami Basztową i Warszawską na Kleparzu.\nTeren placu Matejki stanowił w przeszłości wschodnią część rynku kleparskiego, powstałego zapewne w XIV w. Znajdował się tutaj ratusz, jatki. Cały teren służył także jako przedpole Barbakanu.\nKleparz został przyłączony do Krakowa w 1791.\nPodział kleparskiego rynku nastąpił w XIX w. Pośrodku kleparskiego rynku zbudowano główny budynek Akademii Sztuk Pięknych, szkołę miejską a następnie na miejscu kleparskiego ratusza wzniesiono gmach Dyrekcji Kolei, to dzisiejsza zachodnia pierzeja placu Matejki. Nosił wtedy nazwę plac Główny. Obecną nazwę otrzymał w 1882 roku, gdy Janowi Matejce ofiarowano honorowe obywatelstwo miasta Krakowa.\nZ czasem znikała stara, drewniana zabudowa wzdłuż wschodniej pierzei placu. Powstał na jej miejscu budynek Narodowego Banku Polskiego oraz czynszowe kamienice.\nW 1910, w 500. rocznicę zwycięskiej bitwy pod Grunwaldem wzniesiono pomnik Grunwaldzki, według projektu Antoniego Wiwulskiego. Powstanie pomnika finansował Ignacy Paderewski. Pomnik został zniszczony przez Niemców podczas okupacji. W 1976 pomnik zrekonstruowano. Przed pomnikiem znajduje się marmurowa płyta Grobu Nieznanego Żołnierza.\nPrzy zbiegu ulic Warszawskiej i Kurniki, w północno-wschodnim narożniku placu Matejki znajduje się kościół św. Floriana z XII w., wielokrotnie przebudowywany. W przeszłości od kościoła św. Floriana zaczynała się tzw. \"Droga Królewska\" biegnąca na Wawel.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/0364_20100523_Krakow_Plac_Jana_Matejki.jpg/960px-0364_20100523_Krakow_Plac_Jana_Matejki.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 423
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:45Z",
+      "lastrevid": 79613318,
+      "length": 6085,
+      "fullurl": "https://pl.wikipedia.org/wiki/Plac_Jana_Matejki_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Plac_Jana_Matejki_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Plac_Jana_Matejki_w_Krakowie"
+     },
+     {
+      "pageid": 488205,
+      "ns": 0,
+      "title": "Dom Jana Matejki w Krakowie",
+      "index": 9,
+      "coordinates": [
+       {
+        "lat": 50.064014,
+        "lon": 19.940858,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q998674"
+      },
+      "extract": "Dom Jana Matejki w Krakowie – muzeum poświęcone Janowi Matejce, założone w 1895, od 1904 oddział Muzeum Narodowego w Krakowie.\n Budynek wpisany jest do rejestru zabytków pod nr rej.: A-58 z 12.05.1931",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Jan_Matejko_Museum%2C_Krak%C3%B3w%2C_Poland%2C_September_2019.jpg/960px-Jan_Matejko_Museum%2C_Krak%C3%B3w%2C_Poland%2C_September_2019.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 1068
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:46Z",
+      "lastrevid": 78386881,
+      "length": 10036,
+      "fullurl": "https://pl.wikipedia.org/wiki/Dom_Jana_Matejki_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Dom_Jana_Matejki_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Dom_Jana_Matejki_w_Krakowie"
+     },
+     {
+      "pageid": 503880,
+      "ns": 0,
+      "title": "Pomnik Grunwaldzki w Krakowie",
+      "index": 10,
+      "coordinates": [
+       {
+        "lat": 50.066417,
+        "lon": 19.942139,
+        "primary": true,
+        "type": "landmark",
+        "dim": "30"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q11823211"
+      },
+      "extract": "Pomnik Grunwaldzki – pomnik konny króla Władysława II Jagiełły w Krakowie, w Dzielnicy I Stare Miasto, na placu Jana Matejki, wzniesiony w 1910 z fundacji Ignacego Jana Paderewskiego według projektu Antoniego Wiwulskiego i Franciszka Blacka w 500. rocznicę bitwy pod Grunwaldem (1410); zburzony w 1939 przez Niemców, zrekonstruowany w 1976 według projektu Mariana Koniecznego; przed pomnikiem znajduje się Grób Nieznanego Żołnierza (1976).",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/PomnikGrunwaldzki-PlacMatejki-POL%2C_Krak%C3%B3w.jpg/960px-PomnikGrunwaldzki-PlacMatejki-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 853
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:46Z",
+      "lastrevid": 78172389,
+      "length": 16645,
+      "fullurl": "https://pl.wikipedia.org/wiki/Pomnik_Grunwaldzki_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Pomnik_Grunwaldzki_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Pomnik_Grunwaldzki_w_Krakowie"
+     },
+     {
+      "pageid": 678299,
+      "ns": 0,
+      "title": "Grób Nieznanego Żołnierza w Krakowie",
+      "index": 11,
+      "coordinates": [
+       {
+        "lat": 50.06625,
+        "lon": 19.942028,
+        "primary": true,
+        "type": "landmark",
+        "dim": "30"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q9282382"
+      },
+      "extract": "Grób Nieznanego Żołnierza – cenotaf upamiętniający poległych na polach bitewnych nieznanych polskich żołnierzy, usytuowany w Krakowie na placu Matejki przed pomnikiem Grunwaldzkim. Na marmurowym postumencie znajduje się znicz z brązu, zapalany podczas uroczystości.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Grunwald_Monument_and_Tomb_of_the_Unknown_Soldier%2C_Matejko_square%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Grunwald_Monument_and_Tomb_of_the_Unknown_Soldier%2C_Matejko_square%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 410
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:51:54Z",
+      "lastrevid": 77635658,
+      "length": 5260,
+      "fullurl": "https://pl.wikipedia.org/wiki/Gr%C3%B3b_Nieznanego_%C5%BBo%C5%82nierza_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Gr%C3%B3b_Nieznanego_%C5%BBo%C5%82nierza_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Gr%C3%B3b_Nieznanego_%C5%BBo%C5%82nierza_w_Krakowie"
+     },
+     {
+      "pageid": 844353,
+      "ns": 0,
+      "title": "Fundacja Książąt Czartoryskich",
+      "index": 12,
+      "coordinates": [
+       {
+        "lat": 50.064639,
+        "lon": 19.939944,
+        "primary": true,
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q3434944"
+      },
+      "extract": "Fundacja Książąt Czartoryskich (właśc. Fundacja XX Czartoryskich) – fundacja ustanowiona w 1991 przez Adama Karola Czartoryskiego w celu sprawowania pieczy nad zbiorami Muzeum Książąt Czartoryskich w Krakowie.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Klasztorek%2C_Czartoryski_Muzeum_in_Krak%C3%B3w%2C_2023%2C_01.jpg/960px-Klasztorek%2C_Czartoryski_Muzeum_in_Krak%C3%B3w%2C_2023%2C_01.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 785
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-09-08T15:26:41Z",
+      "lastrevid": 79288377,
+      "length": 7264,
+      "fullurl": "https://pl.wikipedia.org/wiki/Fundacja_Ksi%C4%85%C5%BC%C4%85t_Czartoryskich",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Fundacja_Ksi%C4%85%C5%BC%C4%85t_Czartoryskich&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Fundacja_Ksi%C4%85%C5%BC%C4%85t_Czartoryskich"
+     },
+     {
+      "pageid": 1183521,
+      "ns": 0,
+      "title": "Budynek Feniksa w Krakowie (ul. Basztowa)",
+      "index": 13,
+      "coordinates": [
+       {
+        "lat": 50.066528,
+        "lon": 19.940278,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q9181462"
+      },
+      "extract": "Budynek Feniksa – kamienica czynszowa i biurowo-usługowa wzniesiona dla wiedeńskiego Towarzystwa Ubezpieczeniowego „Feniks”, znajdująca się w Krakowie w dzielnicy I przy ulicy Basztowej 15 na rogu z Rynkiem Kleparskim, na Kleparzu.\nNa przełomie tysiącleci bardziej znany jako budynek PLL LOT, gdyż na parterze działała ekspozytura linii lotniczych.\nBudynek został zaprojektowany przez Jerzego Struszkiewicza i Maksymiliana Burstina. Mimo iż starania o budowę nowej kamienicy na tej działce trwały już od 1911, nowy obiekt stanął tu dopiero w 1933, po dwuletniej budowie. Po rozpoczęciu budowy, działkę wraz z powstającym obiektem przejęło Towarzystwo Ubezpieczeń na Życie „Feniks”, które mogło się już wtedy pochwalić awangardowym i supernowoczesnym budynkiem „Feniksa” wzniesionym przy Rynku w Krakowie.\nNowy gmach był najwyższym wysokościowcem w Krakowie. Żelbetowa konstrukcja budynku wznosi się na 7 pięter i jest ukoronowana 2-kondygnacyjną wieżą. Zaprojektowany został jako budynek mieszkalno-użytkowy, mieścił komfortowe mieszkania, ekskluzywną salę kinową oraz sale restauracyjne.\nW 1938 w budynku mieścił się konsulat Niemiec.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1b/Feniks_tenement_house%2C_1931_design._Leopold_Bauer%2C_Jerzy_Struszkiewicz%2C_Maksymilian_Burstin%2C_15_Basztowa_street%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Feniks_tenement_house%2C_1931_design._Leopold_Bauer%2C_Jerzy_Struszkiewicz%2C_Maksymilian_Burstin%2C_15_Basztowa_street%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 426
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:12Z",
+      "lastrevid": 80542492,
+      "length": 4321,
+      "fullurl": "https://pl.wikipedia.org/wiki/Budynek_Feniksa_w_Krakowie_(ul._Basztowa)",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Budynek_Feniksa_w_Krakowie_(ul._Basztowa)&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Budynek_Feniksa_w_Krakowie_(ul._Basztowa)"
+     },
+     {
+      "pageid": 1668840,
+      "ns": 0,
+      "title": "Kamienica przy ul. Floriańskiej 38 w Krakowie",
+      "index": 14,
+      "coordinates": [
+       {
+        "lat": 50.064419,
+        "lon": 19.941158,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q16558534"
+      },
+      "extract": "Kamienica przy ulicy Floriańskiej 38 w Krakowie, Kamienica Głowińska – kamienica zaadaptowana na trzygwiazdkowy Hotel Floryan. Położona w ścisłym centrum Krakowa przy ulicy Floriańskiej 38.\nKamienica, w której mieści się hotel pochodzi z XVI wieku. W ciągu wieków należała do znanych krakowskich mieszczan. Od nazwiska jednego z nich – Andrzeja Głowy zwana była głowinską. Budynek miał wówczas wejście od piwnicy z ulicy, po czterech kamiennych stopniach, sień brukowana kamieniami oraz kamienne schody. W XVIII wieku budynek stał się własnością Piotra Bianchi, podczaszego litewskiego i jego żony Salomei z Karskich. W obecnych czasach, po generalnym remoncie i modernizacji, dawne mieszkania zaadaptowano na potrzeby hotelu, natomiast w odsłoniętych renesansowych piwnicach mieści się restauracja.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Hotel_Floryan_w_Krakowie.jpg/960px-Hotel_Floryan_w_Krakowie.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 796
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:29Z",
+      "lastrevid": 69552897,
+      "length": 2648,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ul._Floria%C5%84skiej_38_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_przy_ul._Floria%C5%84skiej_38_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ul._Floria%C5%84skiej_38_w_Krakowie"
+     },
+     {
+      "pageid": 1757187,
+      "ns": 0,
+      "title": "Staatliche Kunstgewerbeschule Krakau",
+      "index": 15,
+      "coordinates": [
+       {
+        "lat": 50.06625,
+        "lon": 19.941583,
+        "primary": true,
+        "type": "city",
+        "dim": "10000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q1271631"
+      },
+      "extract": "Staatliche Kunstgewerbeschule Krakau (Państwowa Szkoła Rzemiosła Artystycznego w Krakowie) – artystyczna szkoła zawodowa założona przez władze niemieckie podczas okupacji niemieckiej w miejsce zamkniętej krakowskiej Akademii Sztuk Pięknych, początkowo jako kontynuacja przedwojennego Instytutu Sztuk Plastycznych w Krakowie. Uczniami szkoły było wielu późniejszych wybitnych polskich twórców oraz intelektualistów, działających w okresie powojennym. Z kręgu słuchaczy Kunstgewerbeschule wywodziła się także znaczna część uczestników Podziemnego Teatru Niezależnego Tadeusza Kantora. Istniała do 31 marca 1943.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/Kunstgewerbeschule_Krakau_-_%C5%9Bwiadectwo_1943.jpg/960px-Kunstgewerbeschule_Krakau_-_%C5%9Bwiadectwo_1943.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 907
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-09-03T13:06:38Z",
+      "lastrevid": 79241084,
+      "length": 14683,
+      "fullurl": "https://pl.wikipedia.org/wiki/Staatliche_Kunstgewerbeschule_Krakau",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Staatliche_Kunstgewerbeschule_Krakau&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Staatliche_Kunstgewerbeschule_Krakau"
+     },
+     {
+      "pageid": 1758915,
+      "ns": 0,
+      "title": "Zaułek Książąt Czartoryskich",
+      "index": 16,
+      "coordinates": [
+       {
+        "lat": 50.064722,
+        "lon": 19.940417,
+        "primary": true,
+        "type": "landmark",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q9387473"
+      },
+      "extract": "Zaułek Książąt Czartoryskich – niewielki plac położony przy ul. Pijarskiej na Starym Mieście w Krakowie. Zaułek przylega do murów obronnych, Arsenału i tzw. Klasztorku.\nSwoją nazwę zaułek otrzymał w 2006 roku na mocy zarządzenia Prezydenta Miasta Krakowa. W 2006 roku zaułek został zmodernizowany według projektu architektów Piotra Lewickiego i Kazimierza Łataka. Część powierzchni została podniesiona tak, że prowadzą na nią trzy stopnie. Zmieniona została nawierzchnia, ustawiono kopię rzeźby Bertela Thorvaldsena Merkury (oryginał w Muzeum Czartoryskich). Modernizacja wywołała kontrowersje. Z jednej strony została zgłoszona do plebiscytu Archi-Szopa 2007 dla najgorszych realizacji architektonicznych Krakowa, a z drugiej w 2008 roku otrzymała, wraz z krakowskim placem Wszystkich Świętych, drugie wyróżnienie w konkursie \"Bramy Kraju\" na najlepsze inwestycje w przestrzeni publicznej, organizowanym po raz czwarty przez agencję AMS.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Czartoryski%27s_alley%2C_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Czartoryski%27s_alley%2C_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 425
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:33Z",
+      "lastrevid": 75455774,
+      "length": 2451,
+      "fullurl": "https://pl.wikipedia.org/wiki/Zau%C5%82ek_Ksi%C4%85%C5%BC%C4%85t_Czartoryskich",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Zau%C5%82ek_Ksi%C4%85%C5%BC%C4%85t_Czartoryskich&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Zau%C5%82ek_Ksi%C4%85%C5%BC%C4%85t_Czartoryskich"
+     },
+     {
+      "pageid": 1793639,
+      "ns": 0,
+      "title": "Ulica Basztowa w Krakowie",
+      "index": 17,
+      "coordinates": [
+       {
+        "lat": 50.06584,
+        "lon": 19.941433,
+        "primary": true,
+        "type": "landmark",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q9364927"
+      },
+      "extract": "Ulica Basztowa – ulica w Krakowie, w dzielnicy I Stare Miasto. Wchodzi w skład I obwodnicy. Zachodni kraniec stanowi skrzyżowanie z ulicą Garbarską, gdzie staje się przedłużeniem ulicy Juliana Dunajewskiego. Ogranicza Stare Miasto i Planty od północy. W 1914 roku na ulicy wybudowano torowisko tramwajowe.  \nStarsza część ulicy od Dworca Głównego do Bramy Floriańskiej pochodzi z XIII wieku, dalsza część pochodzi z XIX wieku. Nazwa nawiązuje najprawdopodobniej do znajdującego się w jej pobliżu zachowanego do dziś fragmentu murów miejskich z basztami.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Basztowa_street_%28view_from_E%29%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Basztowa_street_%28view_from_E%29%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 364
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:34Z",
+      "lastrevid": 76690894,
+      "length": 10588,
+      "fullurl": "https://pl.wikipedia.org/wiki/Ulica_Basztowa_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Ulica_Basztowa_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Ulica_Basztowa_w_Krakowie"
+     },
+     {
+      "pageid": 1814428,
+      "ns": 0,
+      "title": "Ulica Pijarska w Krakowie",
+      "index": 18,
+      "coordinates": [
+       {
+        "lat": 50.064886,
+        "lon": 19.939484,
+        "primary": true,
+        "type": "city",
+        "dim": "10000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q9365792"
+      },
+      "extract": "Ulica Pijarska – jedna z nielicznie zachowanych w Krakowie ulic podmurnych. Biegnie wzdłuż dawnych murów miejskich od ulicy św. Marka do ulicy Szpitalnej. Łączy ulice wychodzące z Rynku: Floriańską, św. Jana i Sławkowską.\nNazwa Pijarska została nadana ulicy pod koniec XIX wieku i związana jest z klasztorem oo. Pijarów i kościołem Przemienienia Pańskiego, znajdujących się u wylotu ulicy św. Jana.",
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/City_walls%2C_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-City_walls%2C_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 404
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:35Z",
+      "lastrevid": 75697579,
+      "length": 10375,
+      "fullurl": "https://pl.wikipedia.org/wiki/Ulica_Pijarska_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Ulica_Pijarska_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Ulica_Pijarska_w_Krakowie"
+     },
+     {
+      "pageid": 1816105,
+      "ns": 0,
+      "title": "Arsenał Miejski w Krakowie",
+      "index": 19,
+      "coordinates": [
+       {
+        "lat": 50.065139,
+        "lon": 19.940417,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q9160342"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Arsena%C5%82Miejski-POL%2C_Krak%C3%B3w.jpg/960px-Arsena%C5%82Miejski-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 398
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:35Z",
+      "lastrevid": 76363906,
+      "length": 6488,
+      "fullurl": "https://pl.wikipedia.org/wiki/Arsena%C5%82_Miejski_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Arsena%C5%82_Miejski_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Arsena%C5%82_Miejski_w_Krakowie"
+     },
+     {
+      "pageid": 2235984,
+      "ns": 0,
+      "title": "Kamienica Raczyńskiego w Krakowie",
+      "index": 20,
+      "coordinates": [
+       {
+        "lat": 50.064472,
+        "lon": 19.94225,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q11734181"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d8/Raczynski_tenement%2C_23_Pijarska_str%2C_Old_Town%2C_Krakow%2C_Poland.jpg/960px-Raczynski_tenement%2C_23_Pijarska_str%2C_Old_Town%2C_Krakow%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 392
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:51Z",
+      "lastrevid": 74970807,
+      "length": 1925,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_Raczy%C5%84skiego_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_Raczy%C5%84skiego_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_Raczy%C5%84skiego_w_Krakowie"
+     },
+     {
+      "pageid": 2238593,
+      "ns": 0,
+      "title": "Baszta Pasamoników w Krakowie",
+      "index": 21,
+      "coordinates": [
+       {
+        "lat": 50.064769,
+        "lon": 19.942242,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q9166818"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Baszta_Pasamonikow_w_Krakowie.jpg/960px-Baszta_Pasamonikow_w_Krakowie.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 1078
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:52Z",
+      "lastrevid": 80021647,
+      "length": 5492,
+      "fullurl": "https://pl.wikipedia.org/wiki/Baszta_Pasamonik%C3%B3w_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Baszta_Pasamonik%C3%B3w_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Baszta_Pasamonik%C3%B3w_w_Krakowie"
+     },
+     {
+      "pageid": 2238662,
+      "ns": 0,
+      "title": "Baszta Cieśli w Krakowie",
+      "index": 22,
+      "coordinates": [
+       {
+        "lat": 50.065,
+        "lon": 19.94,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q9166764"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/BasztaCie%C5%9Bli-POL%2C_Krak%C3%B3w.jpg/960px-BasztaCie%C5%9Bli-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 985
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:52Z",
+      "lastrevid": 68141974,
+      "length": 5955,
+      "fullurl": "https://pl.wikipedia.org/wiki/Baszta_Cie%C5%9Bli_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Baszta_Cie%C5%9Bli_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Baszta_Cie%C5%9Bli_w_Krakowie"
+     },
+     {
+      "pageid": 2238686,
+      "ns": 0,
+      "title": "Baszta Stolarzy w Krakowie",
+      "index": 23,
+      "coordinates": [
+       {
+        "lat": 50.065,
+        "lon": 19.940556,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q9166827"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/BasztaStolarzy-POL%2C_Krak%C3%B3w.jpg/960px-BasztaStolarzy-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 952
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:52:52Z",
+      "lastrevid": 79523578,
+      "length": 5891,
+      "fullurl": "https://pl.wikipedia.org/wiki/Baszta_Stolarzy_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Baszta_Stolarzy_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Baszta_Stolarzy_w_Krakowie"
+     },
+     {
+      "pageid": 2531499,
+      "ns": 0,
+      "title": "Kamienica Kennerów w Krakowie",
+      "index": 24,
+      "coordinates": [
+       {
+        "lat": 50.064222,
+        "lon": 19.941961,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q11734094"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Kenner%27s_House%2C_38_Szpitalna_street%2C_Old_Town%2C_Krakow%2C_Poland.jpg/960px-Kenner%27s_House%2C_38_Szpitalna_street%2C_Old_Town%2C_Krakow%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 426
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:53:02Z",
+      "lastrevid": 74706005,
+      "length": 4523,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_Kenner%C3%B3w_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_Kenner%C3%B3w_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_Kenner%C3%B3w_w_Krakowie"
+     },
+     {
+      "pageid": 3084708,
+      "ns": 0,
+      "title": "Pomnik Jana Matejki w Krakowie",
+      "index": 25,
+      "coordinates": [
+       {
+        "lat": 50.065389,
+        "lon": 19.941083,
+        "primary": true,
+        "type": "landmark",
+        "dim": "30"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q15622244"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Jan_Matejko_monument%2C_2013_design._Jan_Tutaj%2C_Planty_Park%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Jan_Matejko_monument%2C_2013_design._Jan_Tutaj%2C_Planty_Park%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 427
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:53:17Z",
+      "lastrevid": 78213909,
+      "length": 3873,
+      "fullurl": "https://pl.wikipedia.org/wiki/Pomnik_Jana_Matejki_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Pomnik_Jana_Matejki_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Pomnik_Jana_Matejki_w_Krakowie"
+     },
+     {
+      "pageid": 3697502,
+      "ns": 0,
+      "title": "Wydział Malarstwa Akademii Sztuk Pięknych im. Jana Matejki w Krakowie",
+      "index": 26,
+      "coordinates": [
+       {
+        "lat": 50.066111,
+        "lon": 19.941389,
+        "primary": true,
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q25407901"
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-09-03T13:08:58Z",
+      "lastrevid": 77216550,
+      "length": 2615,
+      "fullurl": "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Malarstwa_Akademii_Sztuk_Pi%C4%99knych_im._Jana_Matejki_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Wydzia%C5%82_Malarstwa_Akademii_Sztuk_Pi%C4%99knych_im._Jana_Matejki_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Malarstwa_Akademii_Sztuk_Pi%C4%99knych_im._Jana_Matejki_w_Krakowie"
+     },
+     {
+      "pageid": 3711940,
+      "ns": 0,
+      "title": "Wydział Rzeźby Akademii Sztuk Pięknych im. Jana Matejki w Krakowie",
+      "index": 27,
+      "coordinates": [
+       {
+        "lat": 50.066111,
+        "lon": 19.941389,
+        "primary": true,
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q25408093"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Studenci_i_studentki_w_pracowni_profesora_Konstantego_Laszczki_Krak%C3%B3w.jpg/960px-Studenci_i_studentki_w_pracowni_profesora_Konstantego_Laszczki_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 448
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-09-22T07:53:47Z",
+      "lastrevid": 77216546,
+      "length": 15565,
+      "fullurl": "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Rze%C5%BAby_Akademii_Sztuk_Pi%C4%99knych_im._Jana_Matejki_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Wydzia%C5%82_Rze%C5%BAby_Akademii_Sztuk_Pi%C4%99knych_im._Jana_Matejki_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Rze%C5%BAby_Akademii_Sztuk_Pi%C4%99knych_im._Jana_Matejki_w_Krakowie"
+     },
+     {
+      "pageid": 4324160,
+      "ns": 0,
+      "title": "Gmach Urzędu Wojewódzkiego w Krakowie",
+      "index": 28,
+      "coordinates": [
+       {
+        "lat": 50.065556,
+        "lon": 19.943611,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q30162719"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/GmachMa%C5%82opolskiegoUrz%C4%99duWojew%C3%B3dzkiego-UlicaBasztowa22-POL%2C_Krak%C3%B3w.jpg/960px-GmachMa%C5%82opolskiegoUrz%C4%99duWojew%C3%B3dzkiego-UlicaBasztowa22-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 537
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:53:48Z",
+      "lastrevid": 76960455,
+      "length": 7017,
+      "fullurl": "https://pl.wikipedia.org/wiki/Gmach_Urz%C4%99du_Wojew%C3%B3dzkiego_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Gmach_Urz%C4%99du_Wojew%C3%B3dzkiego_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Gmach_Urz%C4%99du_Wojew%C3%B3dzkiego_w_Krakowie"
+     },
+     {
+      "pageid": 4325324,
+      "ns": 0,
+      "title": "Gmach Narodowego Banku Polskiego w Krakowie",
+      "index": 29,
+      "coordinates": [
+       {
+        "lat": 50.065694,
+        "lon": 19.942389,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q30162715"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/NarodowyBankPolski-GmachKrakowski-POL%2C_Krak%C3%B3w.JPG/960px-NarodowyBankPolski-GmachKrakowski-POL%2C_Krak%C3%B3w.JPG?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 427
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:53:48Z",
+      "lastrevid": 78210311,
+      "length": 13394,
+      "fullurl": "https://pl.wikipedia.org/wiki/Gmach_Narodowego_Banku_Polskiego_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Gmach_Narodowego_Banku_Polskiego_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Gmach_Narodowego_Banku_Polskiego_w_Krakowie"
+     },
+     {
+      "pageid": 4329850,
+      "ns": 0,
+      "title": "Gmach Główny Akademii Sztuk Pięknych w Krakowie",
+      "index": 30,
+      "coordinates": [
+       {
+        "lat": 50.066111,
+        "lon": 19.941389,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q30170309"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/AkademiaSztukPi%C4%99knychImJanaMatejki-POL%2C_Krak%C3%B3w.jpg/960px-AkademiaSztukPi%C4%99knychImJanaMatejki-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 620
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:53:48Z",
+      "lastrevid": 77537018,
+      "length": 9784,
+      "fullurl": "https://pl.wikipedia.org/wiki/Gmach_G%C5%82%C3%B3wny_Akademii_Sztuk_Pi%C4%99knych_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Gmach_G%C5%82%C3%B3wny_Akademii_Sztuk_Pi%C4%99knych_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Gmach_G%C5%82%C3%B3wny_Akademii_Sztuk_Pi%C4%99knych_w_Krakowie"
+     },
+     {
+      "pageid": 4377876,
+      "ns": 0,
+      "title": "Strajk w Sempericie",
+      "index": 31,
+      "coordinates": [
+       {
+        "lat": 50.065833,
+        "lon": 19.941444,
+        "primary": true,
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q60832027"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Monument_to_the_Fallen_Semperit%E2%80%99s_Workers_of_1936%2C_Planty_Park%2C_Basztowa_Street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Monument_to_the_Fallen_Semperit%E2%80%99s_Workers_of_1936%2C_Planty_Park%2C_Basztowa_Street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 960
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-08-13T18:32:53Z",
+      "lastrevid": 77526003,
+      "length": 6772,
+      "fullurl": "https://pl.wikipedia.org/wiki/Strajk_w_Sempericie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Strajk_w_Sempericie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Strajk_w_Sempericie"
+     },
+     {
+      "pageid": 4589095,
+      "ns": 0,
+      "title": "Żywe Muzeum Obwarzanka w Krakowie",
+      "index": 32,
+      "coordinates": [
+       {
+        "lat": 50.066646,
+        "lon": 19.940872,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q86668560"
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:53:56Z",
+      "lastrevid": 80501702,
+      "length": 6673,
+      "fullurl": "https://pl.wikipedia.org/wiki/%C5%BBywe_Muzeum_Obwarzanka_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=%C5%BBywe_Muzeum_Obwarzanka_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/%C5%BBywe_Muzeum_Obwarzanka_w_Krakowie"
+     },
+     {
+      "pageid": 4608868,
+      "ns": 0,
+      "title": "Kamienica Bełzińska w Krakowie",
+      "index": 33,
+      "coordinates": [
+       {
+        "lat": 50.064083,
+        "lon": 19.940944,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q86672638"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Be%C5%82zi%C5%84ska_tenement_house%2C_45_Floria%C5%84ska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Be%C5%82zi%C5%84ska_tenement_house%2C_45_Floria%C5%84ska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 872
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:53:56Z",
+      "lastrevid": 74912020,
+      "length": 6202,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_Be%C5%82zi%C5%84ska_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_Be%C5%82zi%C5%84ska_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_Be%C5%82zi%C5%84ska_w_Krakowie"
+     },
+     {
+      "pageid": 4903610,
+      "ns": 0,
+      "title": "Rektorat Przemienienia Pańskiego w Krakowie (Stare Miasto)",
+      "index": 34,
+      "coordinates": [
+       {
+        "lat": 50.065087,
+        "lon": 19.939462,
+        "primary": true,
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q110389792"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/Church_of_the_Transfiguration_of_Our_Lord%2C_facade%2C_2_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Church_of_the_Transfiguration_of_Our_Lord%2C_facade%2C_2_Pijarska_street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 976
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-09-08T15:30:54Z",
+      "lastrevid": 75674208,
+      "length": 2329,
+      "fullurl": "https://pl.wikipedia.org/wiki/Rektorat_Przemienienia_Pa%C5%84skiego_w_Krakowie_(Stare_Miasto)",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Rektorat_Przemienienia_Pa%C5%84skiego_w_Krakowie_(Stare_Miasto)&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Rektorat_Przemienienia_Pa%C5%84skiego_w_Krakowie_(Stare_Miasto)"
+     },
+     {
+      "pageid": 4926200,
+      "ns": 0,
+      "title": "Pomnik Aleksandra Fredry w Krakowie",
+      "index": 35,
+      "coordinates": [
+       {
+        "lat": 50.064139,
+        "lon": 19.942472,
+        "primary": true,
+        "type": "landmark",
+        "dim": "30"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q105626752"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Aleksander_Fredro_Monument%2C_1900_design._Cyprian_Godebski%2C_1_%C5%9Awi%C4%99tego_Ducha_Square%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Aleksander_Fredro_Monument%2C_1900_design._Cyprian_Godebski%2C_1_%C5%9Awi%C4%99tego_Ducha_Square%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 981
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:06Z",
+      "lastrevid": 72331596,
+      "length": 5119,
+      "fullurl": "https://pl.wikipedia.org/wiki/Pomnik_Aleksandra_Fredry_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Pomnik_Aleksandra_Fredry_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Pomnik_Aleksandra_Fredry_w_Krakowie"
+     },
+     {
+      "pageid": 4992865,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Basztowej 23 w Krakowie",
+      "index": 36,
+      "coordinates": [
+       {
+        "lat": 50.065,
+        "lon": 19.943889,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q30162721"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Kamienica-UlicaBasztowa23-Kleparz-POL%2C_Krak%C3%B3w.jpg/960px-Kamienica-UlicaBasztowa23-Kleparz-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 544
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:08Z",
+      "lastrevid": 74769591,
+      "length": 3731,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ulicy_Basztowej_23_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_przy_ulicy_Basztowej_23_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ulicy_Basztowej_23_w_Krakowie"
+     },
+     {
+      "pageid": 5459691,
+      "ns": 0,
+      "title": "Dyrekcja Kolei w Krakowie",
+      "index": 37,
+      "coordinates": [
+       {
+        "lat": 50.06705,
+        "lon": 19.94201,
+        "primary": true,
+        "dim": "1000"
+       }
+      ],
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Railway_Offices%2C_12_Matejko_square%2C_Krakow%2C_Poland.jpg/960px-Railway_Offices%2C_12_Matejko_square%2C_Krakow%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 467
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:21Z",
+      "lastrevid": 78962142,
+      "length": 6368,
+      "fullurl": "https://pl.wikipedia.org/wiki/Dyrekcja_Kolei_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Dyrekcja_Kolei_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Dyrekcja_Kolei_w_Krakowie"
+     },
+     {
+      "pageid": 5510595,
+      "ns": 0,
+      "title": "Ulica Zacisze w Krakowie",
+      "index": 38,
+      "coordinates": [
+       {
+        "lat": 50.06625,
+        "lon": 19.943389,
+        "primary": true,
+        "type": "landmark",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q124788934"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Zacisze_Street%2C_view_from_S%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Zacisze_Street%2C_view_from_S%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 392
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:23Z",
+      "lastrevid": 76093819,
+      "length": 5923,
+      "fullurl": "https://pl.wikipedia.org/wiki/Ulica_Zacisze_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Ulica_Zacisze_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Ulica_Zacisze_w_Krakowie"
+     },
+     {
+      "pageid": 5564997,
+      "ns": 0,
+      "title": "Pomnik Bohdana Zaleskiego w Krakowie",
+      "index": 39,
+      "coordinates": [
+       {
+        "lat": 50.065833,
+        "lon": 19.940278,
+        "primary": true,
+        "type": "landmark",
+        "dim": "30"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q123478840"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Bohdan_Zaleski_monument%2C_Planty_Park%2C_Basztowa_Street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Bohdan_Zaleski_monument%2C_Planty_Park%2C_Basztowa_Street%2C_Old_Town%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 983
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:25Z",
+      "lastrevid": 79068052,
+      "length": 3424,
+      "fullurl": "https://pl.wikipedia.org/wiki/Pomnik_Bohdana_Zaleskiego_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Pomnik_Bohdana_Zaleskiego_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Pomnik_Bohdana_Zaleskiego_w_Krakowie"
+     },
+     {
+      "pageid": 5570060,
+      "ns": 0,
+      "title": "Kamienica przy ul. Floriańskiej 42 w Krakowie",
+      "index": 40,
+      "coordinates": [
+       {
+        "lat": 50.064444,
+        "lon": 19.941111,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q30168397"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/A-202_kamienica_Hotel_Pod_Bia%C5%82ym_Or%C5%82em_Krak%C3%B3w_ul._Floria%C5%84ska_42_MM.JPG/960px-A-202_kamienica_Hotel_Pod_Bia%C5%82ym_Or%C5%82em_Krak%C3%B3w_ul._Floria%C5%84ska_42_MM.JPG?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 953
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:25Z",
+      "lastrevid": 72364227,
+      "length": 4121,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ul._Floria%C5%84skiej_42_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_przy_ul._Floria%C5%84skiej_42_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ul._Floria%C5%84skiej_42_w_Krakowie"
+     },
+     {
+      "pageid": 5617277,
+      "ns": 0,
+      "title": "Ulica Ignacego Paderewskiego w Krakowie",
+      "index": 41,
+      "coordinates": [
+       {
+        "lat": 50.066389,
+        "lon": 19.941389,
+        "primary": true,
+        "type": "landmark",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q124767373"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/UlicaIgnacegoPaderewskiego-WidokNaWsch%C3%B3d-POL%2C_Krak%C3%B3w.jpg/960px-UlicaIgnacegoPaderewskiego-WidokNaWsch%C3%B3d-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 326
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:26Z",
+      "lastrevid": 80847754,
+      "length": 12340,
+      "fullurl": "https://pl.wikipedia.org/wiki/Ulica_Ignacego_Paderewskiego_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Ulica_Ignacego_Paderewskiego_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Ulica_Ignacego_Paderewskiego_w_Krakowie"
+     },
+     {
+      "pageid": 5637442,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Basztowej 18 w Krakowie",
+      "index": 42,
+      "coordinates": [
+       {
+        "lat": 50.066144,
+        "lon": 19.941081,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q30162712"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Tenement_house%2C_1880_design._Karol_Zaremba%2C_18_Basztowa_street%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Tenement_house%2C_1880_design._Karol_Zaremba%2C_18_Basztowa_street%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 430
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:27Z",
+      "lastrevid": 79999234,
+      "length": 2944,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ulicy_Basztowej_18_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_przy_ulicy_Basztowej_18_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ulicy_Basztowej_18_w_Krakowie"
+     },
+     {
+      "pageid": 5639378,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Zacisze 12 w Krakowie",
+      "index": 43,
+      "coordinates": [
+       {
+        "lat": 50.066608,
+        "lon": 19.943344,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q132779479"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Kamienica-UlicaZacisze12-POL%2C_Krak%C3%B3w.jpg/960px-Kamienica-UlicaZacisze12-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 640
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:27Z",
+      "lastrevid": 79999053,
+      "length": 2964,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ulicy_Zacisze_12_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_przy_ulicy_Zacisze_12_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ulicy_Zacisze_12_w_Krakowie"
+     },
+     {
+      "pageid": 5639379,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Zacisze 10 w Krakowie",
+      "index": 44,
+      "coordinates": [
+       {
+        "lat": 50.066414,
+        "lon": 19.943271,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q30172093"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Kamienica-UlicaZacisze10-POL%2C_Krak%C3%B3w.jpg/960px-Kamienica-UlicaZacisze10-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 395
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:27Z",
+      "lastrevid": 79999054,
+      "length": 3104,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ulicy_Zacisze_10_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_przy_ulicy_Zacisze_10_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_ulicy_Zacisze_10_w_Krakowie"
+     },
+     {
+      "pageid": 5678298,
+      "ns": 0,
+      "title": "Restauracja Żywiec w Krakowie",
+      "index": 45,
+      "coordinates": [
+       {
+        "lat": 50.064127,
+        "lon": 19.940785,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q134447267"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Ul._Floria%C5%84ska_19%2C_Krak%C3%B3w.JPG/960px-Ul._Floria%C5%84ska_19%2C_Krak%C3%B3w.JPG?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 997
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:28Z",
+      "lastrevid": 80609163,
+      "length": 2865,
+      "fullurl": "https://pl.wikipedia.org/wiki/Restauracja_%C5%BBywiec_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Restauracja_%C5%BBywiec_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Restauracja_%C5%BBywiec_w_Krakowie"
+     },
+     {
+      "pageid": 5679108,
+      "ns": 0,
+      "title": "Pomnik Armii Czerwonej w Krakowie",
+      "index": 46,
+      "coordinates": [
+       {
+        "lat": 50.065389,
+        "lon": 19.941083,
+        "primary": true,
+        "type": "landmark",
+        "dim": "30"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q134447398"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Krakow_Military_Cemetery%2C_Soviet_soldiers_section%2C_Memorial_1945_design._by_Marcin_Bukowski_and_Karol_Muszkiet%2Cul._Prandoty_1%2C_Krak%C3%B3w%2C_Poland.jpg/960px-Krakow_Military_Cemetery%2C_Soviet_soldiers_section%2C_Memorial_1945_design._by_Marcin_Bukowski_and_Karol_Muszkiet%2Cul._Prandoty_1%2C_Krak%C3%B3w%2C_Poland.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 362
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-09-27T11:52:06Z",
+      "lastrevid": 80835580,
+      "length": 13650,
+      "fullurl": "https://pl.wikipedia.org/wiki/Pomnik_Armii_Czerwonej_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Pomnik_Armii_Czerwonej_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Pomnik_Armii_Czerwonej_w_Krakowie"
+     },
+     {
+      "pageid": 5679802,
+      "ns": 0,
+      "title": "Kamienica przy placu Jana Matejki 6 w Krakowie",
+      "index": 47,
+      "coordinates": [
+       {
+        "lat": 50.066733,
+        "lon": 19.942781,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q30170294"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Kamienica-PlacJanaMatejki6-POL%2C_Krak%C3%B3w.jpg/960px-Kamienica-PlacJanaMatejki6-POL%2C_Krak%C3%B3w.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 544
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-03T08:54:28Z",
+      "lastrevid": 79998934,
+      "length": 3442,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_placu_Jana_Matejki_6_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kamienica_przy_placu_Jana_Matejki_6_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kamienica_przy_placu_Jana_Matejki_6_w_Krakowie"
+     },
+     {
+      "pageid": 5805005,
+      "ns": 0,
+      "title": "Kawiarnia Paon w Krakowie",
+      "index": 48,
+      "coordinates": [
+       {
+        "lat": 50.064222,
+        "lon": 19.941961,
+        "primary": true,
+        "type": "building",
+        "dim": "1000"
+       }
+      ],
+      "pageprops": {
+       "wikibase_item": "Q131936741"
+      },
+      "thumbnail": {
+       "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/PawWys.jpg/960px-PawWys.jpg?utm_source=pl.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+       "width": 640,
+       "height": 493
+      },
+      "contentmodel": "wikitext",
+      "pagelanguage": "pl",
+      "pagelanguagehtmlcode": "pl",
+      "pagelanguagedir": "ltr",
+      "touched": "2026-10-02T08:51:07Z",
+      "lastrevid": 80134783,
+      "length": 6438,
+      "fullurl": "https://pl.wikipedia.org/wiki/Kawiarnia_Paon_w_Krakowie",
+      "editurl": "https://pl.wikipedia.org/w/index.php?title=Kawiarnia_Paon_w_Krakowie&action=edit",
+      "canonicalurl": "https://pl.wikipedia.org/wiki/Kawiarnia_Paon_w_Krakowie"
+     }
+    ]
+   },
+   "limits": {
+    "coordinates": 500,
+    "extracts": 20,
+    "pageimages": 50
+   }
+  }
+ },
+ {
+  "params": {
+   "action": "query",
+   "format": "json",
+   "formatversion": "2",
+   "generator": "geosearch",
+   "ggscoord": "50.06553|19.9417",
+   "ggsradius": "300",
+   "ggslimit": "50",
+   "prop": "coordinates|pageprops|extracts|pageimages|info",
+   "coprop": "type|dim",
+   "colimit": "max",
+   "ppprop": "wikibase_item",
+   "exintro": "1",
+   "explaintext": "1",
+   "exlimit": "max",
+   "piprop": "thumbnail",
+   "pithumbsize": "640",
+   "pilimit": "max",
+   "inprop": "url",
+   "excontinue": "20",
+   "continue": "||coordinates|pageprops|pageimages|info"
+  },
+  "body": {
+   "continue": {
+    "excontinue": 40,
+    "continue": "||coordinates|pageprops|pageimages|info"
+   },
+   "limits": {
+    "coordinates": 500,
+    "pageimages": 50,
+    "extracts": 20
+   },
+   "query": {
+    "pages": [
+     {
+      "pageid": 18947,
+      "ns": 0,
+      "title": "Brama Floriańska w Krakowie",
+      "index": -1
+     },
+     {
+      "pageid": 18948,
+      "ns": 0,
+      "title": "Mury miejskie w Krakowie",
+      "index": 0
+     },
+     {
+      "pageid": 19617,
+      "ns": 0,
+      "title": "Barbakan w Krakowie",
+      "index": 1
+     },
+     {
+      "pageid": 21603,
+      "ns": 0,
+      "title": "Kościół Przemienienia Pańskiego w Krakowie (ul. Pijarska)",
+      "index": 2
+     },
+     {
+      "pageid": 28862,
+      "ns": 0,
+      "title": "Planty Krakowskie",
+      "index": 3
+     },
+     {
+      "pageid": 65958,
+      "ns": 0,
+      "title": "Akademia Sztuk Pięknych im. Jana Matejki w Krakowie",
+      "index": 4
+     },
+     {
+      "pageid": 134070,
+      "ns": 0,
+      "title": "Muzeum Książąt Czartoryskich w Krakowie",
+      "index": 5
+     },
+     {
+      "pageid": 320705,
+      "ns": 0,
+      "title": "Dzielnica I Stare Miasto",
+      "index": 6
+     },
+     {
+      "pageid": 426971,
+      "ns": 0,
+      "title": "Jama Michalika",
+      "index": 7
+     },
+     {
+      "pageid": 468530,
+      "ns": 0,
+      "title": "Plac Jana Matejki w Krakowie",
+      "index": 8
+     },
+     {
+      "pageid": 488205,
+      "ns": 0,
+      "title": "Dom Jana Matejki w Krakowie",
+      "index": 9
+     },
+     {
+      "pageid": 503880,
+      "ns": 0,
+      "title": "Pomnik Grunwaldzki w Krakowie",
+      "index": 10
+     },
+     {
+      "pageid": 678299,
+      "ns": 0,
+      "title": "Grób Nieznanego Żołnierza w Krakowie",
+      "index": 11
+     },
+     {
+      "pageid": 844353,
+      "ns": 0,
+      "title": "Fundacja Książąt Czartoryskich",
+      "index": 12
+     },
+     {
+      "pageid": 1183521,
+      "ns": 0,
+      "title": "Budynek Feniksa w Krakowie (ul. Basztowa)",
+      "index": 13
+     },
+     {
+      "pageid": 1668840,
+      "ns": 0,
+      "title": "Kamienica przy ul. Floriańskiej 38 w Krakowie",
+      "index": 14
+     },
+     {
+      "pageid": 1757187,
+      "ns": 0,
+      "title": "Staatliche Kunstgewerbeschule Krakau",
+      "index": 15
+     },
+     {
+      "pageid": 1758915,
+      "ns": 0,
+      "title": "Zaułek Książąt Czartoryskich",
+      "index": 16
+     },
+     {
+      "pageid": 1793639,
+      "ns": 0,
+      "title": "Ulica Basztowa w Krakowie",
+      "index": 17
+     },
+     {
+      "pageid": 1814428,
+      "ns": 0,
+      "title": "Ulica Pijarska w Krakowie",
+      "index": 18
+     },
+     {
+      "pageid": 1816105,
+      "ns": 0,
+      "title": "Arsenał Miejski w Krakowie",
+      "index": 19,
+      "extract": "Arsenał Miejski – zabytkowy budynek przeznaczony do przechowywania broni oraz prochu, położony przy ulicy Pijarskiej na Starym Mieście w Krakowie. Pod koniec XIX wieku przeznaczony na Muzeum Książąt Czartoryskich."
+     },
+     {
+      "pageid": 2235984,
+      "ns": 0,
+      "title": "Kamienica Raczyńskiego w Krakowie",
+      "index": 20,
+      "extract": "Kamienica Raczyńskiego – zabytkowa kamienica znajdująca się w Krakowie, w dzielnicy I Stare Miasto przy ul. Pijarskiej 23, na rogu z ul. Szpitalną 40, na Starym Mieście.\nNależała niegdyś do prezydenta RP na uchodźstwie Edwarda Raczyńskiego."
+     },
+     {
+      "pageid": 2238593,
+      "ns": 0,
+      "title": "Baszta Pasamoników w Krakowie",
+      "index": 21,
+      "extract": "Baszta Pasamoników (znana także jako Baszta Szmuklerzy) – jedna z trzech w pełni zachowanych baszt w obrębie murów miejskich w Krakowie (obok Cieśli oraz Stolarzy)."
+     },
+     {
+      "pageid": 2238662,
+      "ns": 0,
+      "title": "Baszta Cieśli w Krakowie",
+      "index": 22,
+      "extract": "Baszta Cieśli (znana także jako Baszta Ciesielska) – jedna z trzech w pełni zachowanych baszt w obrębie murów miejskich w Krakowie (obok Pasamoników oraz Stolarzy)."
+     },
+     {
+      "pageid": 2238686,
+      "ns": 0,
+      "title": "Baszta Stolarzy w Krakowie",
+      "index": 23,
+      "extract": "Baszta Stolarzy (znana także jako Baszta Stolarska, Baszta Stolarzy i Powroźników) – jedna z trzech w pełni zachowanych baszt w obrębie murów miejskich w Krakowie (obok Cieśli oraz Pasamoników)."
+     },
+     {
+      "pageid": 2531499,
+      "ns": 0,
+      "title": "Kamienica Kennerów w Krakowie",
+      "index": 24,
+      "extract": "Kamienica Kennerów – zabytkowy budynek znajdujący się w Krakowie, w dzielnicy I przy ul. Szpitalnej 38, na Starym Mieście.\nKamienica o modernistycznej fasadzie powstała w latach 1910–1912, po wyburzeniu starszej zabudowy. Zaprojektował ją dla J. i P. Kennerów krakowski architekt Teodor Hoffmann. Na klatce schodowej znajdują witraże wykonane przez Krakowski Zakład Witrażów S. G. Żeleński według projektu Anny Gramatyki-Ostrowskiej.\nJest to czynszowa kamienica, w której mieściła się m.in. Restauracja Cyganeria, powstała pod koniec lat 30. XX wieku. Podczas II wojny światowej była lokalem „nur für Deutsche”. 22 grudnia 1942 przedstawiciele kilku żydowskich organizacji podziemnych dokonali wspólnie udanego zamachu na lokal (zginął oficer Luftwaffe, a 3 inne osoby zostały ranne). Jednym z uczestników tej akcji był Icchak Cukierman. Zamach upamiętnia tablica umieszczona na fasadzie budynku."
+     },
+     {
+      "pageid": 3084708,
+      "ns": 0,
+      "title": "Pomnik Jana Matejki w Krakowie",
+      "index": 25,
+      "extract": "Pomnik Jana Matejki – pomnik w Krakowie na Plantach przy ul. Basztowej, po zachodniej stronie Barbakanu naprzeciwko ASP, w rejonie gdzie do 1997 znajdował się pomnik żołnierzy Armii Radzieckiej."
+     },
+     {
+      "pageid": 3697502,
+      "ns": 0,
+      "title": "Wydział Malarstwa Akademii Sztuk Pięknych im. Jana Matejki w Krakowie",
+      "index": 26,
+      "extract": "Wydział Malarstwa Akademii Sztuk Pięknych im. Jana Matejki w Krakowie – jeden z siedmiu wydziałów Akademii Sztuk Pięknych im. Jana Matejki w Krakowie. Jego siedziba znajduje się przy Placu Matejki 13 w Krakowie. Powstał w 1922 r.\n\n"
+     },
+     {
+      "pageid": 3711940,
+      "ns": 0,
+      "title": "Wydział Rzeźby Akademii Sztuk Pięknych im. Jana Matejki w Krakowie",
+      "index": 27,
+      "extract": "Wydział Rzeźby Akademii Sztuk Pięknych im. Jana Matejki w Krakowie – jeden z siedmiu wydziałów Akademii Sztuk Pięknych im. Jana Matejki w Krakowie. Jego siedziba znajduje się w głównym budynku akademii, przy Placu Matejki 13 w Krakowie. Powstał w 1922 r., wcześniej istniały kursy rzeźby. Po latach okupacji w 1949 roku Wydział Rzeźby się reaktywował. Na wydziale uczyli: Xawery Dunikowski, Jacek Puget, Jerzy Bandura, Wanda Ślędzińska, Jarosław Heger, Marian Konieczny, Stefan Borzęcki."
+     },
+     {
+      "pageid": 4324160,
+      "ns": 0,
+      "title": "Gmach Urzędu Wojewódzkiego w Krakowie",
+      "index": 28,
+      "extract": "Gmach Urzędu Wojewódzkiego w Krakowie – zabytkowy budynek administracyjny, oddany do użytku w 1900 roku, mieszczący siedzibę władz województwa małopolskiego m.in. wojewody małopolskiego, położony w Krakowie przy ulicy Basztowej 22."
+     },
+     {
+      "pageid": 4325324,
+      "ns": 0,
+      "title": "Gmach Narodowego Banku Polskiego w Krakowie",
+      "index": 29,
+      "extract": "Gmach Narodowego Banku Polskiego – zabytkowy budynek znajdujący się w Krakowie, w dzielnicy I przy ulicy Basztowej 20, pomiędzy placem Jana Matejki a ulicą Zacisze, na Kleparzu. Ma w nim siedzibę oddział Narodowego Banku Polskiego."
+     },
+     {
+      "pageid": 4329850,
+      "ns": 0,
+      "title": "Gmach Główny Akademii Sztuk Pięknych w Krakowie",
+      "index": 30,
+      "extract": "Gmach Główny Akademii Sztuk Pięknych – zabytkowy budynek w Krakowie w dzielnicy I, położony przy placu Jana Matejki 13 na rogu z ulicą Basztową 19, na Kleparzu. Główny budynek Akademii Sztuk Pięknych im. Jana Matejki."
+     },
+     {
+      "pageid": 4377876,
+      "ns": 0,
+      "title": "Strajk w Sempericie",
+      "index": 31,
+      "extract": "Strajk w Sempericie, krakowska krwawa wiosna – krwawe wydarzenia, do których doszło w Krakowie 23 marca 1936 roku.\n\n"
+     },
+     {
+      "pageid": 4589095,
+      "ns": 0,
+      "title": "Żywe Muzeum Obwarzanka w Krakowie",
+      "index": 32,
+      "extract": "Żywe Muzeum Obwarzanka w Krakowie – interaktywna, prywatna placówka muzealna w Krakowie, w której odbywają się pokazy połączone z warsztatami wypieku obwarzanka. Placówka promuje krakowską kulturę i historię."
+     },
+     {
+      "pageid": 4608868,
+      "ns": 0,
+      "title": "Kamienica Bełzińska w Krakowie",
+      "index": 33,
+      "extract": "Kamienica Bełzińska (znana także jako Kamienica Bełzowska, Kamienica Cyprianowska, Kamienica Pod Jelonkiem, Kamienica Witoszyńskich) – zabytkowa kamienica znajdująca się w Krakowie, w dzielnicy I przy ulicy Floriańskiej 45, na Starym Mieście."
+     },
+     {
+      "pageid": 4903610,
+      "ns": 0,
+      "title": "Rektorat Przemienienia Pańskiego w Krakowie (Stare Miasto)",
+      "index": 34,
+      "extract": "Rektorat Przemienienia Pańskiego w Krakowie – rektorat rzymskokatolicki, znajdujący się w archidiecezji krakowskiej, w dekanacie Kraków-Centrum."
+     },
+     {
+      "pageid": 4926200,
+      "ns": 0,
+      "title": "Pomnik Aleksandra Fredry w Krakowie",
+      "index": 35,
+      "extract": "Pomnik Aleksandra Fredry – pomnik znajdujący się w Krakowie na pl. Świętego Ducha przed budynkiem teatru im. Juliusza Słowackiego. Fundatorem był Konstanty Wołodkowicz, a autorem popiersia Cyprian Godebski. Odsłonięty został 8 listopada 1900 roku."
+     },
+     {
+      "pageid": 4992865,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Basztowej 23 w Krakowie",
+      "index": 36,
+      "extract": "Kamienica przy ulicy Basztowej 23 – zabytkowa kamienica, znajdująca się w Krakowie, w dzielnicy I przy ulicy Basztowej, na Kleparzu.\nJest to budynek wzniesiony w stylu neorenesansowym w 1890 roku według projektu Sławomira Odrzywolskiego we współpracy z Władysławem Kaczmarskim jako trzypiętrowa kamienica o charakterze czynszowym. W 2006 roku kamienica przeszła remont konserwatorski elewacji.\nW kamienicy nad bramą tylną znajduje się secesyjny witraż w łukowatym kształcie z motywem maków, wykonany ze szkła ornamentowego i mąconego w 1914 roku w Krakowskim Zakładzie Witrażów S.G. Żeleński."
+     },
+     {
+      "pageid": 5459691,
+      "ns": 0,
+      "title": "Dyrekcja Kolei w Krakowie",
+      "index": 37,
+      "extract": "Dyrekcja Kolei w Krakowie – terytorialny organ zarządzania koleją z siedzibą w Krakowie."
+     },
+     {
+      "pageid": 5510595,
+      "ns": 0,
+      "title": "Ulica Zacisze w Krakowie",
+      "index": 38,
+      "extract": "Ulica Zacisze – ulica w Krakowie, w dzielnicy I Stare Miasto, na Kleparzu. Biegnie południkowo, łącząc ulice Basztową (na południu) i Kurniki (na północy).\nUlica istnieje co najmniej od XV wieku. Wzmiankowana była na początku wieku XVI jako „ulica Wąska” (Platea Stricta), prowadząca na tyłach zabudowań usytuowanych we wschodniej pierzei ówczesnego rynku kleparskiego."
+     },
+     {
+      "pageid": 5564997,
+      "ns": 0,
+      "title": "Pomnik Bohdana Zaleskiego w Krakowie",
+      "index": 39
+     },
+     {
+      "pageid": 5570060,
+      "ns": 0,
+      "title": "Kamienica przy ul. Floriańskiej 42 w Krakowie",
+      "index": 40
+     },
+     {
+      "pageid": 5617277,
+      "ns": 0,
+      "title": "Ulica Ignacego Paderewskiego w Krakowie",
+      "index": 41
+     },
+     {
+      "pageid": 5637442,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Basztowej 18 w Krakowie",
+      "index": 42
+     },
+     {
+      "pageid": 5639378,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Zacisze 12 w Krakowie",
+      "index": 43
+     },
+     {
+      "pageid": 5639379,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Zacisze 10 w Krakowie",
+      "index": 44
+     },
+     {
+      "pageid": 5678298,
+      "ns": 0,
+      "title": "Restauracja Żywiec w Krakowie",
+      "index": 45
+     },
+     {
+      "pageid": 5679108,
+      "ns": 0,
+      "title": "Pomnik Armii Czerwonej w Krakowie",
+      "index": 46
+     },
+     {
+      "pageid": 5679802,
+      "ns": 0,
+      "title": "Kamienica przy placu Jana Matejki 6 w Krakowie",
+      "index": 47
+     },
+     {
+      "pageid": 5805005,
+      "ns": 0,
+      "title": "Kawiarnia Paon w Krakowie",
+      "index": 48
+     }
+    ]
+   }
+  }
+ },
+ {
+  "params": {
+   "action": "query",
+   "format": "json",
+   "formatversion": "2",
+   "generator": "geosearch",
+   "ggscoord": "50.06553|19.9417",
+   "ggsradius": "300",
+   "ggslimit": "50",
+   "prop": "coordinates|pageprops|extracts|pageimages|info",
+   "coprop": "type|dim",
+   "colimit": "max",
+   "ppprop": "wikibase_item",
+   "exintro": "1",
+   "explaintext": "1",
+   "exlimit": "max",
+   "piprop": "thumbnail",
+   "pithumbsize": "640",
+   "pilimit": "max",
+   "inprop": "url",
+   "excontinue": "40",
+   "continue": "||coordinates|pageprops|pageimages|info"
+  },
+  "body": {
+   "batchcomplete": true,
+   "limits": {
+    "coordinates": 500,
+    "pageimages": 50,
+    "extracts": 20
+   },
+   "query": {
+    "pages": [
+     {
+      "pageid": 18947,
+      "ns": 0,
+      "title": "Brama Floriańska w Krakowie",
+      "index": -1
+     },
+     {
+      "pageid": 18948,
+      "ns": 0,
+      "title": "Mury miejskie w Krakowie",
+      "index": 0
+     },
+     {
+      "pageid": 19617,
+      "ns": 0,
+      "title": "Barbakan w Krakowie",
+      "index": 1
+     },
+     {
+      "pageid": 21603,
+      "ns": 0,
+      "title": "Kościół Przemienienia Pańskiego w Krakowie (ul. Pijarska)",
+      "index": 2
+     },
+     {
+      "pageid": 28862,
+      "ns": 0,
+      "title": "Planty Krakowskie",
+      "index": 3
+     },
+     {
+      "pageid": 65958,
+      "ns": 0,
+      "title": "Akademia Sztuk Pięknych im. Jana Matejki w Krakowie",
+      "index": 4
+     },
+     {
+      "pageid": 134070,
+      "ns": 0,
+      "title": "Muzeum Książąt Czartoryskich w Krakowie",
+      "index": 5
+     },
+     {
+      "pageid": 320705,
+      "ns": 0,
+      "title": "Dzielnica I Stare Miasto",
+      "index": 6
+     },
+     {
+      "pageid": 426971,
+      "ns": 0,
+      "title": "Jama Michalika",
+      "index": 7
+     },
+     {
+      "pageid": 468530,
+      "ns": 0,
+      "title": "Plac Jana Matejki w Krakowie",
+      "index": 8
+     },
+     {
+      "pageid": 488205,
+      "ns": 0,
+      "title": "Dom Jana Matejki w Krakowie",
+      "index": 9
+     },
+     {
+      "pageid": 503880,
+      "ns": 0,
+      "title": "Pomnik Grunwaldzki w Krakowie",
+      "index": 10
+     },
+     {
+      "pageid": 678299,
+      "ns": 0,
+      "title": "Grób Nieznanego Żołnierza w Krakowie",
+      "index": 11
+     },
+     {
+      "pageid": 844353,
+      "ns": 0,
+      "title": "Fundacja Książąt Czartoryskich",
+      "index": 12
+     },
+     {
+      "pageid": 1183521,
+      "ns": 0,
+      "title": "Budynek Feniksa w Krakowie (ul. Basztowa)",
+      "index": 13
+     },
+     {
+      "pageid": 1668840,
+      "ns": 0,
+      "title": "Kamienica przy ul. Floriańskiej 38 w Krakowie",
+      "index": 14
+     },
+     {
+      "pageid": 1757187,
+      "ns": 0,
+      "title": "Staatliche Kunstgewerbeschule Krakau",
+      "index": 15
+     },
+     {
+      "pageid": 1758915,
+      "ns": 0,
+      "title": "Zaułek Książąt Czartoryskich",
+      "index": 16
+     },
+     {
+      "pageid": 1793639,
+      "ns": 0,
+      "title": "Ulica Basztowa w Krakowie",
+      "index": 17
+     },
+     {
+      "pageid": 1814428,
+      "ns": 0,
+      "title": "Ulica Pijarska w Krakowie",
+      "index": 18
+     },
+     {
+      "pageid": 1816105,
+      "ns": 0,
+      "title": "Arsenał Miejski w Krakowie",
+      "index": 19
+     },
+     {
+      "pageid": 2235984,
+      "ns": 0,
+      "title": "Kamienica Raczyńskiego w Krakowie",
+      "index": 20
+     },
+     {
+      "pageid": 2238593,
+      "ns": 0,
+      "title": "Baszta Pasamoników w Krakowie",
+      "index": 21
+     },
+     {
+      "pageid": 2238662,
+      "ns": 0,
+      "title": "Baszta Cieśli w Krakowie",
+      "index": 22
+     },
+     {
+      "pageid": 2238686,
+      "ns": 0,
+      "title": "Baszta Stolarzy w Krakowie",
+      "index": 23
+     },
+     {
+      "pageid": 2531499,
+      "ns": 0,
+      "title": "Kamienica Kennerów w Krakowie",
+      "index": 24
+     },
+     {
+      "pageid": 3084708,
+      "ns": 0,
+      "title": "Pomnik Jana Matejki w Krakowie",
+      "index": 25
+     },
+     {
+      "pageid": 3697502,
+      "ns": 0,
+      "title": "Wydział Malarstwa Akademii Sztuk Pięknych im. Jana Matejki w Krakowie",
+      "index": 26
+     },
+     {
+      "pageid": 3711940,
+      "ns": 0,
+      "title": "Wydział Rzeźby Akademii Sztuk Pięknych im. Jana Matejki w Krakowie",
+      "index": 27
+     },
+     {
+      "pageid": 4324160,
+      "ns": 0,
+      "title": "Gmach Urzędu Wojewódzkiego w Krakowie",
+      "index": 28
+     },
+     {
+      "pageid": 4325324,
+      "ns": 0,
+      "title": "Gmach Narodowego Banku Polskiego w Krakowie",
+      "index": 29
+     },
+     {
+      "pageid": 4329850,
+      "ns": 0,
+      "title": "Gmach Główny Akademii Sztuk Pięknych w Krakowie",
+      "index": 30
+     },
+     {
+      "pageid": 4377876,
+      "ns": 0,
+      "title": "Strajk w Sempericie",
+      "index": 31
+     },
+     {
+      "pageid": 4589095,
+      "ns": 0,
+      "title": "Żywe Muzeum Obwarzanka w Krakowie",
+      "index": 32
+     },
+     {
+      "pageid": 4608868,
+      "ns": 0,
+      "title": "Kamienica Bełzińska w Krakowie",
+      "index": 33
+     },
+     {
+      "pageid": 4903610,
+      "ns": 0,
+      "title": "Rektorat Przemienienia Pańskiego w Krakowie (Stare Miasto)",
+      "index": 34
+     },
+     {
+      "pageid": 4926200,
+      "ns": 0,
+      "title": "Pomnik Aleksandra Fredry w Krakowie",
+      "index": 35
+     },
+     {
+      "pageid": 4992865,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Basztowej 23 w Krakowie",
+      "index": 36
+     },
+     {
+      "pageid": 5459691,
+      "ns": 0,
+      "title": "Dyrekcja Kolei w Krakowie",
+      "index": 37
+     },
+     {
+      "pageid": 5510595,
+      "ns": 0,
+      "title": "Ulica Zacisze w Krakowie",
+      "index": 38
+     },
+     {
+      "pageid": 5564997,
+      "ns": 0,
+      "title": "Pomnik Bohdana Zaleskiego w Krakowie",
+      "index": 39,
+      "extract": "Pomnik Bohdana Zaleskiego (określany również mianem pomnika Bojana, Harfiarza bądź grupą Bojana) – pomnik, znajdujący się w Krakowie w północnej części Plant, między Barbakanem a ul. Sławkowską, w obrębie tzw. „Ogrodu przy Barbakanie”."
+     },
+     {
+      "pageid": 5570060,
+      "ns": 0,
+      "title": "Kamienica przy ul. Floriańskiej 42 w Krakowie",
+      "index": 40,
+      "extract": "Kamienica przy ulicy Floriańskiej 42 w Krakowie, Kamienica „Pod Białym Orłem” – zabytkowa kamienica zaadaptowana na pięciogwiazdkowy Hotel Polski. Położona w ścisłym centrum Krakowa przy ulicy Floriańskiej 42. 8 marca 1966 roku została wpisana do rejestru zabytków nieruchomych.\n\nKamienica ta na początku swojego istnienia w XIV wieku była własnością Macieja Kossowicza, który wydzierżawił ją w 1825 roku, Franciszkowi Staniszewskiemu z przeznaczeniem na oberżę. Staniszewski wkrótce kamienicę zakupił i urządził w niej zajazd. W XIX wieku zajazd został rozbudowany wzdłuż murów w stronę ulicy św. Jana i zmienił nazwę na „Hotel Polski”. W kamienicy tej 5 lutego 1879 został aresztowany Ludwik Waryński, twórca pierwszej polskiej partii rewolucyjnej „Proletariat”.\n8 marca 1966 roku została wpisana do rejestru zabytków nieruchomych, a później także do gminnej ewidencji zabytków."
+     },
+     {
+      "pageid": 5617277,
+      "ns": 0,
+      "title": "Ulica Ignacego Paderewskiego w Krakowie",
+      "index": 41,
+      "extract": "Ulica Ignacego Paderewskiego – ulica w Krakowie, w Dzielnicy I Stare Miasto, na Kleparzu.\nŁączy rynek Kleparski z placem Jana Matejki. Jest jednojezdniowa."
+     },
+     {
+      "pageid": 5637442,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Basztowej 18 w Krakowie",
+      "index": 42,
+      "extract": "Kamienica przy ulicy Basztowej 18 – zabytkowa kamienica znajdująca się w Krakowie, w dzielnicy I Stare Miasto przy ulicy Basztowej, na Kleparzu.\nKamienica została wzniesiona w 1877 roku, według projektu architekta Karola Zaremby. Po 1999 roku odbył się remont budynku.\n21 stycznia 1976 kamienica została wpisana do rejestru zabytków. Znajduje się także w gminnej ewidencji zabytków."
+     },
+     {
+      "pageid": 5639378,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Zacisze 12 w Krakowie",
+      "index": 43,
+      "extract": "Kamienica przy ulicy Zacisze 12 – zabytkowa kamienica znajdująca się w Krakowie, w dzielnicy I Stare Miasto przy ulicy Zacisze, na Kleparzu.\nKamienica została wzniesiona w latach 1908–1909 według projektu architekta Jana Orłowskiego.\nBudynek został wpisany do gminnej ewidencji zabytków. Znajduje się na obszarze Kleparza, którego układ urbanistyczny został wpisany 25 stycznia 1984 do rejestru zabytków."
+     },
+     {
+      "pageid": 5639379,
+      "ns": 0,
+      "title": "Kamienica przy ulicy Zacisze 10 w Krakowie",
+      "index": 44,
+      "extract": "Kamienica przy ulicy Zacisze 10 – zabytkowa kamienica znajdująca się w Krakowie, w dzielnicy I Stare Miasto przy ulicy Zacisze, na Kleparzu.\nKamienica została wzniesiona w 1881 roku zgodnie z koncepcją Ignacego Miarczyńskiego. Powstała z materiałów ceglanych.\n23 kwietnia 1999 budynek został wpisany do rejestru zabytków. Znajduje się także w gminnej ewidencji zabytków."
+     },
+     {
+      "pageid": 5678298,
+      "ns": 0,
+      "title": "Restauracja Żywiec w Krakowie",
+      "index": 45,
+      "extract": "Restauracja Żywiec (Pod Morską Latarnią) – nieistniejąca już restauracja i kawiarnia znajdująca się w Krakowie, przy ulicy Floriańskiej 19."
+     },
+     {
+      "pageid": 5679108,
+      "ns": 0,
+      "title": "Pomnik Armii Czerwonej w Krakowie",
+      "index": 46,
+      "extract": "Pomnik Armii Czerwonej (inaczej Pomnik Wdzięczności Armii Czerwonej bądź Pomnik Wdzięczności dla Armii Radzieckiej) – pomnik znajdujący się od lat 40. XX wieku w Krakowie na Plantach w pobliżu Barbakanu, w 1997 roku przeniesiony na Cmentarz Rakowicki (do kwatery żołnierzy radzieckich).\n\n"
+     },
+     {
+      "pageid": 5679802,
+      "ns": 0,
+      "title": "Kamienica przy placu Jana Matejki 6 w Krakowie",
+      "index": 47,
+      "extract": "Kamienica przy placu Jana Matejki 6 – zabytkowa kamienica znajdująca się w Krakowie, w dzielnicy I przy placu Jana Matejki 6, na Kleparzu.\nKamienica jest datowana na lata 1910–1913 lub 1918. Zaprojektowana została przez Jozue Oberledera.\nJest to budynek o funkcji mieszkalnej, wzniesiony z cegły. Architektura obiektu reprezentuje styl modernistyczny. Obiekt stanowił miejsce zamieszkania Tadeusza Pawlikowskiego. Pobyt ten został uhonorowany poprzez umieszczenie tablicy pamiątkowej na elewacji budynku.\n12 października 1990 kamienica została wpisana do rejestru zabytków. Znajduje się także w gminnej ewidencji zabytków."
+     },
+     {
+      "pageid": 5805005,
+      "ns": 0,
+      "title": "Kawiarnia Paon w Krakowie",
+      "index": 48,
+      "extract": "Kawiarnia Paon (także Kawiarnia Pod Pawiem, początkowo Kawiarnia Teatralna) – zlikwidowana kawiarnia w Krakowie, działająca w zburzonym domu przy ulicy Szpitalnej 38, w dzielnicy I Stare Miasto, na Starym Mieście."
+     }
+    ]
+   }
+  }
+ }
+]

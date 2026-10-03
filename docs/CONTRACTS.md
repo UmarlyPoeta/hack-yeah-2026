@@ -39,7 +39,7 @@ interface Segment {
   text: string;               // po polsku, gotowy do przeczytania
   claims: Claim[];            // [] dla szablonów
   origin: "ai" | "template";
-  llmModel: string | null;    // np. "bielik-4.5b-v3.0-instruct:Q4_K_M"
+  llmModel: string | null;    // np. "bielik-4.5b-v3.0-instruct:Q8_0"
   audioUrl: string | null;    // "/v1/audio/<id>.mp3" albo null (brak TTS)
   durationMs: number | null;  // prawdziwa długość audio
   voice: string | null;       // "elevenlabs:<voice>" | "piper:pl_PL-gosia-medium"
@@ -88,7 +88,7 @@ Odpowiedzi to JSON w UTF-8 (poza `/v1/audio`). Błędy mają format `{ "error": 
 | MISSED | „Po {lewej/prawej} minęliśmy {name}.” |
 
 ## Konfiguracja aplikacji
-`entry/src/main/ets/data/ApiConfig.ets`: `API_BASE_URL` (np. `http://192.168.x.y:8787`; pusty = tryb offline), `REQUEST_TIMEOUT_MS = 20000`.
+`Projekt/entry/src/main/ets/data/ApiConfig.ets`: `API_BASE_URL` (np. `http://192.168.x.y:8787`; pusty = tryb offline), `REQUEST_TIMEOUT_MS = 20000` (`/v1/pois`), `SEGMENT_TIMEOUT_MS = 50000` i `DEEP_DIVE_TIMEOUT_MS = 95000` (`/v1/segment`: dłuższe niż timeouty LLM serwera, żeby spóźniona odpowiedź mogła jeszcze zastąpić szablon). Deadline z plannera jest krótszy: po nim `SegmentService` od razu oddaje lokalny szablon. `SegmentService` zamienia względny `audioUrl` na pełny adres (`API_BASE_URL + audioUrl`), gotowy dla AVPlayera. HTTP bez TLS działa w modelu Stage bez dodatkowej konfiguracji (FAQ Network Kit), wystarczy uprawnienie `INTERNET`.
 
 ## Konfiguracja serwera (`server/.env.example`)
 `PORT`, `OLLAMA_URL`, `LLM_MODEL`, `TTS_PROVIDER` (`elevenlabs|piper|none`), `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID`, `ELEVENLABS_MODEL_ID`, `PIPER_BIN`, `PIPER_VOICE`, `FFMPEG_BIN`, `CACHE_DIR`.
