@@ -7,6 +7,7 @@ import { distributedDeviceManager } from '@kit.DistributedServiceKit';
 import { liveViewManager } from '@kit.LiveViewKit';
 import { geoLocationManager } from '@kit.LocationKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { http } from '@kit.NetworkKit';
 import { NarratorPlayer } from '../audio/NarratorPlayer';
 
 // SPIKE (branch spike/super-device): checks on the emulator which HarmonyOS features the
@@ -52,6 +53,7 @@ struct SpikePage {
     await this.startLiveView();
     await this.distributed();
     await this.askLocation();
+    await this.server();
     this.log('ZEGAREK: koniec testów');
   }
 
@@ -240,6 +242,22 @@ struct SpikePage {
     }
   }
 
+  // --- 5. Can the emulator reach a server on the laptop? (plain HTTP, three addresses)
+  private async server(): Promise<void> {
+    const urls: string[] = ['http://10.0.2.2:8787/', 'http://192.168.18.100:8787/', 'http://127.0.0.1:8787/'];
+    for (const url of urls) {
+      const req = http.createHttp();
+      try {
+        const r = await req.request(url, { connectTimeout: 3000, readTimeout: 3000 });
+        this.log('SERWER ' + url + ' → HTTP ' + r.responseCode);
+      } catch (e) {
+        this.log('SERWER ' + url + ' ' + describe(e));
+      } finally {
+        req.destroy();
+      }
+    }
+  }
+
   build() {
     Column({ space: 8 }) {
       Text('SPIKE · Super Device / zegarek / AVSession / Live View').fontSize(13).fontWeight(FontWeight.Bold)
@@ -262,6 +280,7 @@ struct SpikePage {
           }
           Text('4. Super Device: urządzenia + wspólny obiekt').fontSize(13).fontWeight(FontWeight.Medium)
           Button('Sprawdź').fontSize(12).onClick(() => this.distributed())
+          Button('Serwer na laptopie').fontSize(12).onClick(() => this.server())
           Text('5. Kontynuacja: włączona w EntryAbility (onContinue); test tylko na 2 prawdziwych urządzeniach')
             .fontSize(11).fontColor('#5B6672')
           Divider()
