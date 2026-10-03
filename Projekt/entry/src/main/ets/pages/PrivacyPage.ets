@@ -1,5 +1,5 @@
 import router from '@ohos.router';
-import { Eyebrow, Fonts, Palette } from '../common/Theme';
+import { Eyebrow, Fonts, Motion, Palette } from '../common/Theme';
 
 class Point {
   no: string;
@@ -25,6 +25,14 @@ const POINTS: Point[] = [
 @Entry
 @Component
 struct PrivacyPage {
+  pageTransition() {
+    PageTransitionEnter({ duration: 420, curve: Motion.EASE_OUT })
+      .opacity(0)
+      .translate({ y: 24 })
+    PageTransitionExit({ duration: 220, curve: Curve.EaseIn })
+      .opacity(0)
+  }
+
   build() {
     Column() {
       Text('← Wróć')

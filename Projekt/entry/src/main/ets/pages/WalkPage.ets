@@ -6,11 +6,12 @@ import { SessionBadge } from '../components/SessionBadge';
 import { DeepDiveSheet } from '../components/DeepDiveSheet';
 import common from '@ohos.app.ability.common';
 import router from '@ohos.router';
-import { Eyebrow, Fonts, Palette } from '../common/Theme';
+import { Eyebrow, Fonts, Motion, Palette } from '../common/Theme';
 
 @Entry
 @Component
 struct WalkPage {
+  @State private entered: boolean = false;
   private player: NarratorPlayer = new NarratorPlayer();
 
   @State currentText: string =
@@ -32,6 +33,14 @@ struct WalkPage {
     this.player.release();
   }
 
+  pageTransition() {
+    PageTransitionEnter({ duration: 420, curve: Motion.EASE_OUT })
+      .opacity(0)
+      .translate({ y: 24 })
+    PageTransitionExit({ duration: 220, curve: Curve.EaseIn })
+      .opacity(0)
+  }
+
   build() {
     Stack() {
       Column() {
@@ -42,6 +51,9 @@ struct WalkPage {
         }
         .width('100%')
         .margin({ top: 8 })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 0 })
 
         Row() {
           RouteStrip({
@@ -60,6 +72,9 @@ struct WalkPage {
         .width('100%')
         .alignItems(VerticalAlign.Top)
         .margin({ top: 28 })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 1 * Motion.STAGGER_MS })
 
         Column() {
           Eyebrow('DALEJ NA TRASIE')
@@ -75,6 +90,9 @@ struct WalkPage {
         .padding({ top: 16 })
         .margin({ top: 22 })
         .border({ width: { top: 1 }, color: Palette.RULE })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 2 * Motion.STAGGER_MS })
 
         Blank()
 
@@ -87,6 +105,9 @@ struct WalkPage {
             this.player.playRawFile(context, 'test.mp3');
           }
         })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 3 * Motion.STAGGER_MS })
 
         Button({ type: ButtonType.Normal }) {
           Row() {
@@ -108,6 +129,10 @@ struct WalkPage {
         .backgroundColor(Color.Transparent)
         .border({ width: 1, color: Palette.INK, radius: 14 })
         .margin({ top: 14 })
+        .clickEffect({ level: ClickEffectLevel.LIGHT, scale: 0.98 })
+        .opacity(this.entered ? 1 : 0)
+        .translate({ y: this.entered ? 0 : Motion.ENTER_SHIFT })
+        .animation({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT, delay: 4 * Motion.STAGGER_MS })
         .onClick(() => {
           this.isDeepDiveOpen = true;
         })
@@ -128,6 +153,9 @@ struct WalkPage {
       .padding({ left: 24, right: 24 })
       .backgroundColor(Palette.PAPER)
       .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+    .onAppear(() => {
+      this.entered = true;
+    })
 
       DeepDiveSheet({
         isShown: $isDeepDiveOpen,

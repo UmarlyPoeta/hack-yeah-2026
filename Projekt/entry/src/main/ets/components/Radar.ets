@@ -5,16 +5,20 @@ import { Fonts, Palette } from '../common/Theme';
 export struct Radar {
   @Prop poiName: string = 'Najbliższy obiekt';
   @Prop distanceM: number = 120;
-  @Prop @Watch('redraw') bearingAngle: number = 45;
+  @Prop @Watch('settle') bearingAngle: number = 45;
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
+  // needle angle actually drawn; it springs towards bearingAngle like a real compass needle
+  private shown: number = -60;
+  private velocity: number = 0;
+  private timer: number = -1;
 
   build() {
     Column() {
       Canvas(this.ctx)
         .width(96)
         .height(96)
-        .onReady(() => this.redraw())
+        .onReady(() => this.settle())
       Text(this.directionText())
         .fontFamily(Fonts.ITALIC)
         .fontSize(14)
@@ -32,6 +36,28 @@ export struct Radar {
       return 'za tobą';
     }
     return a < 180 ? 'po prawej' : 'po lewej';
+  }
+
+  aboutToDisappear(): void {
+    clearInterval(this.timer);
+  }
+
+  settle(): void {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => this.step(), 16);
+  }
+
+  private step(): void {
+    // shortest way round, then a lightly damped spring
+    let diff = ((this.bearingAngle - this.shown) % 360 + 540) % 360 - 180;
+    this.velocity = this.velocity * 0.86 + diff * 0.018;
+    this.shown += this.velocity;
+    diff = ((this.bearingAngle - this.shown) % 360 + 540) % 360 - 180;
+    if (Math.abs(diff) < 0.05 && Math.abs(this.velocity) < 0.05) {
+      this.shown = this.bearingAngle;
+      clearInterval(this.timer);
+    }
+    this.redraw();
   }
 
   redraw(): void {
@@ -65,7 +91,7 @@ export struct Radar {
     }
 
     // needle towards the stop
-    const a = this.bearingAngle * Math.PI / 180;
+    const a = this.shown * Math.PI / 180;
     const tip = r - 13;
     const tail = r * 0.35;
     const side = 6;

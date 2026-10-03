@@ -1,4 +1,4 @@
-import { Eyebrow, Fonts, Palette } from '../common/Theme';
+import { Eyebrow, Fonts, Motion, Palette } from '../common/Theme';
 
 @Component
 export struct DeepDiveSheet {
@@ -7,8 +7,8 @@ export struct DeepDiveSheet {
   @Prop content: string;
 
   build() {
-    if (this.isShown) {
-      Stack({ alignContent: Alignment.Bottom }) {
+    Stack({ alignContent: Alignment.Bottom }) {
+      if (this.isShown) {
         // scrim: tap outside closes the sheet
         Column()
           .width('100%')
@@ -18,7 +18,10 @@ export struct DeepDiveSheet {
           .onClick(() => {
             this.isShown = false;
           })
+          .transition(TransitionEffect.OPACITY.animation({ duration: 300, curve: Curve.EaseOut }))
+      }
 
+      if (this.isShown) {
         Column() {
           Row()
             .width(36)
@@ -76,11 +79,14 @@ export struct DeepDiveSheet {
         .onClick(() => {
           // taps inside the sheet do not close it
         })
+        .transition(TransitionEffect.move(TransitionEdge.BOTTOM)
+          .animation({ duration: 420, curve: Motion.EASE_OUT }))
       }
-      .width('100%')
-      .height('100%')
-      .position({ x: 0, y: 0 })
-      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
     }
+    .width('100%')
+    .height('100%')
+    .position({ x: 0, y: 0 })
+    .hitTestBehavior(this.isShown ? HitTestMode.Default : HitTestMode.Transparent)
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 }

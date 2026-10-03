@@ -1,4 +1,4 @@
-import { UIContext } from '@kit.ArkUI';
+import { curves, UIContext } from '@kit.ArkUI';
 
 // Visual language: a printed museum walking guide. Warm paper, ink, Kraków brick as the only accent.
 export class Palette {
@@ -55,4 +55,12 @@ export function Rule() {
   Divider()
     .strokeWidth(1)
     .color(Palette.RULE)
+}
+
+// Motion: calm and short. One easing for everything that enters, staggered by STAGGER_MS.
+export class Motion {
+  static readonly ENTER_MS: number = 650;
+  static readonly STAGGER_MS: number = 70;
+  static readonly ENTER_SHIFT: number = 18;
+  static readonly EASE_OUT: ICurve = curves.cubicBezierCurve(0.16, 1, 0.3, 1);
 }

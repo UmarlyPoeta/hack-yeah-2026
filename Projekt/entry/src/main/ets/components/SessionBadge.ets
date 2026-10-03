@@ -3,11 +3,20 @@ import { Palette } from '../common/Theme';
 @Component
 export struct SessionBadge {
   @Prop sessionState: string = 'WALKING';
+  @State private breath: number = 1;
 
   build() {
     Row({ space: 7 }) {
       Circle({ width: 7, height: 7 })
         .fill(this.getSessionColor())
+        .opacity(this.sessionState === 'WALKING' || this.sessionState === 'ACQUIRING' ? this.breath : 1)
+        .onAppear(() => {
+          this.getUIContext().animateTo({
+            duration: 1100, curve: Curve.EaseInOut, iterations: -1, playMode: PlayMode.Alternate
+          }, () => {
+            this.breath = 0.25;
+          });
+        })
       Text(this.getSessionText())
         .fontSize(13)
         .fontColor(Palette.INK_SOFT)

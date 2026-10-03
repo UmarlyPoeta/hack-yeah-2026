@@ -1,8 +1,10 @@
-import { Eyebrow, Fonts, Palette } from '../common/Theme';
+import { Eyebrow, Fonts, Motion, Palette } from '../common/Theme';
 
 @Component
 export struct Teleprompter {
-  @Prop currentText: string = 'Oczekiwanie na narrację...';
+  @Prop @Watch('reveal') currentText: string = 'Oczekiwanie na narrację...';
+  @State private textOpacity: number = 1;
+  @State private textShift: number = 0;
   @Prop poiName: string = 'Najbliższy punkt';
   @Prop segmentKind: string = 'WELCOME';
   onPlayClick: () => void = () => {};
@@ -33,6 +35,8 @@ export struct Teleprompter {
         .textOverflow({ overflow: TextOverflow.Ellipsis })
         .width('100%')
         .margin({ top: 14 })
+        .opacity(this.textOpacity)
+        .translate({ y: this.textShift })
 
       Row({ space: 14 }) {
         Stack() {
@@ -57,6 +61,7 @@ export struct Teleprompter {
       }
       .width('100%')
       .margin({ top: 20 })
+      .clickEffect({ level: ClickEffectLevel.LIGHT, scale: 0.97 })
       .onClick(() => this.onPlayClick())
     }
     .width('100%')
@@ -64,6 +69,16 @@ export struct Teleprompter {
     .backgroundColor(Palette.CARD)
     .borderRadius(18)
     .border({ width: 1, color: Palette.RULE, radius: 18 })
+  }
+
+  /** A new narration segment fades in from slightly below. */
+  reveal(): void {
+    this.textOpacity = 0;
+    this.textShift = 10;
+    this.getUIContext().animateTo({ duration: Motion.ENTER_MS, curve: Motion.EASE_OUT }, () => {
+      this.textOpacity = 1;
+      this.textShift = 0;
+    });
   }
 
   private kindLabel(): string {

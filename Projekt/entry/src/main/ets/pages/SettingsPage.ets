@@ -1,5 +1,5 @@
 import router from '@ohos.router';
-import { Eyebrow, Fonts, Palette } from '../common/Theme';
+import { Eyebrow, Fonts, Motion, Palette } from '../common/Theme';
 
 class InterestOption {
   id: string;     // Interest in docs/CONTRACTS.md
@@ -24,6 +24,14 @@ const OPTIONS: InterestOption[] = [
 struct SettingsPage {
   @State selected: string[] = ['historia'];
   @State voiceOn: boolean = true;
+
+  pageTransition() {
+    PageTransitionEnter({ duration: 420, curve: Motion.EASE_OUT })
+      .opacity(0)
+      .translate({ y: 24 })
+    PageTransitionExit({ duration: 220, curve: Curve.EaseIn })
+      .opacity(0)
+  }
 
   build() {
     Column() {
@@ -58,6 +66,8 @@ struct SettingsPage {
             .border({ width: 1, color: Palette.INK, radius: 20 })
             .padding({ left: 18, right: 18, top: 10, bottom: 10 })
             .margin({ right: 10, bottom: 10 })
+            .animation({ duration: 220, curve: Curve.EaseOut })
+            .clickEffect({ level: ClickEffectLevel.LIGHT, scale: 0.95 })
             .onClick(() => this.toggle(o.id))
         }, (o: InterestOption) => o.id)
       }
