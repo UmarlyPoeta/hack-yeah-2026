@@ -143,6 +143,10 @@
     {
       "name": "enable",
       "value": "Włącz"
+    },
+    {
+      "name": "a11y_walk_map",
+      "value": "Mapa: jesteś między Barbakanem a Bramą Floriańską"
     }
   ]
 }

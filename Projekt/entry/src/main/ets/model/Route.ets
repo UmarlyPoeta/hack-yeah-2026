@@ -13,9 +13,10 @@ export class RouteStop implements GeoPoint {
   summary: string;          // "Więcej o tym miejscu"
   transcript: string[];     // narration, sentence by sentence
   audioSeconds: number;
+  approach: string;         // how to get here from the previous stop, shown on the direction card
 
   constructor(num: number, name: string, caption: string, image: Resource, lat: number, lon: number, summary: string,
-    transcript: string[], audioSeconds: number) {
+    transcript: string[], audioSeconds: number, approach: string) {
     this.num = num;
     this.name = name;
     this.caption = caption;
@@ -25,6 +26,7 @@ export class RouteStop implements GeoPoint {
     this.summary = summary;
     this.transcript = transcript;
     this.audioSeconds = audioSeconds;
+    this.approach = approach;
   }
 }
 
@@ -69,24 +71,24 @@ const ROYAL_ROUTE_STOPS: RouteStop[] = [
   new RouteStop(1, 'Barbakan', 'Brama przed bramą', $r('app.media.barbakan'), 50.065556, 19.941667,
     'Barbakan to najbardziej wysunięta na północ część dawnych fortyfikacji Krakowa. Stoi na Plantach, przed Bramą Floriańską.',
     ['Barbakan postawiono w 1499 roku, kiedy w Krakowie bano się najazdu tureckiego.',
-      'Mury mają ponad 3 metry grubości.', 'Policz otwory strzelnicze, jest ich 130.'], 220),
+      'Mury mają ponad 3 metry grubości.', 'Policz otwory strzelnicze, jest ich 130.'], 220, 'Start przy Plantach'),
   new RouteStop(2, 'Brama Floriańska', 'Ostatnia z ośmiu bram', $r('app.media.brama_florianska'), 50.064861, 19.941389,
     'Średniowieczna brama miejska z basztą, zamyka od północy ulicę Floriańską. Pozostałość dawnych murów miejskich.',
-    ['Z ośmiu bram miejskich przetrwała tylko ta jedna.', 'Przez nią królowie wjeżdżali do miasta na koronację.'], 180),
+    ['Z ośmiu bram miejskich przetrwała tylko ta jedna.', 'Przez nią królowie wjeżdżali do miasta na koronację.'], 180, 'Prosto przez bramę'),
   new RouteStop(3, 'Kościół Mariacki', 'Hejnał co godzinę', $r('app.media.kosciol_mariacki'), 50.061667, 19.939444,
     'Gotycka bazylika przy Rynku Głównym. W środku ołtarz Wita Stwosza, z wyższej wieży co godzinę grany jest hejnał.',
-    ['Hejnał urywa się w połowie melodii.', 'Według legendy trębacza trafiła strzała w gardło.'], 240),
+    ['Hejnał urywa się w połowie melodii.', 'Według legendy trębacza trafiła strzała w gardło.'], 240, 'Ulicą Floriańską do Rynku'),
   new RouteStop(4, 'Sukiennice', 'Środek Rynku', $r('app.media.sukiennice'), 50.061667, 19.937222,
     'Dawna hala targowa na środku Rynku Głównego, dziś z kramami na parterze i galerią sztuki na piętrze.',
-    ['W średniowieczu handlowano tu suknem, stąd nazwa.', 'Na piętrze jest galeria malarstwa polskiego XIX wieku.'], 200),
+    ['W średniowieczu handlowano tu suknem, stąd nazwa.', 'Na piętrze jest galeria malarstwa polskiego XIX wieku.'], 200, 'Przez Rynek na zachód'),
   new RouteStop(5, 'Kościół św. Piotra i Pawła', 'Apostołowie na murze', $r('app.media.kosciol_piotra_pawla'), 50.056944,
     19.938611,
     'Barokowy kościół przy ulicy Grodzkiej. Przed fasadą stoją figury dwunastu apostołów.',
     ['To pierwsza w Polsce budowla wzorowana na rzymskim kościele Il Gesù.', 'Figury apostołów to kopie, oryginały są w muzeum.'],
-    190),
+    190, 'Ulicą Grodzką na południe'),
   new RouteStop(6, 'Wawel', 'Zamek i katedra', $r('app.media.wawel'), 50.054, 19.935278,
     'Wzgórze z Zamkiem Królewskim i Katedrą Wawelską, przez wieki siedziba polskich królów.',
-    ['Na Wawelu koronowano i chowano polskich królów.', 'W wieży katedry wisi Dzwon Zygmunt.'], 260),
+    ['Na Wawelu koronowano i chowano polskich królów.', 'W wieży katedry wisi Dzwon Zygmunt.'], 260, 'Grodzką do wzgórza'),
 ];
 
 export const ROYAL_ROUTE: Route = new Route('royal-route', 'Droga Królewska', 'Od Barbakanu do Wawelu',
