@@ -14,9 +14,10 @@ npm run record-fixtures  # re-record test/fixtures/ from the live API (needs int
 
 | Route | Status | Owner |
 |---|---|---|
-| `GET /v1/health` | done (`llm`/`tts` report `ok: false` until P4 plugs in checks) | P3 |
+| `GET /v1/health` | done (`llm` from config + last LLM call, never wakes Modal; `tts` `ok: false` until #19) | P3, P4 |
 | `GET /v1/pois?lat=&lon=&radius=` | done | P3 |
-| `POST /v1/segment`, `GET /v1/audio/:id.mp3` | todo | P4 |
+| `POST /v1/segment` | done, text only (#18); `audioUrl: null` + `tts_unavailable` until #19 | P4 |
+| `GET /v1/audio/:id.mp3` | todo (#19) | P4 |
 
 ## `/v1/pois` data flow
 
@@ -26,6 +27,18 @@ npm run record-fixtures  # re-record test/fixtures/ from the live API (needs int
 4. `distanceM` is computed for the real position, filtered by `radius`, sorted, max 50.
 
 The request log contains only method, path, status and time. Query strings carry the user's position and are never logged.
+
+## `/v1/segment` data flow (#18)
+
+1. Request checked (`kind`, `poiId`, `fromPoiId` for `BRIDGE`, `interests`, `maxWords` 5–400, `voice`). Unknown fields are ignored; the client never sends source text (prompt-injection guard). Unknown POI → `404 unknown_poi`.
+2. `APPROACH` / `MISSED`: template right away, no LLM. The server never sees the position, so they use the forms without distance and side.
+3. Source text: the POI `summary`; the article text (`poiService.deepSource`) for `DEEP_DIVE` and for summaries under 600 chars (Barbakan has 198), so the model does not fill gaps itself. `BRIDGE` gets both places.
+4. Bielik on Modal (`src/llm/OllamaClient.js`): Ollama `/api/chat`, `format` = JSON Schema `{title?, text, claims[{text, quote}]}`, `num_predict` from `maxWords`, headers `Modal-Key` / `Modal-Secret`. Timeouts `LLM_TIMEOUT_MS` 45 s, `LLM_DEEP_DIVE_TIMEOUT_MS` 90 s.
+5. Validator (`src/validate/grounding.js`): every number in the text must be in the source (strict); a claim's quote must match a source passage on ≥ 80 % of its words in order; bad claims are dropped, the segment fails when more claims are bad than good. Markdown and list numbers are stripped from the text.
+6. Failure → 1 retry with the list of problems (`validation_retry`); a quick HTTP 5xx from Ollama → 1 retry (`llm_retry`); then the template with `validation_failed` / `llm_timeout` / `llm_unavailable`. Timeouts are not retried (the app's deadline would pass anyway).
+7. AI segments are cached in `.cache/segments.json` (30 days) by `kind|poiId|fromPoiId|interests|maxWords|PROMPT_VERSION|model`; `id` is a hash of that key. Templates are not cached, so the LLM is tried again after an outage. Identical concurrent requests share one LLM call.
+
+Measured on Bielik Q8_0, T4, warm (6 requests on the demo route): all `origin: ai` on the first attempt, 6–14 s each (`DEEP_DIVE` 14 s). After > 2 min idle the Modal container is cold: the first request needs ~90 s and ends as a template (`llm_timeout`), so the app should wake the model at walk start. Known limits: the validator cannot catch wrong words without numbers (e.g. „sklep galaretowy” for „galanteryjny”) or Roman-numeral centuries.
 
 ## For P4: using POIs in `/v1/segment`
 

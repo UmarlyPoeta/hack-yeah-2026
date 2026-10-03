@@ -25,6 +25,8 @@ export function loadConfig(env = process.env) {
     modalKey: env.MODAL_KEY || '',
     modalSecret: env.MODAL_SECRET || '',
     ttsProvider: env.TTS_PROVIDER || 'none',
+    llmTimeoutMs: intOr(env.LLM_TIMEOUT_MS, 45_000),
+    llmDeepDiveTimeoutMs: intOr(env.LLM_DEEP_DIVE_TIMEOUT_MS, 90_000),
   };
 }
 
