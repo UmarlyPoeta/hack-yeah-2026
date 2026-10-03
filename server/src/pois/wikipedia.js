@@ -6,7 +6,7 @@ export const USER_AGENT = 'SpacerZHistoria/0.1 (https://github.com/UmarlyPoeta/h
 // coordinate types that describe areas, not places you can stand next to
 const AREA_TYPES = new Set(['city', 'adm1st', 'adm2nd', 'adm3rd', 'country', 'region', 'isle', 'waterbody']);
 const MAX_DIM_M = 5000;
-const MAX_CONTINUATIONS = 4;
+const MAX_CONTINUATIONS = 6;
 const DEEP_MAX_CHARS = 8000;
 const SKIP_SECTIONS = new Set(['Przypisy', 'Bibliografia', 'Linki zewnętrzne', 'Zobacz też', 'Uwagi']);
 
@@ -18,11 +18,54 @@ export class WikipediaClient {
     this.fetch = fetchImpl;
   }
 
-  /** Pages with coordinates within `radiusM` of the point, extracts merged across continuations. */
-  async geosearch(lat, lon, radiusM) {
+  /** Pages with coordinates within `radiusM` of the point (nearest `limit`), with details. */
+  async geosearch(lat, lon, radiusM, limit = 50) {
+    return this.#details({
+      generator: 'geosearch', ggscoord: `${lat}|${lon}`, ggsradius: String(Math.min(radiusM, 10000)), ggslimit: String(limit),
+    });
+  }
+
+  /** Cheap list of page ids around a point (no text), for the wide search of important places. */
+  async geosearchIds(lat, lon, radiusM, limit = 500) {
+    const data = await this.#get({
+      action: 'query', format: 'json', formatversion: '2', list: 'geosearch',
+      gscoord: `${lat}|${lon}`, gsradius: String(Math.min(radiusM, 10000)), gslimit: String(limit),
+    });
+    return (data.query?.geosearch ?? []).map((g) => g.pageid);
+  }
+
+  /** The same details as geosearch() for known page ids. */
+  async pages(pageids) {
+    const out = [];
+    for (const batch of chunks(pageids, 50)) {
+      out.push(...await this.#details({ pageids: batch.join('|') }));
+    }
+    return out;
+  }
+
+  /** Number of other-language versions per page id (prop=langlinks, continuations followed). */
+  async langlinkCounts(pageids) {
+    const counts = new Map();
+    for (const batch of chunks(pageids, 50)) {
+      let cont = {};
+      for (let i = 0; i < 40; i++) {
+        const data = await this.#get({
+          action: 'query', format: 'json', formatversion: '2', prop: 'langlinks', lllimit: 'max',
+          pageids: batch.join('|'), ...cont,
+        });
+        for (const p of data.query?.pages ?? []) {
+          counts.set(p.pageid, (counts.get(p.pageid) ?? 0) + (p.langlinks?.length ?? 0));
+        }
+        if (!data.continue) break;
+        cont = data.continue;
+      }
+    }
+    return counts;
+  }
+
+  async #details(selector) {
     const params = {
-      action: 'query', format: 'json', formatversion: '2',
-      generator: 'geosearch', ggscoord: `${lat}|${lon}`, ggsradius: String(Math.min(radiusM, 10000)), ggslimit: '50',
+      action: 'query', format: 'json', formatversion: '2', ...selector,
       prop: 'coordinates|pageprops|extracts|pageimages|info',
       coprop: 'type|dim', colimit: 'max', ppprop: 'wikibase_item',
       exintro: '1', explaintext: '1', exlimit: 'max',
@@ -122,6 +165,10 @@ function cutAtSentence(text, maxChars) {
   const cut = text.slice(0, maxChars);
   const end = cut.lastIndexOf('. ');
   return end > maxChars / 2 ? cut.slice(0, end + 1) : cut;
+}
+
+function* chunks(items, size) {
+  for (let i = 0; i < items.length; i += size) yield items.slice(i, i + size);
 }
 
 function stripUndefined(obj) {

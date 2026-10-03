@@ -1,0 +1,44 @@
+{
+  "_comment": "Rules for POI signals (#40). Shared by server/src/pois/signals.js and tools/gen_fixtures.py, so the server and the fixtures classify places the same way.",
+  "importanceLanglinksCap": 40,
+  "importanceSummaryFallbackChars": 2000,
+  "nearRadiusM": 150,
+  "nearLimit": 50,
+  "farRadiusM": 600,
+  "farLimit": 500,
+  "farMinImportance": 0.6,
+  "areaClasses": {
+    "Q79007": "ulica",
+    "Q174782": "plac",
+    "Q13033698": "rynek",
+    "Q676050": "stare miasto",
+    "Q702492": "obszar zurbanizowany",
+    "Q4286337": "dzielnica miasta",
+    "Q123705": "część miejscowości",
+    "Q22698": "park",
+    "Q309250": "dziedziniec",
+    "Q16748868": "mury miejskie"
+  },
+  "excludedClasses": {
+    "Q102496": "parafia",
+    "Q43229": "organizacja",
+    "Q178706": "instytucja",
+    "Q1664720": "instytut",
+    "Q3146899": "diecezja Kościoła katolickiego",
+    "Q105390172": "archidiecezja metropolitalna rzymskokatolicka"
+  },
+  "areaNamePrefixes": [
+    "Ulica",
+    "Plac",
+    "Rynek",
+    "Stare Miasto",
+    "Zaułek",
+    "Mury",
+    "Planty"
+  ],
+  "excludedNamePrefixes": [
+    "Parafia",
+    "Archidiecezja",
+    "Diecezja"
+  ]
+}
