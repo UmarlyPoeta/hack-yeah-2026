@@ -9,6 +9,7 @@ export const REQUEST_TIMEOUT_MS: number = 20000;
 export const SEGMENT_TIMEOUT_MS: number = 50000;
 export const DEEP_DIVE_TIMEOUT_MS: number = 95000;
 
-// Phone <-> watch relay (#51). 127.0.0.1 works on emulators and on devices plugged into the laptop by USB
-// after `hdc rport tcp:8787 tcp:8787` (run once per device). Otherwise the laptop's LAN address.
-export const LINK_BASE_URL: string = 'http://127.0.0.1:8787';
+// Phone <-> watch relay (#51), tried in order; the link moves on when one keeps failing.
+// 10.0.2.2 = the laptop seen from a DevEco emulator; 127.0.0.1 = through `hdc rport tcp:8787 tcp:8787`
+// (devices on a USB cable). For devices on Wi-Fi add the laptop's LAN address here.
+export const LINK_BASE_URLS: string[] = ['http://10.0.2.2:8787', 'http://127.0.0.1:8787'];

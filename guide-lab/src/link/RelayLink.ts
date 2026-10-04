@@ -27,9 +27,13 @@ interface RelayList {
   lastSeq: number;
 }
 
+export const RELAY_FAILS_BEFORE_SWITCH: number = 3;
+
 export class RelayLink implements DeviceLink {
   private http: HttpTransport;
-  private url: string;
+  private urls: string[];                  // candidate server addresses, tried in order
+  private urlIndex: number = 0;
+  private fails: number = 0;
   private deviceId: string;
   private listener: ((m: LinkMessage) => void) | null = null;
   private afterSeq: number = -1;           // -1: not synced yet, skip the room's history
@@ -40,11 +44,33 @@ export class RelayLink implements DeviceLink {
   online: boolean = false;                 // last request reached the server
   lastError: string = '';
 
-  // deviceId must match [a-z0-9_-]{1,16} (server rule)
-  constructor(http: HttpTransport, baseUrl: string, room: string, deviceId: string) {
+  // deviceId must match [a-z0-9_-]{1,16} (server rule). Several base URLs: when one keeps failing the
+  // link moves to the next (e.g. the emulator host 10.0.2.2, hdc rport 127.0.0.1, the laptop's LAN address).
+  constructor(http: HttpTransport, baseUrls: string[], room: string, deviceId: string) {
     this.http = http;
-    this.url = baseUrl.replace(new RegExp('/+$'), '') + '/v1/link/' + encodeURIComponent(room) + '/messages';
+    this.urls = baseUrls.map((b: string) => b.replace(new RegExp('/+$'), '') + '/v1/link/'
+      + encodeURIComponent(room) + '/messages');
     this.deviceId = deviceId;
+  }
+
+  serverUrl(): string {
+    return this.urls.length > 0 ? this.urls[this.urlIndex] : '';
+  }
+
+  private ok(): void {
+    this.online = true;
+    this.lastError = '';
+    this.fails = 0;
+  }
+
+  private failed(reason: string): void {
+    this.online = false;
+    this.lastError = reason;
+    this.fails++;
+    if (this.fails >= RELAY_FAILS_BEFORE_SWITCH && this.urls.length > 1) {
+      this.urlIndex = (this.urlIndex + 1) % this.urls.length;
+      this.fails = 0;
+    }
   }
 
   send(message: LinkMessage): void {
@@ -108,12 +134,14 @@ export class RelayLink implements DeviceLink {
 
   private async post(body: string): Promise<void> {
     try {
-      const r: HttpResult = await this.http.postJson(this.url, body, RELAY_TIMEOUT_MS);
-      this.online = r.status === 200;
-      this.lastError = r.status === 200 ? '' : 'HTTP ' + r.status;
+      const r: HttpResult = await this.http.postJson(this.serverUrl(), body, RELAY_TIMEOUT_MS);
+      if (r.status === 200) {
+        this.ok();
+      } else {
+        this.failed('HTTP ' + r.status);
+      }
     } catch (e) {
-      this.online = false;
-      this.lastError = 'network';
+      this.failed('network');
     }
   }
 
@@ -124,11 +152,10 @@ export class RelayLink implements DeviceLink {
     this.polling = true;
     try {
       const after = this.afterSeq < 0 ? 0 : this.afterSeq;
-      const r: HttpResult = await this.http.get(this.url + '?after=' + after, RELAY_TIMEOUT_MS);
+      const r: HttpResult = await this.http.get(this.serverUrl() + '?after=' + after, RELAY_TIMEOUT_MS);
       if (r.status === 200) {
         const list = JSON.parse(r.body) as RelayList;
-        this.online = true;
-        this.lastError = '';
+        this.ok();
         const firstSync = this.afterSeq < 0;
         // the room was reset (server restarted, messages expired): start over from its counter
         if (list.lastSeq < this.afterSeq) {
@@ -147,12 +174,10 @@ export class RelayLink implements DeviceLink {
           this.afterSeq = Math.max(this.afterSeq, list.lastSeq, 0);
         }
       } else {
-        this.online = false;
-        this.lastError = 'HTTP ' + r.status;
+        this.failed('HTTP ' + r.status);
       }
     } catch (e) {
-      this.online = false;
-      this.lastError = 'network';
+      this.failed('network');
     } finally {
       this.polling = false;
     }
