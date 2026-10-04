@@ -50,14 +50,19 @@ export class Services {
   // Pois the fallback can talk about (the app registers every Poi it shows).
   private static known: Map<string, Poi> = new Map<string, Poi>();
 
-  static init(context: common.Context): void {
-    if (Services.repo !== null) {
-      return;
+  /** baseUrl: the server address from the settings ("Moje" > Serwer), API_BASE_URL by default. */
+  static init(context: common.Context, baseUrl: string = API_BASE_URL): void {
+    if (Services.repo === null) {
+      Services.configure(context, baseUrl);
     }
+  }
+
+  /** New server address: new clients, so the next request goes there. */
+  static configure(context: common.Context, baseUrl: string): void {
     const http = new NetworkHttpTransport();
-    Services.repo = new PoiRepository(http, API_BASE_URL, new RawfileTextSource(context, 'pois-krakow.json'),
+    Services.repo = new PoiRepository(http, baseUrl, new RawfileTextSource(context, 'pois-krakow.json'),
       REQUEST_TIMEOUT_MS);
-    Services.segments = new SegmentService(http, API_BASE_URL,
+    Services.segments = new SegmentService(http, baseUrl,
       new SummaryFallback((id: string) => Services.known.get(id) ?? null), {
         maxParallel: 2,
         timeoutMs: NARRATION_TIMEOUT_MS,

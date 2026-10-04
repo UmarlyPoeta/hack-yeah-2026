@@ -9,6 +9,8 @@ import { Notifier } from '../../store/Notifier';
 import { PlaceQueue } from '../../store/PlaceQueue';
 import { SavedPlaces } from '../../store/SavedPlaces';
 import { Settings } from '../../store/Settings';
+import { Services } from '../../store/Services';
+import { fetchText } from '../../store/LocalFiles';
 import { Widgets } from '../../store/Widgets';
 
 @Component
@@ -16,6 +18,13 @@ export struct SavedView {
   onOpen: (place: Place) => void = () => {};
   @StorageLink('saved') saved: Place[] = [];
   @StorageProp('handsFree') handsFree: boolean = false;
+  @State serverUrl: string = '';
+  @State serverStatus: string = '';
+
+  aboutToAppear(): void {
+    this.serverUrl = Settings.serverUrl();
+    this.checkServer();
+  }
   @StorageProp('topInset') topInset: number = 0;
 
   build() {
@@ -49,6 +58,7 @@ export struct SavedView {
 
           this.SectionTitle($r('app.string.section_settings'))
           this.HandsFreeRow()
+          this.ServerRow()
         }
         .alignItems(HorizontalAlign.Start)
         .width('100%')
@@ -116,6 +126,63 @@ export struct SavedView {
     .padding({ top: 12, bottom: 12 })
     .accessibilityText(shortName(place))
     .onClick(() => this.onOpen(place))
+  }
+
+  // Server address, for a real phone: a tunnel URL or the laptop's address in the same Wi-Fi.
+  @Builder
+  ServerRow() {
+    Column({ space: 6 }) {
+      Text($r('app.string.server'))
+        .fontSize($r('app.float.font_body'))
+        .fontFamily(Fonts.BOLD)
+        .fontColor($r('app.color.text'))
+      TextInput({ text: this.serverUrl })
+        .type(InputType.URL)
+        .enterKeyType(EnterKeyType.Done)
+        .fontSize($r('app.float.font_small'))
+        .fontFamily(Fonts.MEDIUM)
+        .borderRadius($r('app.float.radius'))
+        .backgroundColor($r('app.color.surface_muted'))
+        .onChange((value: string) => {
+          this.serverUrl = value;
+        })
+        .onSubmit(() => this.applyServer())
+      Text(this.serverStatus)
+        .fontSize($r('app.float.font_caption'))
+        .fontFamily(Fonts.SEMIBOLD)
+        .fontColor($r('app.color.text_secondary'))
+    }
+    .alignItems(HorizontalAlign.Start)
+    .width('100%')
+    .padding({ top: 12, bottom: 12 })
+  }
+
+  private applyServer(): void {
+    const url = this.serverUrl.trim().replace(new RegExp('/+$'), '');
+    if (!new RegExp('^https?://[^\\s/]+').test(url)) {
+      this.serverStatus = this.text($r('app.string.server_invalid'));
+      return;
+    }
+    this.serverUrl = url;
+    Settings.setServerUrl(url);
+    const ctx = this.getUIContext().getHostContext();
+    if (ctx !== undefined) {
+      Services.configure(ctx, url);
+    }
+    this.checkServer();
+    Guide.refresh();
+  }
+
+  /** GET /v1/health: shows whether the phone reaches the server and which model answers. */
+  private async checkServer(): Promise<void> {
+    this.serverStatus = this.text($r('app.string.server_checking'));
+    const body = await fetchText(`${Settings.serverUrl()}/v1/health`);
+    this.serverStatus = body !== null && body.includes('"ok":true') ?
+      this.text($r('app.string.server_ok')) : this.text($r('app.string.server_down'));
+  }
+
+  private text(res: Resource): string {
+    return this.getUIContext().getHostContext()?.resourceManager.getStringSync(res.id) ?? '';
   }
 
   private confirmReset(): void {

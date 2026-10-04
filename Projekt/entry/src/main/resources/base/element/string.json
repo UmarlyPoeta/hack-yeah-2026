@@ -267,6 +267,26 @@
     {
       "name": "saved_empty_short",
       "value": "Zapisz zabytek ikoną zakładki, a pojawi się tutaj."
+    },
+    {
+      "name": "server",
+      "value": "Serwer"
+    },
+    {
+      "name": "server_checking",
+      "value": "Sprawdzam połączenie…"
+    },
+    {
+      "name": "server_ok",
+      "value": "Połączono z serwerem"
+    },
+    {
+      "name": "server_down",
+      "value": "Brak połączenia z serwerem: opowieści z Wikipedii, bez głosu"
+    },
+    {
+      "name": "server_invalid",
+      "value": "Adres musi zaczynać się od http:// albo https://"
     }
   ]
 }

@@ -52,8 +52,8 @@ export default class EntryAbility extends UIAbility {
     // First launch: OnboardingPage, afterwards the tabs (MainPage). The saved landmark queue is restored
     // before the first frame. Full-screen layout so photos and maps go under the status bar.
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
-    Services.init(this.context);
     Settings.init(this.context);
+    Services.init(this.context, Settings.serverUrl());
     PlaceQueue.init(this.context);
     SavedPlaces.init(this.context);
     CityInfo.init(this.context);
