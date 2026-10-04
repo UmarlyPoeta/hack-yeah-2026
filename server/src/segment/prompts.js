@@ -1,5 +1,5 @@
 // Polish prompts per segment kind for Bielik (#18). Bump PROMPT_VERSION on any change: it is part of the cache key.
-export const PROMPT_VERSION = 'p2';
+export const PROMPT_VERSION = 'p4';
 
 export const SEGMENT_SCHEMA = {
   type: 'object',
@@ -58,6 +58,8 @@ function clip(text, kind) {
  * @returns {{ user: string, sourceText: string }} sourceText = everything the validator may accept quotes from
  */
 export function buildPrompt(req, poi, fromPoi, source) {
+  // eval #25: asking for a range ("80–110 % of N, use the time") made texts shorter (ARRIVAL 54 % -> 34 % of the
+  // budget), and forbidding "Słuchaczu" doubled its use (8 -> 17 of 28). Both reverted; the vocative is cut in cleanText.
   const budget = `Długość: około ${req.maxWords} słów (nie więcej niż ${Math.ceil(req.maxWords * 1.2)}).`;
   const interests = interestsLine(req.interests);
   const target = clip(source.target, req.kind);

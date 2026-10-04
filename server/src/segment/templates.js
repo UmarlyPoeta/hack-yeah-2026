@@ -43,11 +43,12 @@ export function templateText(req, poi, fromPoi = null) {
     case 'ARRIVAL':
       return leadSentences(poi.summary, 3, req.maxWords);
     case 'BRIDGE':
-      return fromPoi ? `Zostawiamy za sobą ${fromPoi.name}. Idziemy dalej. Przed nami ${poi.name}.` : `Idziemy dalej. Przed nami ${poi.name}.`;
+      // names stay in the nominative ("Za nami: …"): arbitrary place names are not declined here
+      return fromPoi ? `Za nami: ${fromPoi.name}. Idziemy dalej, przed nami: ${poi.name}.` : `Idziemy dalej, przed nami: ${poi.name}.`;
     case 'DEEP_DIVE':
       return leadSentences(poi.summary, 6, req.maxWords);
     case 'MISSED':
-      return `Minęliśmy ${poi.name}.`;
+      return `Właśnie minęliśmy: ${poi.name}.`;
     default:
       throw new Error(`unknown kind ${req.kind}`);
   }

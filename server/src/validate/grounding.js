@@ -92,11 +92,16 @@ export function validateSegment(result, source, { maxWords, minClaims = 1 }) {
   return { ok: problems.length === 0, problems, claims: good };
 }
 
-/** Text for TTS: no Markdown emphasis, headings or list markers, single spaces. */
+/** Text for TTS: no Markdown, emoji, headings or list markers, single spaces. */
 export function cleanText(s) {
   return s
+    .replace(/\\n/g, '\n')                                         // a literal "\n" written by the model
+    .replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}]/gu, '')  // emoji: TTS would read them out or choke
     .replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, '$1')
+    .replace(/\*{1,3}|_{2,3}/g, '')
     .replace(/^\s*(#{1,6}\s+|[-•*]\s+|\d+[.)]\s+)/gm, '')
     .replace(/\s+/g, ' ')
-    .trim();
+    .trim()
+    // "Słuchaczu, zatrzymajmy się…": the opening vocative Bielik likes, cut and the next word capitalised
+    .replace(/^(?:drogi |drodzy )?słuchacz(?:u|e)[,!]\s*(\p{L})/iu, (_, c) => c.toUpperCase());
 }
