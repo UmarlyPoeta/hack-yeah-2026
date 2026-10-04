@@ -8,16 +8,18 @@ cp .env.example .env     # optional; defaults work without it
 npm start                # prints localhost and LAN addresses for the emulator
 npm test                 # offline: Wikipedia responses are replayed from test/fixtures/
 npm run record-fixtures  # re-record test/fixtures/ (Wikipedia + Wikidata) from the live APIs (needs internet)
+npm run warm -- --dry-run   # plan of the demo-route warm-up (see "Voice" below)
+npm run tts-smoke        # ElevenLabs + Piper smoke test (add `voices` to list Polish voices)
 ```
 
 ## Endpoints
 
 | Route | Status | Owner |
 |---|---|---|
-| `GET /v1/health` | done (`llm` from config + last LLM call, never wakes Modal; `tts` `ok: false` until #19) | P3, P4 |
+| `GET /v1/health` | done (`llm`/`tts` from config + last call; never wakes Modal or calls ElevenLabs) | P3, P4 |
 | `GET /v1/pois?lat=&lon=&radius=` | done | P3 |
-| `POST /v1/segment` | done, text only (#18); `audioUrl: null` + `tts_unavailable` until #19 | P4 |
-| `GET /v1/audio/:id.mp3` | todo (#19) | P4 |
+| `POST /v1/segment` | done: text (#18) + voice (#19) | P4 |
+| `GET /v1/audio/<audioId>.mp3` | done (#19) | P4 |
 
 ## `/v1/pois` data flow
 
@@ -47,6 +49,16 @@ The request log contains only method, path, status and time. Query strings carry
 7. AI segments are cached in `.cache/segments.json` (30 days) by `kind|poiId|fromPoiId|interests|maxWords|PROMPT_VERSION|model`; `id` is a hash of that key. Templates are not cached, so the LLM is tried again after an outage. Identical concurrent requests share one LLM call.
 
 Measured on Bielik Q8_0, T4, warm (6 requests on the demo route): all `origin: ai` on the first attempt, 6–14 s each (`DEEP_DIVE` 14 s). After > 2 min idle the Modal container is cold: the first request needs ~90 s and ends as a template (`llm_timeout`), so the app should wake the model at walk start. Known limits: the validator cannot catch wrong words without numbers (e.g. „sklep galaretowy” for „galanteryjny”) or Roman-numeral centuries.
+
+## Voice: TTS, `/v1/audio`, `npm run warm` (#19)
+
+- `TTS_PROVIDER=elevenlabs`: ElevenLabs (`eleven_multilingual_v2`, `language_code: pl`), on error Piper (`tts_fallback_piper`). `piper`: Piper only. `none`: no audio. Piper writes WAV, ffmpeg turns it into MP3 (AVPlayer does not play raw PCM).
+- **Template segments are voiced by Piper only** (`TTS_CLOUD_FOR_TEMPLATES=false`): ElevenLabs characters go to AI text. Free plan: 10 000 characters/month ≈ 15–20 `ARRIVAL`s.
+- ElevenLabs 401/402/429 (quota, key, plan) switches it off for 10 min, Piper takes over without retrying ElevenLabs on every request. Only the generated text about the place is sent to ElevenLabs.
+- Audio: `.cache/audio/<audioId>.mp3`, `audioId` = hash(voice, text), so the same text is never paid for twice; the text cache and the audio cache are separate (a TTS outage never costs another LLM call). `durationMs` is read from the MP3 frames (`src/tts/mp3.js`, within ~80 ms of ffprobe).
+- `npm run warm -- [--limit 5] [--interests historia] [--no-voice] [--dry-run]`: walks `fixtures/demo-route-krakow.json`, picks POIs within 35 m in walking order and generates `WELCOME`, `ARRIVAL` and `BRIDGE` with the planner's budgets (ARCHITECTURE §2.3), bucketed to multiples of 10. LLM timeout 180 s (wakes Modal). The default `--limit 5` keeps ElevenLabs at ~4–5k characters; the whole route (32 segments) would be ~14k, over the free plan. **The app hits these entries only with the same `interests` and `maxWords` bucket.** Measured: 2 stops, Piper, 4/4 `ai` with audio.
+
+Piper on Windows: `piper_windows_amd64.zip` from github.com/rhasspy/piper/releases into e.g. `%LOCALAPPDATA%\piper` (`PIPER_BIN` = full path to `piper.exe`), voice `pl_PL-gosia-medium.onnx` + `.onnx.json` from huggingface.co/rhasspy/piper-voices into `server/voices/`, ffmpeg via `winget install Gyan.FFmpeg`.
 
 ## For P4: using POIs in `/v1/segment`
 
