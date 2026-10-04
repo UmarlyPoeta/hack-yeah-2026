@@ -17,6 +17,7 @@ npm run record-fixtures  # re-record test/fixtures/ (Wikipedia + Wikidata) from 
 | `GET /v1/health` | done (`llm`/`tts` report `ok: false` until P4 plugs in checks) | P3 |
 | `GET /v1/pois?lat=&lon=&radius=` | done | P3 |
 | `POST /v1/segment`, `GET /v1/audio/:id.mp3` | todo | P4 |
+| `POST/GET /v1/link/<room>/messages` | done: phone ↔ watch relay in memory (#51) | P3 |
 
 ## `/v1/pois` data flow
 

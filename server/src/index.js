@@ -5,6 +5,8 @@ import path from 'node:path';
 import { JsonCache } from './cache/JsonCache.js';
 import { loadConfig, VERSION } from './config.js';
 import { createApp } from './http/app.js';
+import { LinkRelay } from './link/LinkRelay.js';
+import { linkRoutes } from './link/routes.js';
 import { loadFixturePois, PoiService } from './pois/PoiService.js';
 import { WikidataClient } from './pois/wikidata.js';
 import { WikipediaClient } from './pois/wikipedia.js';
@@ -21,7 +23,7 @@ const poiService = new PoiService({
   log,
 });
 
-const server = http.createServer(createApp({ poiService, log }));
+const server = http.createServer(createApp({ poiService, routes: linkRoutes(new LinkRelay()), log }));
 
 server.listen(config.port, config.host, () => {
   log(`spacer-z-historia server ${VERSION} listening on port ${config.port}`);
