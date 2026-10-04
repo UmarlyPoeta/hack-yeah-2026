@@ -104,6 +104,13 @@ interface GuideProgress {  // same identyfikatory przystanków
 ```
 Przekaźnik na serwerze (#51) przenosi `LinkMessage` bez zaglądania do środka.
 
+### Łącze telefon ↔ zegarek: `/v1/link/<room>/messages` (#51)
+Na emulatorach Super Device nie widzi urządzeń, więc oba łączą się przez serwer (`hdc rport tcp:8787 tcp:8787`, w aplikacji `http://127.0.0.1:8787`). `<room>` to kod parowania (`[A-Za-z0-9_-]{1,32}`, telefon pokazuje 4 cyfry).
+- `POST` `{ "from": "phone"|"watch", "body": { ... } }` → `200 { "seq": number, "t": number }`. `body` to dowolny obiekt JSON ustalony w #50, maks. 4 KB całości (`413`).
+- **Bez pozycji:** pola `lat`, `lon`, `lng`, `latitude`, `longitude`, `position`, `coords`, `coordinates`, `geoFix`, `accuracyM` na dowolnym poziomie → `400 position_not_allowed` (#56). Łącze niesie stan przewodnika, nie lokalizację.
+- `GET ?after=<seq>` → `200 { "messages": [{ "seq", "t", "from", "body" }], "lastSeq": number }`, wiadomości z `seq > after`, rosnąco. Klient pyta co 500–1000 ms i zapamiętuje ostatni `seq`.
+- Wiadomości są tylko w pamięci serwera: maks. 200 na pokój, TTL 10 min, maks. 100 pokojów (`503 too_many_rooms`). Nie trafiają do logu ani na dysk.
+
 ## Szablony (identyczne w aplikacji i na serwerze)
 
 | Kind | Szablon |

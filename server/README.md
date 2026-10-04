@@ -20,6 +20,7 @@ npm run tts-smoke        # ElevenLabs + Piper smoke test (add `voices` to list P
 | `GET /v1/pois?lat=&lon=&radius=` | done | P3 |
 | `POST /v1/segment` | done: text (#18) + voice (#19) | P4 |
 | `GET /v1/audio/<audioId>.mp3` | done (#19) | P4 |
+| `POST/GET /v1/link/<room>/messages` | done: phone ↔ watch relay in memory (#51) | P3 |
 
 ## `/v1/pois` data flow
 

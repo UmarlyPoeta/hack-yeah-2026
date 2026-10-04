@@ -3,6 +3,8 @@ import http from 'node:http';
 import os from 'node:os';
 import { loadConfig, VERSION } from './config.js';
 import { createApp } from './http/app.js';
+import { LinkRelay } from './link/LinkRelay.js';
+import { linkRoutes } from './link/routes.js';
 import { segmentRoutes } from './segment/routes.js';
 import { createServices } from './services.js';
 import { audioRoutes } from './tts/routes.js';
@@ -14,7 +16,7 @@ const { poiService, llm, tts, segments, health } = createServices(config, log);
 const server = http.createServer(createApp({
   poiService,
   health,
-  routes: [...segmentRoutes(segments), ...audioRoutes(tts?.store ?? null)],
+  routes: [...segmentRoutes(segments), ...audioRoutes(tts?.store ?? null), ...linkRoutes(new LinkRelay())],
   log,
 }));
 
