@@ -65,7 +65,18 @@ AI narration (P4, from the #25 evaluation):
 
 - Model or service: **Bielik-4.5B-v3.0-Instruct** (Polish open-source LLM by SpeakLeash and ACK Cyfronet AGH), GGUF Q8_0, served by Ollama on our own **Modal** GPU deployment (`server/modal/`), not a third-party LLM API. Voice: **ElevenLabs** text-to-speech (cloud); offline fallback **Piper** with a `pl_PL` voice.
 - Inference flow: the app sends only a segment request (kind, place id(s), interests, word budget) to our server. The server loads the Wikipedia source text of the place(s), builds a prompt per segment kind, calls Ollama `/api/chat` on Modal with a JSON Schema `format`, validates the result, then synthesises audio and returns text + MP3 URL.
-- Data handling and privacy: the user's location stays on the phone, apart from a coarse `/v1/pois` query to our own server, which does not log positions. LLM inference runs on our own Modal deployment and receives only the segment prompt (Wikipedia text of the place, kind, word budget), never a position or user data. Only the generated text about a public monument is sent to ElevenLabs, with no location and no user data. The ElevenLabs key lives only in `server/.env`.
+- Data handling and privacy. Decision (#56): Bielik runs on our own Modal GPU deployment, not locally, so the pitch says "our own deployment of an open Polish model", never "local". The server can point at a local Ollama with one variable (`OLLAMA_URL`, same API), and only then is "local" true. What leaves where:
+
+  | from → to | what is sent | never sent |
+  |---|---|---|
+  | phone → our server `GET /v1/pois` | position and radius (today exact; #56 rounds it to a ~150 m grid cell on the phone) | route, history, user id |
+  | phone → our server `POST /v1/segment` | segment kind, place id(s), interests, word budget | position, route |
+  | our server → pl.wikipedia.org, wikidata.org | centre of a ~100 m grid cell, page and entity ids | exact position, anything about the user |
+  | our server → Bielik on Modal | prompt: Wikipedia text of the place(s), segment kind, word budget, interests | position, place ids of the user's route, user id |
+  | our server → ElevenLabs | the generated text about the monument | position, user data |
+  | server logs | method, path, status, time; segment kind and place id; TTS characters | query strings (they carry the position), prompts, generated text |
+
+  GPS fixes, the walked route and the motion state stay on the phone. The ElevenLabs key and the Modal proxy-auth token live only in `server/.env`.
 - Failure and fallback behavior: a grounding validator requires every number in the text to appear in the source and each claim's quote to match a source passage (>= 80 % of its words in order); bad claims are dropped, the segment fails when more claims are bad than good. One retry with the list of problems, then a template built from the source. Markdown, emoji and the opening vocative are stripped before TTS. TTS chain ElevenLabs -> Piper -> text only. The app keeps working fully offline with bundled data and templates. The UI labels every segment (AI/template, voice) and links the source (CC BY-SA).
 - Evaluation (`npm run eval`, `server/eval/`, issue #25): the 10 most important sights on the demo route (Barbakan ... Kaplica Zygmuntowska) x ARRIVAL (90 words), BRIDGE (50), DEEP_DIVE (250), 30 segments through the real pipeline with an empty cache, Bielik Q8_0 on a Modal T4. Results and all texts: `server/eval/results/` (`eval-*.json`, `review-*.md`).
 
