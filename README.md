@@ -1,6 +1,6 @@
 # Spacer z historią
 
-Przewodnik na HarmonyOS/OpenHarmony (API 20+), który idzie razem z tobą: wie, co jest przed tobą, płynnie łączy kolejne zabytki w jedną opowieść i mówi po polsku. **Bez stałego uprawnienia do lokalizacji**: lokalizację dostaje tylko po kliknięciu `LocationButton` i traci ją, gdy schodzi z ekranu. Tekst pisze Bielik (Ollama na Modalu), czyta ElevenLabs (zapasowo Piper offline). Projekt na HackYeah 2026, wyzwanie Huawei / OpenHarmony.
+Przewodnik na HarmonyOS/OpenHarmony (API 20+), który idzie razem z tobą: wie, co jest przed tobą, płynnie łączy kolejne zabytki w jedną opowieść i mówi po polsku. **Lokalizacja tylko na czas spaceru**: systemowa zgoda „Allow this time only”, bez lokalizacji w tle. Ten sam HAP działa na telefonie i zegarku, które razem prowadzą jeden spacer. Tekst pisze Bielik (Ollama na Modalu), czyta ElevenLabs (zapasowo Piper offline). Projekt na HackYeah 2026, wyzwanie Huawei / OpenHarmony.
 
 > 🚧 W trakcie hackathonu. Instrukcje build/run uzupełnia issue „README: setup, build, run”.
 

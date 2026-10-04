@@ -1,11 +1,18 @@
 import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import { emitAppBackground, emitAppForeground } from '../platform/AppLifecycle';
 
 const DOMAIN = 0x0000;
 
 export default class EntryAbility extends UIAbility {
+  // `hdc shell aa start -a EntryAbility -b <bundle> --ps page debug` opens the guide debug page
+  private startPage: string = 'pages/StartPage';
+
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+    if (want.parameters !== undefined && want.parameters['page'] === 'debug') {
+      this.startPage = 'pages/GuideDebugPage';
+    }
     try {
       this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET);
     } catch (err) {
@@ -22,7 +29,7 @@ export default class EntryAbility extends UIAbility {
     // Główny start aplikacji – ładuje ekran powitalny StartPage
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
-    windowStage.loadContent('pages/StartPage', (err) => {
+    windowStage.loadContent(this.startPage, (err) => {
       if (err.code) {
         hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
         return;
@@ -37,9 +44,12 @@ export default class EntryAbility extends UIAbility {
 
   onForeground(): void {
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onForeground');
+    emitAppForeground();
   }
 
   onBackground(): void {
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onBackground');
+    // one-time location grant: the walk pauses when the app leaves the foreground (#48)
+    emitAppBackground();
   }
 }

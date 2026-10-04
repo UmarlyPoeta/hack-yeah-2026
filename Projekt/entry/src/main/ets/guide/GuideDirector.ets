@@ -3,7 +3,7 @@ import { Poi } from '../model/Poi';
 import { Interest, Segment } from '../model/Segment';
 import { Itinerary, ItineraryView } from './Itinerary';
 import { MotionSnapshot, MotionTracker } from './MotionTracker';
-import { GuideAction, NarrationPlanner, PlannerState } from './NarrationPlanner';
+import { GuideAction, GuideProgress, NarrationPlanner, PlannerState } from './NarrationPlanner';
 
 // The guide engine behind one interface: events in, actions out. The view model feeds it
 // location fixes, a clock tick, AI segments and player callbacks, and executes the returned actions.
@@ -78,6 +78,40 @@ export class GuideDirector {
       return accepted.concat(this.planner.update(t, this.tracker.snapshot(), this.view));
     }
     return this.planner.update(t, this.tracker.snapshot(), this.view);
+  }
+
+  // Commands from the user or the other device. Each returns the actions to execute now.
+  skip(t: number): GuideAction[] {
+    const now = this.advance(t);
+    this.planner.skip(now);
+    return this.planner.update(now, this.tracker.snapshot(), this.view);
+  }
+
+  replay(t: number): GuideAction[] {
+    return this.planner.replay(this.advance(t));
+  }
+
+  setMuted(muted: boolean, t: number): GuideAction[] {
+    const now = this.advance(t);
+    this.planner.setMuted(muted);
+    return this.planner.update(now, this.tracker.snapshot(), this.view);
+  }
+
+  isMuted(): boolean {
+    return this.planner.isMuted();
+  }
+
+  exportProgress(): GuideProgress {
+    return this.planner.exportProgress();
+  }
+
+  importProgress(p: GuideProgress): void {
+    this.planner.importProgress(p);
+  }
+
+  private advance(t: number): number {
+    this.lastT = Math.max(t, this.lastT);
+    return this.lastT;
   }
 
   motion(): MotionSnapshot {

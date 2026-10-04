@@ -8,6 +8,8 @@ import itineraryTest from './Itinerary.test';
 import templatesTest from './Templates.test';
 import guideTest from './Guide.test';
 import walkControllerTest from './WalkController.test';
+import walkSessionTest from './WalkSession.test';
+import twoDeviceTest from './TwoDevice.test';
 
 export default function testsuite() {
   localUnitTest();
@@ -20,4 +22,6 @@ export default function testsuite() {
   templatesTest();
   guideTest();
   walkControllerTest();
+  walkSessionTest();
+  twoDeviceTest();
 }

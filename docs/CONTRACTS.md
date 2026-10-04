@@ -76,6 +76,30 @@ Odpowiedzi to JSON w UTF-8 (poza `/v1/audio`). Błędy mają format `{ "error": 
 ### `GET /v1/audio/<segmentId>.mp3`
 `200 audio/mpeg` z cache albo `404`.
 
+## Łącze między urządzeniami (`link/DeviceLink.ets`, #50, #51)
+
+```ts
+interface LinkMessage {
+  kind: "hello" | "state" | "cmd" | "progress";
+  from: string;            // id urządzenia nadawcy
+  seq: number;             // rosnący u nadawcy
+  t: number;               // zegar nadawcy, ms (informacyjnie)
+  state: LinkState | null; // LEAD → FOLLOW
+  cmd: "pause" | "resume" | "skip" | "replay" | "deepDive" | "handoff" | null;   // FOLLOW → LEAD
+  progress: GuideProgress | null;   // stary LEAD → nowy LEAD przy przejęciu
+}
+interface LinkState {      // tylko to, co pokazać; BEZ pozycji, odległości i kierunku
+  currentText: string; segmentKind: string; poiName: string; poiId: string; originLabel: string; sourceUrl: string;
+  nextPoiName: string; laterStops: string[]; storiesTold: number; deepDiveOfferId: string; deepDiveOfferName: string;
+  paused: boolean;
+}
+interface GuideProgress {  // same identyfikatory przystanków
+  arrived: string[]; announced: string[]; bridged: string[]; missedSaid: string[]; offered: string[];
+  spoken: string[]; lastArrivalId: string | null;
+}
+```
+Przekaźnik na serwerze (#51) przenosi `LinkMessage` bez zaglądania do środka.
+
 ## Szablony (identyczne w aplikacji i na serwerze)
 
 | Kind | Szablon |

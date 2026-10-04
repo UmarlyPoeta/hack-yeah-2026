@@ -29,7 +29,9 @@ function byImportance(a: Poi, b: Poi): number {
 }
 
 export function buildStops(pois: Poi[]): Stop[] {
-  const sights = pois.filter((p: Poi) => p.role !== PoiRole.AREA).sort(byImportance);
+  // Without a coordinate type (kind null) Wikipedia entries are mostly events and organisations
+  // ("Sonderaktion Krakau", "Fundacja ..."), not places to stand next to: never a stop, never "Obok".
+  const sights = pois.filter((p: Poi) => p.role !== PoiRole.AREA && p.kind !== null).sort(byImportance);
   const ids = new Set<string>(sights.map((p: Poi) => p.id));
   const stopOf = new Map<string, Stop>();
   const stops: Stop[] = [];

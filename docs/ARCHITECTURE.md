@@ -1,10 +1,10 @@
 # Spacer z historią: architektura
 
-> Przewodnik, który **idzie razem z tobą** i mówi prawdziwym polskim głosem. Wie, w którą stronę idziesz, co jest przed tobą i ile czasu zostało do następnego zabytku, więc płynnie łączy kolejne miejsca w jedną opowieść. Gdy się zatrzymasz, proponuje pogłębienie. Lokalizację dostaje **tylko po kliknięciu `LocationButton`**, bez stałego uprawnienia. Tekst pisze **Bielik** (polski open-source LLM) serwowany przez **Ollamę** na GPU w **Modal**, a czyta go **ElevenLabs**. Zapasowy głos offline to **Piper**.
+> Przewodnik, który **idzie razem z tobą** i mówi prawdziwym polskim głosem. Wie, w którą stronę idziesz, co jest przed tobą i ile czasu zostało do następnego zabytku, więc płynnie łączy kolejne miejsca w jedną opowieść. Gdy się zatrzymasz, proponuje pogłębienie. Lokalizację dostaje **tylko na czas jednego spaceru** (systemowa zgoda „Allow this time only”), bez lokalizacji w tle. Tekst pisze **Bielik** (polski open-source LLM) serwowany przez **Ollamę** na GPU w **Modal**, a czyta go **ElevenLabs**. Zapasowy głos offline to **Piper**.
 
 - **Temat prowadzący:** Human-Centric Technology (doświadczenie kulturowe, odpowiedzialna technologia).
 - **Drugi:** Intelligent Experiences (kontekstowy przewodnik: ruch, kierunek, tempo, zatrzymania).
-- **Platforma w centrum:** HarmonyOS **Security Components** (`LocationButton`: autoryzacja tymczasowa, ważna do wygaszenia ekranu, przejścia w tło albo wyjścia z aplikacji), Location Kit, Media Kit (AVPlayer), Network Kit, ArkUI.
+- **Platforma w centrum:** jeden HAP na telefon i zegarek, jednorazowa zgoda na lokalizację (Location Kit), AVSession, Live View (telefon), wibracje zegarka, Distributed Data Object / kontynuacja (prawdziwe urządzenia), Media Kit, Network Kit, ArkUI. `LocationButton` nie istnieje w publicznym SDK HarmonyOS 6.1.1 (spike, #48).
 - **Suwerenność:** dane z polskiej Wikipedii (CC BY-SA), polski otwarty model (Bielik, SpeakLeash i ACK Cyfronet AGH) na własnym wdrożeniu (Modal, bez zewnętrznego API LLM), otwarty system.
 - **Środowisko:** jeden emulator telefonu w DevEco Studio (compatible API 20, compile 23, target 24) z symulowanym GPS + laptop z `server/`; Bielik w Ollamie na Modalu (`server/modal/`).
 
@@ -23,7 +23,7 @@
 │                        ├ NarrationPlanner co i kiedy mówić + budżet długości            │
 │                        └ Templates        tekst bez AI dla każdego typu segmentu        │
 │ SESJA (P1)     WalkSession  IDLE/ACQUIRING/WALKING/PAUSED/ERROR                         │
-│ ADAPTERY       LocationProvider ◀── LocationButton                                      │
+│ ADAPTERY       LocationProvider ◀── zgoda „Allow this time only”                         │
 │                 ├ LiveLocationProvider (geoLocationManager)             (P1)            │
 │                 └ RouteReplayProvider  (tylko debug, oznaczony w UI)    (P1)            │
 │                PoiRepository   ── GET /v1/pois    | fallback: rawfile fixtures   (P3)   │
@@ -81,11 +81,12 @@ Narrator mówi **jeden segment naraz**. Czas trwania segmentu to **prawdziwa dł
 Na trasie demo jest 77 miejsc, z czego 67 w zasięgu: kamienice, obszary, duplikaty. Przewodnik opowiada o **przystankach**, nie o każdym punkcie:
 - **Grupowanie:** miejsca w promieniu 40 m od siebie oraz połączone przez `partOfId` tworzą jeden przystanek; główne jest to z najwyższym `importance`, reszta trafia do zdania „Obok: …”. Obszary (`role: area`) nigdy nie są przystankami.
 - **Próg względny:** przystanek jest główny, gdy należy do górnych 30% ważności w promieniu 500 m, z dolnym minimum 0,15 i górnym limitem 0,6. Dzięki temu w Krakowie mówimy o najważniejszych, a w małym mieście też jest o czym mówić.
-- **Wypełniacze:** przystanek poniżej progu dostaje `ARRIVAL` tylko wtedy, gdy przewodnik milczał ≥ 30 s, a do następnego głównego jest ≥ 90 s.
+- **Tylko miejsca:** wpisy bez typu współrzędnych (`kind: null`) to w danych głównie wydarzenia i organizacje („Sonderaktion Krakau”, „Strajk w Sempericie”); nigdy nie są przystankiem ani nie padają w „Obok: …”.
+- **Wypełniacze:** przystanek poniżej progu dostaje `ARRIVAL` tylko wtedy, gdy ma ważność ≥ 0,3, przewodnik milczał ≥ 30 s, do następnego głównego jest ≥ 90 s, i najwyżej raz na 3 minuty.
 - **Spóźnione przybycie:** główny przystanek minięty bliżej niż 60 m albo wcześniej zapowiedziany dostaje `ARRIVAL` zamiast „już za nami”. `MISSED` tylko dla miejsc bliżej niż 120 m, najwyżej jedno na minutę.
 - **Szablony** trzymają nazwy w mianowniku („Za nami: X, przed nami: Y”), bo bez modelu nie odmienimy poprawnie dowolnej nazwy.
 
-Wynik na trasie demo: 15 przystanków w 19 minut, segmenty nigdy się nie nakładają, kolejność zgodna z trasą także przy szumie GPS ±5–8 m.
+Wynik na trasie demo (331 miejsc z #40): 16 przystanków w 19 minut, od Barbakanu po Zamek na Wawelu z Katedrą i Dzwon Zygmunt, segmenty nigdy się nie nakładają, kolejność zgodna z trasą także przy szumie GPS ±5–8 m.
 
 ### 2.5 Silnik w aplikacji
 
@@ -106,20 +107,31 @@ Wynik na trasie demo: 15 przystanków w 19 minut, segmenty nigdy się nie nakła
 ## 4. Zasady
 
 1. **Działa bez serwera.** Aplikacja ma w `rawfile` dane POI i trasy oraz szablony dla każdego typu segmentu. Serwer, AI i głos wzbogacają aplikację, ale reprodukcja od nich nie zależy.
-2. **Zero stałych uprawnień do lokalizacji.** Jedyna droga to `LocationButton`. Utrata autoryzacji to stan `PAUSED`, nie błąd. Manifest ma tylko `INTERNET` (system_grant).
+2. **Lokalizacja tylko na ten spacer.** Zgoda „Allow this time only”; system trzyma ją, dopóki żyje proces aplikacji, i odbiera po jego zamknięciu. Lokalizację w tle wyłączamy sami: przejście w tło = `PAUSED` i zatrzymany dostawca. Wznowienie prosi system o zgodę; okienko pojawi się tylko wtedy, gdy zgoda wygasła. Żadnej lokalizacji w tle.
 3. **Czysty rdzeń, czas jako parametr:** testy Hypium są deterministyczne.
 4. **Każde źródło za interfejsem**, z wersją live i zastępczą.
 5. **Przejrzystość w UI:** etykieta „AI: Bielik · głos: ElevenLabs” albo „szablon”, plus link do źródła.
 
-## 5. `WalkSession`
+## 5. `WalkSession` (#48)
 
 ```
-IDLE ──tap LocationButton──▶ ACQUIRING ──pierwszy fix──▶ WALKING
-  ▲                              │ timeout 15 s              │ onBackground / ekran off / błąd uprawnień
-  │                              ▼                           ▼
-  └──────── stop ────────── ERROR(NO_FIX|DENIED) ◀──── PAUSED ──tap LocationButton──▶ ACQUIRING
+IDLE ──start──▶ ASKING ──„Allow this time only”──▶ ACQUIRING ──pierwszy fix──▶ WALKING
+                  │ odmowa                            │ 15 s bez fixu / lokalizacja wyłączona  │ tło, błąd lokalizacji,
+                  ▼                                   ▼                                         ▼ pauza użytkownika
+                ERROR(DENIED) ◀──────────────── ERROR(NO_FIX|LOCATION_OFF)                 PAUSED ──wznów──▶ ASKING
 ```
-W `PAUSED` odtwarzanie narracji się zatrzymuje, a subskrypcja lokalizacji jest zdejmowana.
+Lokalizacja (`LiveLocationProvider`, 1 Hz, scenariusz NAVIGATION) działa tylko w `ACQUIRING`/`WALKING`. `RouteReplayProvider` (trasa demo) jest oznaczony w UI jako SYMULACJA. Kod: `session/WalkSession.ets`, `location/*`, `platform/AppLifecycle.ets`.
+
+## 5a. Dwa urządzenia: telefon + zegarek (#50)
+
+Ten sam HAP (`deviceTypes: phone, wearable`). Każde urządzenie ma pełny silnik; łącze (`DeviceLink`) ustala role:
+- **SOLO**: samo, bez łącza.
+- **LEAD**: liczy, mówi, wysyła `state` (co pokazać) co zmianę i co ≤ 3 s.
+- **FOLLOW**: silnik działa wyciszony (własna strzałka i odległość z własnego GPS), tekst i oferta pogłębienia przychodzą od LEAD-a; przyciski wysyłają `cmd`; wibracje (#52) liczone lokalnie.
+- **Przejęcie („Przejmij”)**: FOLLOW wysyła `cmd: handoff` → LEAD wysyła `progress` (opowiedziane, zapowiedziane, ostatni przystanek), milknie i staje się FOLLOW → nowy LEAD importuje postęp i mówi dalej bez powtórek.
+- Brak wiadomości przez 10 s → FOLLOW przechodzi w SOLO.
+- Łącze nie przenosi pozycji, odległości ani kierunku (#56). Implementacje: `RelayLink` przez serwer (emulatory, #51), `DistributedLink` (prawdziwe urządzenia, #57).
+Kod: `viewmodel/WalkController.ets`, `link/DeviceLink.ets`, `viewmodel/Haptics.ets`, `platform/VibratorHaptics.ets`, `platform/LiveViewPublisher.ets`.
 
 ## 6. Struktura repozytorium
 
@@ -145,7 +157,7 @@ fixtures/ tools/ docs/ AI_WORKFLOW.md README.md
 
 | Ryzyko | Zabezpieczenie | Kto |
 |---|---|---|
-| `LocationButton` nie współpracuje z symulowanym GPS albo wymaga deklaracji | spike w 1. godzinie; plan B: `requestPermissionsFromUser` z „tylko tym razem” | P1 |
+| `LocationButton` nie istnieje w publicznym SDK 6.1.1 (potwierdzone w spike'u) | zgoda „Allow this time only” (`requestPermissionsFromUser`), sprawdzona na telefonie i zegarku | P1 |
 | Emulator nie odtwarza trasy GPS | punkty ręcznie w panelu emulatora; `RouteReplayProvider` w debug, oznaczony | P1 |
 | Emulator nie widzi serwera (sieć, HTTP bez TLS) | aplikacja działa offline; spike sieci w 1. godzinie | P1, P3 |
 | Emulator nie wydaje dźwięku | spike; plan B: głos nagrany na fizycznym telefonie od mentorów, na emulatorze napisy | P5 |
