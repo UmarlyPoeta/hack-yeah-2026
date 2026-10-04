@@ -12,3 +12,11 @@ export function emitAppBackground(): void {
 export function emitAppForeground(): void {
   emitter.emit(APP_FOREGROUND_EVENT);
 }
+
+// Debug commands sent with `aa start ... --ps action <name>` (GuideDebugPage listens).
+export const DEBUG_ACTION_EVENT: string = 'spacer.debug.action';
+
+export function emitDebugAction(action: string): void {
+  const data: emitter.EventData = { data: { 'action': action } };
+  emitter.emit(DEBUG_ACTION_EVENT, data);
+}

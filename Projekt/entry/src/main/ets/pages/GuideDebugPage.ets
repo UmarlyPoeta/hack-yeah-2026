@@ -1,11 +1,13 @@
 import { util } from '@kit.ArkTS';
+import { emitter } from '@kit.BasicServicesKit';
+import { DEBUG_ACTION_EVENT } from '../platform/AppLifecycle';
 import { common } from '@kit.AbilityKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { GeoFix } from '../model/GeoPoint';
 import { Poi } from '../model/Poi';
 import { Segment } from '../model/Segment';
 import { parsePois, parseRoute, ParseResult } from '../data/FixtureParser';
-import { LINK_BASE_URL } from '../data/ApiConfig';
+import { LINK_BASE_URLS } from '../data/ApiConfig';
 import { NetworkHttpTransport } from '../data/NetworkHttpTransport';
 import { RelayLink } from '../link/RelayLink';
 import { LiveLocationProvider } from '../location/LiveLocationProvider';
@@ -39,7 +41,30 @@ struct GuideDebugPage {
   private link: RelayLink | null = null;
   private linkTimer: number = -1;
 
+  aboutToAppear(): void {
+    emitter.on(DEBUG_ACTION_EVENT, (e: emitter.EventData) => {
+      const action = e.data !== undefined ? String(e.data['action']) : '';
+      if (action === 'takeover') {
+        this.vm.takeOver();
+      } else if (action === 'pause') {
+        this.vm.pauseNarration();
+      } else if (action === 'resume') {
+        this.vm.resumeNarration();
+      } else if (action === 'skip') {
+        this.vm.skip();
+      }
+    });
+    const room = AppStorage.get<string>('debugJoinRoom');
+    if (room !== undefined && room.length > 0) {
+      AppStorage.setOrCreate('debugJoinRoom', '');
+      this.room = room;
+      this.start(true);
+      this.pair(false);
+    }
+  }
+
   aboutToDisappear(): void {
+    emitter.off(DEBUG_ACTION_EVENT);
     this.unlink();
     this.vm.stop();
   }
@@ -52,12 +77,12 @@ struct GuideDebugPage {
     }
     const deviceId = (deviceInfo.deviceType === 'wearable' ? 'watch-' : 'phone-')
       + String(Math.floor(Math.random() * 100000));
-    const link = new RelayLink(new NetworkHttpTransport(), LINK_BASE_URL, this.room, deviceId);
+    const link = new RelayLink(new NetworkHttpTransport(), LINK_BASE_URLS, this.room, deviceId);
     this.link = link;
     this.vm.connect(link, deviceId, lead);
     this.linkTimer = setInterval(() => {
       this.linkInfo = 'SYMULACJA ŁĄCZA przez serwer · pokój ' + this.room + ' · '
-        + (link.online ? 'serwer OK' : 'brak serwera ' + link.lastError);
+        + (link.online ? 'serwer OK' : 'brak serwera ' + link.lastError) + ' · ' + link.serverUrl().split('/v1')[0];
     }, 1000);
   }
 
@@ -104,14 +129,6 @@ struct GuideDebugPage {
     });
   }
 
-  @Builder
-  row(label: string, value: string) {
-    Row({ space: 6 }) {
-      Text(label).fontSize(12).fontColor('#5B6672')
-      Text(value).fontSize(13)
-    }
-  }
-
   build() {
     Scroll() {
       Column({ space: 10 }) {
@@ -128,12 +145,18 @@ struct GuideDebugPage {
         if (this.loadInfo.length > 0) {
           Text(this.loadInfo).fontSize(12).fontColor('#5B6672')
         }
+        // inline on purpose: @Builder parameters are passed by value and would not refresh
         Column({ space: 2 }) {
-          this.row('Sesja', this.vm.sessionState + (this.vm.sessionReason !== 'NONE' ? ' · ' + this.vm.sessionReason : ''))
-          this.row('Rola', this.vm.role + (this.vm.peerConnected ? ' · połączony' : ''))
-          this.row('Ruch', (this.vm.moving ? 'idzie' : 'stoi') + ' · opowiedziano: ' + this.vm.storiesTold
-            + (this.vm.narrationPaused ? ' · NARRACJA WSTRZYMANA' : ''))
+          Text('Sesja: ' + this.vm.sessionState + (this.vm.sessionReason !== 'NONE' ? ' · ' + this.vm.sessionReason : ''))
+            .fontSize(13)
+          Text('Rola: ' + this.vm.role + (this.vm.peerConnected ? ' · połączony' : '')).fontSize(13)
+          Text('Ruch: ' + (this.vm.moving ? 'idzie' : 'stoi') + ' · opowiedziano: ' + this.vm.storiesTold
+            + (this.vm.narrationPaused ? ' · NARRACJA WSTRZYMANA' : '')).fontSize(13)
         }.alignItems(HorizontalAlign.Start).width('100%')
+        // near the top: on the round watch screen the bottom of the page is out of reach
+        if (this.vm.role === 'FOLLOW') {
+          Button('Przejmij prowadzenie').fontSize(12).onClick(() => this.vm.takeOver())
+        }
         if (this.vm.sessionState === 'PAUSED' || this.vm.sessionState === 'ERROR') {
           Button('Wznów spacer').fontSize(12).onClick(() => this.vm.resumeWalk())
         }
@@ -175,9 +198,6 @@ struct GuideDebugPage {
               this.room = v;
             })
           Button('Dołącz').fontSize(12).onClick(() => this.pair(false))
-        }
-        if (this.vm.role === 'FOLLOW') {
-          Button('Przejmij prowadzenie').fontSize(12).onClick(() => this.vm.takeOver())
         }
         if (this.linkInfo.length > 0) {
           Text(this.linkInfo).fontSize(11).fontColor('#B35900')
