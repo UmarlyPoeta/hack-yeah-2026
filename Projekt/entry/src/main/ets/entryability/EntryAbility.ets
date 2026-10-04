@@ -28,7 +28,16 @@ export default class EntryAbility extends UIAbility {
 
   /** Notification "Rozpocznij": MainPage opens AppStorage 'openPlaceId'. */
   private takePlaceId(want: Want): void {
-    const id = want.parameters?.placeId;
+    let id = want.parameters?.placeId;
+    // home screen card: postCardAction 'router' delivers its params as a JSON string
+    const cardParams = want.parameters?.params;
+    if (id === undefined && typeof cardParams === 'string') {
+      try {
+        id = (JSON.parse(cardParams) as Record<string, string>)['placeId'];
+      } catch (e) {
+        id = undefined;
+      }
+    }
     if (typeof id === 'string' && id.length > 0) {
       AppStorage.setOrCreate<string>('openPlaceId', id);
     }

@@ -235,6 +235,18 @@
     {
       "name": "perm_background_reason",
       "value": "Szukanie zabytków w pobliżu, gdy aplikacja działa w tle."
+    },
+    {
+      "name": "widget_name",
+      "value": "Zabytek w pobliżu"
+    },
+    {
+      "name": "widget_desc",
+      "value": "Najbliższy zabytek z kolejki tour"
+    },
+    {
+      "name": "widget_listen",
+      "value": "Posłuchaj"
     }
   ]
 }

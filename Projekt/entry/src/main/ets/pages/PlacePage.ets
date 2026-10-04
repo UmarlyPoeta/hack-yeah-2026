@@ -1,7 +1,9 @@
 // One landmark: photos from Wikipedia and the narration from the server (Bielik + TTS), started from
 // "Posłuchaj historii". Both are fetched together; LoadingView stays until both are ready.
 // Router params: { place: Place } (the whole place, so it opens even if the queue rotated meanwhile).
+import { common } from '@kit.AbilityKit';
 import { LengthMetrics } from '@kit.ArkUI';
+import { NarrationSession } from '../audio/NarrationSession';
 import { NarratorPlayer, PlaybackListener } from '../audio/NarratorPlayer';
 import { Fonts } from '../common/Fonts';
 import { PhotoIconButton, PrimaryButton } from '../components/common/Controls';
@@ -53,6 +55,7 @@ struct PlacePage {
   @StorageProp('bottomInset') bottomInset: number = 0;
   private player: NarratorPlayer = new NarratorPlayer();
   private started: boolean = false;
+  private session: NarrationSession = new NarrationSession();
 
   aboutToAppear(): void {
     setStatusBarLight(this.getUIContext().getHostContext(), true);
@@ -69,6 +72,8 @@ struct PlacePage {
   // leaving the place (back button or system back) stops the narration
   aboutToDisappear(): void {
     this.player.release();
+    this.session.end();
+    AppStorage.setOrCreate<boolean>('audioPlaying', false);
     AppStorage.setOrCreate<boolean>('listening', false);
     setStatusBarLight(this.getUIContext().getHostContext(), true);   // back to the photo on "Odkrywaj"
     if (this.place !== null && !this.loading) {
@@ -254,10 +259,17 @@ struct PlacePage {
             .backgroundColor($r('app.color.accent'))
         }
         .width('100%')
+        // inline, not a @Builder: builder parameters passed by value do not update
         Row() {
-          this.Time(this.positionMs)
+          Text(clock(this.positionMs))
+            .fontSize($r('app.float.font_caption'))
+            .fontFamily(Fonts.SEMIBOLD)
+            .fontColor($r('app.color.text_secondary'))
           Blank()
-          this.Time(this.durationMs)
+          Text(clock(this.durationMs))
+            .fontSize($r('app.float.font_caption'))
+            .fontFamily(Fonts.SEMIBOLD)
+            .fontColor($r('app.color.text_secondary'))
         }
         .width('100%')
       }
@@ -265,14 +277,6 @@ struct PlacePage {
     }
     .width('100%')
     .margin({ top: 18 })
-  }
-
-  @Builder
-  Time(ms: number) {
-    Text(clock(ms))
-      .fontSize($r('app.float.font_caption'))
-      .fontFamily(Fonts.SEMIBOLD)
-      .fontColor($r('app.color.text_secondary'))
   }
 
   @Builder
@@ -352,9 +356,24 @@ struct PlacePage {
   // ---- audio ----
 
   private startAudio(url: string): void {
+    if (!this.started && this.place !== null) {
+      // lock screen and control centre: photo, name, play/pause and seeking
+      this.session.start(this.getUIContext().getHostContext() as common.Context, this.place, this.durationMs, {
+        play: () => {
+          this.player.resume();
+        },
+        pause: () => {
+          this.player.pause();
+        },
+        seek: (positionMs: number) => {
+          this.player.seek(positionMs);
+        },
+      });
+    }
     this.started = true;
     const listener: PlaybackListener = {
       onProgress: (positionMs: number, durationMs: number) => {
+        // the session needs no update per tick: it extrapolates from the last state
         this.positionMs = positionMs;
         if (durationMs > 0) {
           this.durationMs = durationMs;
@@ -362,6 +381,8 @@ struct PlacePage {
       },
       onStateChange: (playing: boolean) => {
         this.playing = playing;
+        AppStorage.setOrCreate<boolean>('audioPlaying', playing);
+        this.session.update(playing, this.positionMs, this.durationMs);
       },
     };
     this.player.playUrl(url, listener);

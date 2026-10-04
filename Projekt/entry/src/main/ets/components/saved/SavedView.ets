@@ -7,6 +7,7 @@ import { Notifier } from '../../store/Notifier';
 import { PlaceQueue } from '../../store/PlaceQueue';
 import { SavedPlaces } from '../../store/SavedPlaces';
 import { Settings } from '../../store/Settings';
+import { Widgets } from '../../store/Widgets';
 
 @Component
 export struct SavedView {
@@ -124,6 +125,10 @@ export struct SavedView {
     PlaceQueue.reset();
     CityInfo.reset();
     Settings.reset();
+    const ctx = this.getUIContext().getHostContext();
+    if (ctx !== undefined) {
+      Widgets.update(ctx);   // home screen card back to "Szukam zabytków"
+    }
     const router = this.getUIContext().getRouter();
     router.clear();
     router.replaceUrl({ url: 'pages/OnboardingPage' });

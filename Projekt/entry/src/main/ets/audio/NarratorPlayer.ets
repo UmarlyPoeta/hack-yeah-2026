@@ -95,6 +95,10 @@ export class NarratorPlayer {
     this.avPlayer?.pause();
   }
 
+  seek(positionMs: number) {
+    this.avPlayer?.seek(positionMs);
+  }
+
   /** Continues after pause(), or starts again after the end. */
   resume() {
     const player = this.avPlayer;

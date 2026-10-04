@@ -11,6 +11,7 @@ import { preloadNarration } from './Narration';
 import { MIN_INTERVAL_MS, Notifier } from './Notifier';
 import { PlaceQueue } from './PlaceQueue';
 import { UserLocation } from './UserLocation';
+import { Widgets } from './Widgets';
 
 const DOMAIN: number = 0x0000;
 const TAG: string = 'Guide';
@@ -45,6 +46,7 @@ export class Guide {
     CityInfo.update(fix);
     await PlaceQueue.refill(fix);
     preloadNarration(AppStorage.get<Place[]>('queue') ?? []);
+    Widgets.update(context);
     await Notifier.maybeNotify(context, AppStorage.get<Place[]>('queue') ?? [], fix);
   }
 
@@ -52,7 +54,7 @@ export class Guide {
   static async enterBackground(): Promise<void> {
     const context = Guide.context;
     if (context === null || Guide.timer === -1 || Guide.background ||
-      AppStorage.get<boolean>('locationAuthorized') !== true) {
+      (AppStorage.get<boolean>('locationAuthorized') !== true && AppStorage.get<boolean>('audioPlaying') !== true)) {
       return;
     }
     try {
@@ -62,7 +64,9 @@ export class Guide {
         requestCode: 2,
         actionFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG],
       });
-      await backgroundTaskManager.startBackgroundRunning(context, backgroundTaskManager.BackgroundMode.LOCATION, agent);
+      // narration playing (with its media session) keeps sounding behind the lock screen
+      const modes: string[] = AppStorage.get<boolean>('audioPlaying') === true ? ['location', 'audioPlayback'] : ['location'];
+      await backgroundTaskManager.startBackgroundRunning(context, modes, agent);
       Guide.background = true;
     } catch (e) {
       hilog.warn(DOMAIN, TAG, 'background running refused: %{public}s', JSON.stringify(e));
