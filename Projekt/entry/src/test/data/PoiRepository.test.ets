@@ -1,7 +1,8 @@
 import { describe, expect, it } from '@ohos/hypium';
 import { GeoFix } from '../../main/ets/model/GeoFix';
 import { Poi, PoiRole } from '../../main/ets/model/Poi';
-import { PoiRepository } from '../../main/ets/data/PoiRepository';
+import { COARSE_MARGIN_M, coarsePosition, PoiRepository } from '../../main/ets/data/PoiRepository';
+import { distanceM } from '../../main/ets/guide/geo';
 import { FakeCall, FakeReply, FakeTransport, networkError, reply, StringSource } from './Fakes';
 
 const BARBAKAN: GeoFix = { lat: 50.06553, lon: 19.9417, accuracyM: 5, t: 0 };
@@ -61,7 +62,27 @@ export default function poiRepositoryTest() {
       expect(pois.length).assertEqual(2);
       expect(pois[0].name).assertEqual('Barbakan w Krakowie');
       expect((pois[0].distanceM as number) <= (pois[1].distanceM as number)).assertTrue();
-      expect(t.calls[0].url).assertEqual('http://10.0.0.5:8787/v1/pois?lat=50.065530&lon=19.941700&radius=300');
+      // #56: the centre of the ~150 m grid cell, radius + 107 m margin; never the fix itself
+      expect(t.calls[0].url).assertEqual('http://10.0.0.5:8787/v1/pois?lat=50.06580&lon=19.94098&radius=407');
+    });
+
+    it('server_sees_only_the_grid_cell_never_the_fix', 0, async () => {
+      const t = new FakeTransport(() => reply(200, serverBody('live')));
+      const r = new PoiRepository(t, 'http://10.0.0.5:8787/', fixtures(), 1000);
+      await r.near(BARBAKAN, 1000);
+      const url = t.calls[0].url;
+      expect(url.indexOf('50.06553') < 0 && url.indexOf('19.9417&') < 0).assertTrue();
+      expect(url.endsWith('&radius=1000')).assertTrue();   // the margin never pushes past the server's maximum
+    });
+
+    it('coarse_position_is_shared_within_a_cell_and_close_to_the_fix', 0, () => {
+      const a = coarsePosition(BARBAKAN);
+      const b = coarsePosition(NEAR_BARBAKAN);   // ~45 m away, same cell
+      expect(a.lat).assertEqual(b.lat);
+      expect(a.lon).assertEqual(b.lon);
+      expect(distanceM(BARBAKAN, a) <= COARSE_MARGIN_M).assertTrue();
+      const c = coarsePosition(FLORIANSKA);      // ~200 m south: another cell
+      expect(c.lat === a.lat).assertFalse();
     });
 
     it('server_source_cache_is_reported', 0, async () => {

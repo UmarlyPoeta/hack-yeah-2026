@@ -11,6 +11,25 @@ export type PoiSource = 'live' | 'cache' | 'fixture' | 'none';
 export const REFETCH_DISTANCE_M: number = 150;
 export const MAX_POIS: number = 50;
 
+// #56: the server only ever sees the centre of a ~150 m grid cell, never the fix itself. The user can be up to
+// half a cell diagonal (~107 m) away from that centre, so the query radius grows by that margin and the exact
+// distance filter runs here, on the phone.
+export const COARSE_CELL_M: number = 150;
+export const COARSE_MARGIN_M: number = Math.ceil(COARSE_CELL_M * Math.SQRT2 / 2);
+const SERVER_MAX_RADIUS_M: number = 1000;
+const METERS_PER_DEG_LAT: number = 111320;
+
+/** Centre of the grid cell (cellM × cellM) that contains the point. */
+export function coarsePosition(p: GeoPoint, cellM: number = COARSE_CELL_M): GeoPoint {
+  const dLat = cellM / METERS_PER_DEG_LAT;
+  const lat = (Math.floor(p.lat / dLat) + 0.5) * dLat;
+  // longitude step from the row's centre latitude, so every point of a row shares the same columns
+  const dLon = cellM / (METERS_PER_DEG_LAT * Math.cos(lat * Math.PI / 180));
+  const lon = (Math.floor(p.lon / dLon) + 0.5) * dLon;
+  const centre: GeoPoint = { lat: lat, lon: lon };
+  return centre;
+}
+
 interface PoisSource {
   source?: string;
 }
@@ -68,7 +87,9 @@ export class PoiRepository {
     if (this.http === null || this.baseUrl.length === 0) {
       return null;
     }
-    const url = `${this.baseUrl}/v1/pois?lat=${fix.lat.toFixed(6)}&lon=${fix.lon.toFixed(6)}&radius=${Math.round(radiusM)}`;
+    const cell = coarsePosition(fix);
+    const radius = Math.min(SERVER_MAX_RADIUS_M, Math.round(radiusM) + COARSE_MARGIN_M);
+    const url = `${this.baseUrl}/v1/pois?lat=${cell.lat.toFixed(5)}&lon=${cell.lon.toFixed(5)}&radius=${radius}`;
     try {
       const res = await this.http.get(url, this.timeoutMs);
       if (res.status !== 200) {
