@@ -2,6 +2,7 @@
 // exactly the caches the running server reads.
 import path from 'node:path';
 import { JsonCache } from './cache/JsonCache.js';
+import { ClaudeClient } from './llm/ClaudeClient.js';
 import { OllamaClient } from './llm/OllamaClient.js';
 import { loadFixturePois, PoiService } from './pois/PoiService.js';
 import { WikidataClient } from './pois/wikidata.js';
@@ -25,6 +26,16 @@ export function ttsProviders(config) {
   return [];
 }
 
+/** LLM_PROVIDER=claude -> Anthropic API (needs ANTHROPIC_API_KEY), otherwise Bielik in Ollama (needs LLM_MODEL). */
+export function createLlm(config) {
+  if (config.llmProvider === 'claude') {
+    return config.anthropicApiKey ? new ClaudeClient({ apiKey: config.anthropicApiKey, model: config.claudeModel }) : null;
+  }
+  return config.llmModel
+    ? new OllamaClient({ url: config.ollamaUrl, model: config.llmModel, modalKey: config.modalKey, modalSecret: config.modalSecret })
+    : null;
+}
+
 export function createServices(config, log = () => {}) {
   const poiService = new PoiService({
     wiki: new WikipediaClient({ apiUrl: config.wikiApiUrl, timeoutMs: config.wikiTimeoutMs }),
@@ -35,9 +46,7 @@ export function createServices(config, log = () => {}) {
     log,
   });
 
-  const llm = config.llmModel
-    ? new OllamaClient({ url: config.ollamaUrl, model: config.llmModel, modalKey: config.modalKey, modalSecret: config.modalSecret })
-    : null;
+  const llm = createLlm(config);
 
   const providers = ttsProviders(config);
   const tts = providers.length

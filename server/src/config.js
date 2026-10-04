@@ -23,6 +23,10 @@ export function loadConfig(env = process.env) {
     // Bielik runs in Ollama on Modal (server/modal/): every LLM request needs the Modal-Key / Modal-Secret headers.
     ollamaUrl: env.OLLAMA_URL || 'http://localhost:11434',
     llmModel: env.LLM_MODEL || '',
+    // LLM_PROVIDER=claude: Anthropic API instead of Bielik (same prompts, validator and cache layout)
+    llmProvider: env.LLM_PROVIDER === 'claude' ? 'claude' : 'ollama',
+    anthropicApiKey: env.ANTHROPIC_API_KEY || '',
+    claudeModel: env.CLAUDE_MODEL || 'claude-haiku-4-5-20251001',
     modalKey: env.MODAL_KEY || '',
     modalSecret: env.MODAL_SECRET || '',
     ttsProvider: env.TTS_PROVIDER || 'none',

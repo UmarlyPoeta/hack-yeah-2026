@@ -163,7 +163,8 @@ export class SegmentGenerator {
           warnings,
         };
         this.cache.set(id, segment);   // only AI text is cached: after an outage the next request tries the LLM again
-        this.log(`segment ${req.kind} ${req.poiId}: ai, ${countWords(segment.text)} words, attempt ${attempt}`);
+        const usage = this.llm.usage ? `, tokens so far ${this.llm.usage.input} in / ${this.llm.usage.output} out` : '';
+        this.log(`segment ${req.kind} ${req.poiId}: ai, ${countWords(segment.text)} words, attempt ${attempt}${usage}`);
         return segment;
       }
       this.log(`segment ${req.kind} ${req.poiId}: attempt ${attempt} rejected (${check.problems.join('; ')})`);
