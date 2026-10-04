@@ -183,6 +183,10 @@ export class WalkViewModel {
     this.controller?.connect(link, deviceId, lead);
   }
 
+  disconnect(): void {
+    this.controller?.disconnect();
+  }
+
   // legacy name used by the debug page
   pause(): void {
     this.controller?.pause();

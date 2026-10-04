@@ -5,6 +5,9 @@ import { GeoFix } from '../model/GeoPoint';
 import { Poi } from '../model/Poi';
 import { Segment } from '../model/Segment';
 import { parsePois, parseRoute, ParseResult } from '../data/FixtureParser';
+import { LINK_BASE_URL } from '../data/ApiConfig';
+import { NetworkHttpTransport } from '../data/NetworkHttpTransport';
+import { RelayLink } from '../link/RelayLink';
 import { LiveLocationProvider } from '../location/LiveLocationProvider';
 import { LocationProvider } from '../location/LocationProvider';
 import { RouteReplayProvider } from '../location/RouteReplayProvider';
@@ -31,9 +34,43 @@ class TextOnlyOutput implements NarrationOutput {
 struct GuideDebugPage {
   @Local vm: WalkViewModel = new WalkViewModel();
   @Local loadInfo: string = '';
+  @Local room: string = '';
+  @Local linkInfo: string = '';
+  private link: RelayLink | null = null;
+  private linkTimer: number = -1;
 
   aboutToDisappear(): void {
+    this.unlink();
     this.vm.stop();
+  }
+
+  // Pairing through the server relay (#51): the leading device shows a code, the other types it in.
+  private pair(lead: boolean): void {
+    this.unlink();
+    if (lead || this.room.length === 0) {
+      this.room = String(1000 + Math.floor(Math.random() * 9000));
+    }
+    const deviceId = (deviceInfo.deviceType === 'wearable' ? 'watch-' : 'phone-')
+      + String(Math.floor(Math.random() * 100000));
+    const link = new RelayLink(new NetworkHttpTransport(), LINK_BASE_URL, this.room, deviceId);
+    this.link = link;
+    this.vm.connect(link, deviceId, lead);
+    this.linkTimer = setInterval(() => {
+      this.linkInfo = 'SYMULACJA ŁĄCZA przez serwer · pokój ' + this.room + ' · '
+        + (link.online ? 'serwer OK' : 'brak serwera ' + link.lastError);
+    }, 1000);
+  }
+
+  private unlink(): void {
+    if (this.linkTimer >= 0) {
+      clearInterval(this.linkTimer);
+      this.linkTimer = -1;
+    }
+    if (this.link !== null) {
+      this.vm.disconnect();
+      this.link = null;
+    }
+    this.linkInfo = '';
   }
 
   private ctx(): common.UIAbilityContext {
@@ -127,6 +164,23 @@ struct GuideDebugPage {
         .padding(12).borderRadius(8).backgroundColor('#F1F4F8')
         if (this.vm.deepDiveOfferId.length > 0) {
           Button('Opowiedz więcej o: ' + this.vm.deepDiveOfferName).onClick(() => this.vm.acceptDeepDive())
+        }
+        Divider()
+        Text('Drugie urządzenie (najpierw Start na obu)').fontSize(13).fontWeight(FontWeight.Medium)
+        Row({ space: 6 }) {
+          Button('Prowadź').fontSize(12).onClick(() => this.pair(true))
+          TextInput({ placeholder: 'kod', text: this.room })
+            .width(90).type(InputType.Number).maxLength(4)
+            .onChange((v: string) => {
+              this.room = v;
+            })
+          Button('Dołącz').fontSize(12).onClick(() => this.pair(false))
+        }
+        if (this.vm.role === 'FOLLOW') {
+          Button('Przejmij prowadzenie').fontSize(12).onClick(() => this.vm.takeOver())
+        }
+        if (this.linkInfo.length > 0) {
+          Text(this.linkInfo).fontSize(11).fontColor('#B35900')
         }
       }
       .alignItems(HorizontalAlign.Start)

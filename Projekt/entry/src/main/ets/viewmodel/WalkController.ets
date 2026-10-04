@@ -247,7 +247,13 @@ export class WalkController {
     if (m.kind === LinkMessageKind.HELLO && this.role === DeviceRole.LEAD) {
       this.lastSentState = '';          // a new follower: send the full state now
       this.publishState(true);
-    } else if (m.kind === LinkMessageKind.STATE && m.state !== null && this.role === DeviceRole.FOLLOW) {
+    } else if (m.kind === LinkMessageKind.STATE && m.state !== null && this.role !== DeviceRole.LEAD) {
+      if (this.role === DeviceRole.SOLO) {
+        // the LEAD is back after a network gap: follow it again instead of both devices talking
+        this.output.stop();
+        this.role = DeviceRole.FOLLOW;
+        this.applyMute();
+      }
       this.applyRemoteState(m.state);
     } else if (m.kind === LinkMessageKind.CMD && m.cmd !== null && this.role === DeviceRole.LEAD) {
       this.runCommand(m.cmd);

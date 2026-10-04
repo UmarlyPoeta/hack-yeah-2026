@@ -11,7 +11,7 @@ test('parsePois: real fixture loads completely', () => {
   const r = parsePois(poisText);
   assert.equal(r.error, null);
   assert.equal(r.rejected, 0);
-  assert.equal(r.items.length, 77);
+  assert.ok(r.items.length >= 300, `${r.items.length} POIs`);   // 331 since #40 (PR #45)
   const sukiennice = r.items.find((p) => p.name === 'Sukiennice w Krakowie');
   assert.ok(sukiennice);
   assert.ok(sukiennice.summary.length > 0);

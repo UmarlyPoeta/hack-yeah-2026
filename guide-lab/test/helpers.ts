@@ -32,7 +32,7 @@ export function poiAt(id: string, north: number, east: number, importance: numbe
   const p: Poi = {
     id: id, name: id, summary: 'Zdanie pierwsze o ' + id + '. Zdanie drugie. Zdanie trzecie.',
     lat: ORIGIN_LAT + north * M_LAT, lon: ORIGIN_LON + east * M_LON,
-    kind: null, wikidataId: null, imageUrl: null, sourceUrl: 'u',
+    kind: 'building', wikidataId: null, imageUrl: null, sourceUrl: 'u',
     importance: importance, role: role, partOfId: null
   };
   return p;
@@ -58,24 +58,9 @@ export function withNoise(route: GeoFix[], amplitudeM: number, seed: number): Ge
   });
 }
 
-// Demo POIs with the importance/role signals that issue #40 will add to the fixtures.
-// Same formulas as agreed with P3: importance from language versions, role from the name prefix.
-const AREA_PREFIXES: string[] = ['Ulica ', 'Plac ', 'Rynek ', 'Stare Miasto', 'Zaułek ', 'Mury ', 'Planty'];
-
+// Demo POIs: the fixtures carry importance/role/partOfId since issue #40 (PR #45).
 export function demoPoisWithSignals(): Poi[] {
-  const signals = JSON.parse(readFileSync(new URL('fixtures/langlinks-krakow.json', import.meta.url), 'utf8')) as
-    { langlinks: Record<string, number> };
-  return demoPois().map((p: Poi) => {
-    const links = signals.langlinks[p.id] ?? 0;
-    const q: Poi = {
-      id: p.id, name: p.name, summary: p.summary, lat: p.lat, lon: p.lon, kind: p.kind,
-      wikidataId: p.wikidataId, imageUrl: p.imageUrl, sourceUrl: p.sourceUrl,
-      importance: Math.min(1, Math.log(1 + links) / Math.log(41)),
-      role: AREA_PREFIXES.some((a: string) => p.name.startsWith(a)) ? PoiRole.AREA : PoiRole.SIGHT,
-      partOfId: null
-    };
-    return q;
-  });
+  return demoPois();
 }
 
 // Feeds a walk into a director: each fix, then one TICK per second until the next fix
