@@ -181,7 +181,7 @@ export struct DiscoverView {
     .onClick(() => this.onOpen(place))
   }
 
-  // "Jesteś w": the town from Wikipedia, photo on top, intro that unfolds on tap
+  // the town from Wikipedia, photo on top, intro that unfolds on tap
   @Builder
   CityCard(city: City) {
     Column() {
@@ -194,19 +194,12 @@ export struct DiscoverView {
           .backgroundColor($r('app.color.placeholder'))
           .accessibilityText(city.name)
       }
-      Text($r('app.string.city_label'))
-        .fontSize($r('app.float.font_caption'))
-        .fontFamily(Fonts.BOLD)
-        .fontColor($r('app.color.accent'))
-        .letterSpacing(1.5)
-        .textCase(TextCase.UpperCase)
-        .margin({ top: 16 })
       Text(city.name)
         .fontSize($r('app.float.font_hero_title'))
         .fontFamily(Fonts.EXTRABOLD)
         .fontColor($r('app.color.text'))
         .letterSpacing(-0.6)
-        .margin({ top: 4 })
+        .margin({ top: 16 })
       if (city.description.length > 0) {
         Text(city.description)
           .fontSize($r('app.float.font_small'))

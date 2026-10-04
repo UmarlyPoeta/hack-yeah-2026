@@ -45,19 +45,14 @@ export struct SavedView {
         .divider({ strokeWidth: 1, color: $r('app.color.separator') })
       }
 
-      Button({ type: ButtonType.Normal }) {
-        Text($r('app.string.reset'))
-          .fontSize($r('app.float.font_label'))
-          .fontFamily(Fonts.BOLD)
-          .fontColor($r('app.color.danger'))
-      }
-      .width('100%')
-      .height($r('app.float.button_secondary_height'))
-      .borderRadius($r('app.float.radius'))
-      .backgroundColor(Color.Transparent)
-      .border({ width: 1, color: $r('app.color.separator'), radius: $r('app.float.radius') })
-      .margin({ top: 12, bottom: 16 })
-      .onClick(() => this.confirmReset())
+      Text($r('app.string.reset'))
+        .fontSize($r('app.float.font_caption'))
+        .fontFamily(Fonts.SEMIBOLD)
+        .fontColor($r('app.color.text_muted'))
+        .constraintSize({ minHeight: $r('app.float.touch_min') })
+        .alignSelf(ItemAlign.Center)
+        .margin({ bottom: 4 })
+        .onClick(() => this.confirmReset())
     }
     .width('100%')
     .height('100%')

@@ -149,14 +149,6 @@
       "value": "Więcej o tym miejscu"
     },
     {
-      "name": "narration_ai",
-      "value": "Opowiada Bielik"
-    },
-    {
-      "name": "narration_template",
-      "value": "Tekst z Wikipedii"
-    },
-    {
       "name": "no_audio",
       "value": "Bez nagrania"
     },
@@ -211,10 +203,6 @@
     {
       "name": "perm_location_reason",
       "value": "Do znalezienia zabytków w pobliżu."
-    },
-    {
-      "name": "city_label",
-      "value": "Jesteś w"
     },
     {
       "name": "read_more",

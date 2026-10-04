@@ -9,7 +9,7 @@ import { LoadingView } from '../components/place/LoadingView';
 import { BookmarkButton } from '../components/common/BookmarkButton';
 import { splitSentences } from '../guide/Templates';
 import { Place, placeImage, shortName } from '../model/Place';
-import { Segment, SegmentOrigin } from '../model/Segment';
+import { Segment } from '../model/Segment';
 import { fetchText } from '../store/LocalFiles';
 import { PlaceQueue } from '../store/PlaceQueue';
 import { narrationWithVoice } from '../store/Narration';
@@ -196,13 +196,6 @@ struct PlacePage {
         .fontFamily(Fonts.EXTRABOLD)
         .fontColor($r('app.color.text'))
         .letterSpacing(-0.6)
-      Text(this.originLabel())
-        .fontSize($r('app.float.font_caption'))
-        .fontFamily(Fonts.BOLD)
-        .fontColor($r('app.color.accent'))
-        .letterSpacing(1)
-        .textCase(TextCase.UpperCase)
-        .margin({ top: 6 })
 
       if (this.hasAudio()) {
         this.Player()
@@ -388,13 +381,6 @@ struct PlacePage {
 
   private hasAudio(): boolean {
     return this.segment !== null && this.segment.audioUrl !== null;
-  }
-
-  private originLabel(): Resource {
-    if (this.segment?.origin === SegmentOrigin.AI) {
-      return $r('app.string.narration_ai');
-    }
-    return $r('app.string.narration_template');
   }
 
   private progress(): number {
