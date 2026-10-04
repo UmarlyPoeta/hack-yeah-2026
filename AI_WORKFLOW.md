@@ -27,9 +27,13 @@ This project uses AI-assisted development and ships an AI feature. Keep this doc
 | 2026-10-03 | Claude Code / Opus 5.5 | App data layer: `PoiRepository` (HTTP + rawfile fallback, refetch after 150 m), `SegmentService` (deadline, local template, late upgrade, prefetch, max parallel requests), contract models | `Projekt/entry/src/main/ets/{model,data}/*`, `Projekt/entry/src/test/data/*` | `devecocli check arkts` clean, `devecocli build` OK, 17 Hypium local unit tests with fake HTTP pass (suite execution confirmed with a deliberate failing canary); not yet run on the emulator against the real server |
 | 2026-10-03 | Claude Code / Opus 5.5 | Visual redesign of the app UI ("printed museum guide" look) | `Projekt/entry/src/main/ets/{common,components,pages}/*`, bundled Newsreader font (OFL) in `rawfile/fonts/` | Each screen checked on the DevEco emulator (Pura 90, API 20) with screenshots; `check arkts` clean, unit tests pass; screen data is still mock until the guide engine is wired |
 | 2026-10-03 | Claude Code / Opus 5.5 | P2 guide engine: MotionTracker, Itinerary, Stops, Templates, NarrationPlanner, GuideDirector, WalkController/WalkViewModel, debug replay page | `guide-lab/` (TS + Node tests), `Projekt/entry/src/main/ets/{guide,viewmodel,model,data,pages}`, Hypium tests, `docs/ARCHITECTURE.md` §2 | Every module first run on the real demo route and printed as a walk script, rules adjusted on what the data showed (heading baseline, passing at corners, area POIs, Polish case endings); 54 Node tests incl. GPS-noise runs, 33 Hypium tests and the HAP build run in DevEco via hvigor; reviewed by P2 |
+| 2026-10-04 | Claude Code / Opus 5.5 | Spike on emulators (phone + watch) and P1/P2 issues #48, #50, #54, part of #47/#52 | `spike/super-device` test page; `session/WalkSession`, `location/*`, `link/DeviceLink`, two-device roles and handoff in `WalkController`, planner progress/mute/replay, `platform/{LiveViewPublisher,VibratorHaptics,AppLifecycle}`, debug page, docs | Each platform API called on the phone and watch emulators (API 24) and results read from hilog/screenshots; found that `LocationButton` is missing from the public 6.1.1 SDK; 65 Node tests (incl. handoff mid-route without repeats, no position over the link) and 54 Hypium tests, HAP build for phone+wearable via hvigor; device tests left to the team |
 | 2026-10-03 | Claude Code / Opus 5.5 | Generate real demo data | `tools/gen_fixtures.py`, `fixtures/*` | Script run against live Wikipedia API; output inspected (77 POIs, 1.46 km route) |
 | 2026-10-03 | Claude Code / Opus 5.5 | #40 POI signals: importance (langlinks), role and exclusions (Wikidata P31), partOfId (P361), two-range search, fallbacks; fixtures regenerated | `server/src/pois/*`, `server/test/*`, `tools/gen_fixtures.py`, `fixtures/pois-krakow.json`, app rawfile | 51 offline server tests on a recorded Wawel area; live checks at Rynek and Wawel (Mariacki 0.96, castle and cathedral present, parish and archdiocese dropped); P31 classes and P361 links inspected on live Wikidata for all route POIs; app unit tests pass and the app starts on the emulator |
 | 2026-10-03 | Claude Code / Opus 5.5 | Host Bielik on Modal instead of a local Ollama (#6) | `server/modal/bielik_ollama.py`, `server/modal/smoke_test.py`, `server/modal/README.md`, `server/.env.example`, docs | Model files and chat template checked on the Hugging Face model card; Modal API signatures checked in the installed SDK; deploy + smoke test results to be added to #6 |
+| 2026-10-03 | Claude Code / Opus 5.5 | `POST /v1/segment` with Bielik and a grounding validator (#18) | `server/src/{llm,segment,validate}/`, `server/test/segment.test.js`, `server/test/grounding.test.js`, `server/src/index.js`, `server/README.md` | 70 unit tests with a mocked Ollama (bad JSON, timeout, 5xx, hallucinated year, made-up quote, cache, 400/404); live run on Bielik/Modal: first version rejected every segment, validator relaxed to word-order match for quotes while keeping numbers strict, after that 6/6 demo-route segments `origin: ai`; texts read by a human |
+| 2026-10-03 | Claude Code / Opus 5.5 | TTS chain, `/v1/audio`, `npm run warm` (#19) | `server/src/tts/`, `server/src/services.js`, `server/src/segment/walkPlan.js`, `server/scripts/warm.js`, `server/test/tts.test.js`, docs | 83 unit tests (ElevenLabs/Piper mocked, MP3 duration checked against ffprobe on real files); live: warm on 2 stops with Bielik + Piper, 4/4 `ai` with audio, `/v1/audio` served the MP3; first live run showed the Modal cold start timing out, so warm uses a 180 s LLM timeout |
+| 2026-10-04 | Claude Code / Opus 5.5 | AI evaluation and disclosure (#25) | `server/eval/run.js`, `server/eval/results/*`, prompt p3/p4, `cleanText`, templates, this file | Three eval runs (p2, p3, p4) of 30 segments each on the live model; p3 regression found from the numbers and reverted; all 90 texts read; 96 unit tests |
 
 ## Workflow
 
@@ -45,15 +49,43 @@ _To be filled per PR._
 ## Unsuccessful approaches
 
 - Wikidata SPARQL (`query.wikidata.org`) as the live POI source: during the event it was rate-limited to 1 request/minute because of an outage. Switched to the MediaWiki GeoSearch API of pl.wikipedia.org.
+- Verbatim-only quote check in the grounding validator: Bielik quotes almost verbatim (adds a period, joins two sentences, changes one inflection), so the first live run rejected every segment. Replaced by a word-order match (>= 80 % of the quote's words in order) while numbers stay strictly checked.
+- Llama-3 chat template from the Bielik GGUF model card: the model is trained on ChatML; with the card's template answers were cut short and some JSON requests failed with HTTP 500.
+- Prompt p3 (eval #25): forbidding the opening "Słuchaczu" doubled its use (8 -> 17 of 28 AI texts), and asking for a word range made ARRIVAL texts shorter (54 % -> 34 % of the budget). Reverted; the vocative and emoji are removed deterministically in `cleanText`.
 
 ## Known limitations
 
-_To be filled._
+AI narration (P4, from the #25 evaluation):
+- The validator checks quotes and numbers only. It does not catch wrong facts without digits (e.g. a BRIDGE saying a church was "rebuilt in baroque style in the 11th century" while the source says 1611-1618), Roman-numeral centuries, or misspelled words ("Ufunowany", "galaretowy" for "galanteryjny").
+- Texts are shorter than the planner's budget: 62 % of `maxWords` on average (ARRIVAL 63 %, DEEP_DIVE 49 %). The planner times the next segment by the real audio length, so this costs silence, not overlap.
+- DEEP_DIVE is the weakest kind: 80 % AI after retry, the rest falls back to the first sentences of the summary.
+- Modal cold start: after > 2 min idle the first request needs ~80-90 s and ends as a template within the 45 s server timeout. The demo keeps one container warm (`BIELIK_MIN_CONTAINERS=1`) and `npm run warm` pre-generates the demo route.
+- Results vary between runs with the same prompt (first-pass validation 83 % vs 77 % for identical prompt text in p2 and p4, n = 30).
 
 ## AI feature disclosure
 
 - Model or service: **Bielik-4.5B-v3.0-Instruct** (Polish open-source LLM by SpeakLeash and ACK Cyfronet AGH), GGUF Q8_0, served by Ollama on our own **Modal** GPU deployment (`server/modal/`), not a third-party LLM API. Voice: **ElevenLabs** text-to-speech (cloud); offline fallback **Piper** with a `pl_PL` voice.
 - Inference flow: the app sends only a segment request (kind, place id(s), interests, word budget) to our server. The server loads the Wikipedia source text of the place(s), builds a prompt per segment kind, calls Ollama `/api/chat` on Modal with a JSON Schema `format`, validates the result, then synthesises audio and returns text + MP3 URL.
-- Data handling and privacy: the user's location stays on the phone, apart from a coarse `/v1/pois` query to our own server, which does not log positions. LLM inference is local. Only the generated text about a public monument is sent to ElevenLabs, with no location and no user data. The ElevenLabs key lives only in `server/.env`.
-- Failure and fallback behavior: a grounding validator rejects claims whose quotes are not in the source and numbers/years absent from the source; one retry, then a template built from the source. TTS chain ElevenLabs -> Piper -> text only. The app keeps working fully offline with bundled data and templates. The UI labels every segment (AI/template, voice) and links the source (CC BY-SA).
-- Evaluation: `server/eval/` (issue AI-EVAL): first-pass validation rate, generation latency, manual 1-5 rating.
+- Data handling and privacy. Decision (#56): Bielik runs on our own Modal GPU deployment, not locally, so the pitch says "our own deployment of an open Polish model", never "local". The server can point at a local Ollama with one variable (`OLLAMA_URL`, same API), and only then is "local" true. What leaves where:
+
+  | from → to | what is sent | never sent |
+  |---|---|---|
+  | phone → our server `GET /v1/pois` | position and radius (today exact; #56 rounds it to a ~150 m grid cell on the phone) | route, history, user id |
+  | phone → our server `POST /v1/segment` | segment kind, place id(s), interests, word budget | position, route |
+  | our server → pl.wikipedia.org, wikidata.org | centre of a ~100 m grid cell, page and entity ids | exact position, anything about the user |
+  | our server → Bielik on Modal | prompt: Wikipedia text of the place(s), segment kind, word budget, interests | position, place ids of the user's route, user id |
+  | our server → ElevenLabs | the generated text about the monument | position, user data |
+  | server logs | method, path, status, time; segment kind and place id; TTS characters | query strings (they carry the position), prompts, generated text |
+
+  GPS fixes, the walked route and the motion state stay on the phone. The ElevenLabs key and the Modal proxy-auth token live only in `server/.env`.
+- Failure and fallback behavior: a grounding validator requires every number in the text to appear in the source and each claim's quote to match a source passage (>= 80 % of its words in order); bad claims are dropped, the segment fails when more claims are bad than good. One retry with the list of problems, then a template built from the source. Markdown, emoji and the opening vocative are stripped before TTS. TTS chain ElevenLabs -> Piper -> text only. The app keeps working fully offline with bundled data and templates. The UI labels every segment (AI/template, voice) and links the source (CC BY-SA).
+- Evaluation (`npm run eval`, `server/eval/`, issue #25): the 10 most important sights on the demo route (Barbakan ... Kaplica Zygmuntowska) x ARRIVAL (90 words), BRIDGE (50), DEEP_DIVE (250), 30 segments through the real pipeline with an empty cache, Bielik Q8_0 on a Modal T4. Results and all texts: `server/eval/results/` (`eval-*.json`, `review-*.md`).
+
+  | prompt | validation on 1st try | AI after retry | template | median time | max time | words / budget | opening "Słuchaczu" | emoji |
+  |---|---|---|---|---|---|---|---|---|
+  | p2 | 83 % | 90 % | 10 % | 9.1 s | 30.2 s | 60 % | 8 / 27 | 1 |
+  | p3 | 90 % | 93 % | 7 % | 9.7 s | 19.2 s | 49 % | 17 / 28 | 0 |
+  | **p4 (current)** | 77 % | 93 % | 7 % | 9.8 s | 37.9 s | 62 % | 0 / 28 | 0 |
+
+  Per kind (p4): ARRIVAL 100 % AI, median 10.2 s; BRIDGE 100 % AI, 8.0 s; DEEP_DIVE 80 % AI, 14.9 s. Cold start of the Modal container: ~80 s (measured once per run before the samples).
+  Manual review: the texts were read in full by Claude Code (AI-assisted review, not a human rating): fluent Polish, guide-like, grounded in the article in almost all cases; errors found are listed under Known limitations. The `review-*.md` files have empty P/F/G (correctness, fluency, guide style) 1-5 columns for a human rating by the team.

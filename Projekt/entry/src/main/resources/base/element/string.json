@@ -11,6 +11,10 @@
     {
       "name": "EntryAbility_label",
       "value": "Spacer z historią"
+    },
+    {
+      "name": "location_reason",
+      "value": "Przewodnik opowiada o miejscach, obok których właśnie idziesz. Zgoda tylko na ten spacer."
     }
   ]
 }

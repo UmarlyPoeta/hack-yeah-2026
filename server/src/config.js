@@ -26,6 +26,17 @@ export function loadConfig(env = process.env) {
     modalKey: env.MODAL_KEY || '',
     modalSecret: env.MODAL_SECRET || '',
     ttsProvider: env.TTS_PROVIDER || 'none',
+    elevenLabsApiKey: env.ELEVENLABS_API_KEY || '',
+    elevenLabsVoiceId: env.ELEVENLABS_VOICE_ID || '',
+    elevenLabsModelId: env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2',
+    piperBin: env.PIPER_BIN || 'piper',
+    piperVoice: path.resolve(SERVER_DIR, env.PIPER_VOICE || './voices/pl_PL-gosia-medium.onnx'),
+    ffmpegBin: env.FFMPEG_BIN || 'ffmpeg',
+    ttsTimeoutMs: intOr(env.TTS_TIMEOUT_MS, 20_000),
+    // false: template segments get Piper only, ElevenLabs characters go to AI text (free plan: 10k/month)
+    ttsCloudForTemplates: env.TTS_CLOUD_FOR_TEMPLATES === 'true',
+    llmTimeoutMs: intOr(env.LLM_TIMEOUT_MS, 45_000),
+    llmDeepDiveTimeoutMs: intOr(env.LLM_DEEP_DIVE_TIMEOUT_MS, 90_000),
   };
 }
 

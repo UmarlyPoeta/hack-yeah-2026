@@ -1,0 +1,594 @@
+{
+ "meta": {
+  "at": "2026-10-03T22:17:04.936Z",
+  "model": "bielik-4.5b-v3.0-instruct:Q8_0",
+  "promptVersion": "p3",
+  "coldStartMs": 942,
+  "budgets": {
+   "ARRIVAL": 90,
+   "BRIDGE": 50,
+   "DEEP_DIVE": 250
+  }
+ },
+ "total": {
+  "n": 30,
+  "firstPassPct": 90,
+  "aiPct": 93,
+  "templatePct": 7,
+  "medianMs": 9663,
+  "maxMs": 19204,
+  "wordsOfBudgetPct": 49,
+  "avgClaims": 2.8
+ },
+ "byKind": {
+  "ARRIVAL": {
+   "n": 10,
+   "firstPassPct": 90,
+   "aiPct": 90,
+   "templatePct": 10,
+   "medianMs": 8609,
+   "maxMs": 10538,
+   "wordsOfBudgetPct": 34,
+   "avgClaims": 2.7
+  },
+  "BRIDGE": {
+   "n": 10,
+   "firstPassPct": 90,
+   "aiPct": 100,
+   "templatePct": 0,
+   "medianMs": 8445,
+   "maxMs": 17370,
+   "wordsOfBudgetPct": 69,
+   "avgClaims": 2.6
+  },
+  "DEEP_DIVE": {
+   "n": 10,
+   "firstPassPct": 90,
+   "aiPct": 90,
+   "templatePct": 10,
+   "medianMs": 11511,
+   "maxMs": 19204,
+   "wordsOfBudgetPct": 41,
+   "avgClaims": 3
+  }
+ },
+ "samples": [
+  {
+   "kind": "ARRIVAL",
+   "poi": "Barbakan w Krakowie",
+   "fromPoi": null,
+   "origin": "template",
+   "firstPass": false,
+   "warnings": [
+    "validation_retry",
+    "validation_failed"
+   ],
+   "ms": 23042,
+   "maxWords": 90,
+   "words": 26,
+   "claims": 0,
+   "rejections": [
+    "attempt 1 rejected (quote_not_in_source: Jego głównym zadaniem była obrona Bramy Floriańskiej, do której prowadził most z; quote_not_in_source: Do Barbakanu prowadził wejście od strony Kleparza, umożliwiając ostrzeliwanie na)",
+    "attempt 2 rejected (invalid_json)"
+   ],
+   "text": "Barbakan (zwany też Rondlem) – barbakan, najbardziej wysunięta na północ część fortyfikacji miejskich Krakowa. Znajduje się na Plantach, przed Bramą Floriańską, po południowej stronie ul. Basztowej.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Barbakan_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Brama Floriańska w Krakowie",
+   "fromPoi": "Barbakan w Krakowie",
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 11015,
+   "maxWords": 50,
+   "words": 24,
+   "claims": 3,
+   "rejections": [],
+   "text": "Idziemy od Barbakanu, gotyckiej fortyfikacji wzniesionej w 1499 roku, do Bramy Floriańskiej, średniowiecznej bramy miejskiej z XIII wieku, która stanowiła część średniowiecznych murów obronnych.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Barbakan_w_Krakowie",
+    "https://pl.wikipedia.org/wiki/Brama_Floria%C5%84ska_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Barbakan w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 14361,
+   "maxWords": 250,
+   "words": 91,
+   "claims": 2,
+   "rejections": [],
+   "text": "Słuchaczu, zatrzymaj się przy Barbakanie, najbardziej wysuniętej na północ części fortyfikacji miejskich Krakowa, znajdującej się na Plantach, przed Bramą Floriańską. Ta gotycka budowla, wzniesiona w latach 1498–1499 za panowania króla Jana Olbrachta, ma średnicę wewnętrzną 24,40 m i grubość murów sięgającą powyżej 3 m. Otoczona jest siedmioma wieżyczkami, ułożonymi naprzemiennie – okrągłymi i sześciobocznymi. Barbakan był połączony z Bramą Floriańską długą szyją, której mury zawierały hurdycje i otwory strzelnicze, umożliwiając załodze ostrzał z flanki. Do bramy prowadziły dwa mosty zwodzone przerzucone nad fosą o szerokości 24 m i głębokości 3,5 m.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Barbakan_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "ARRIVAL",
+   "poi": "Brama Floriańska w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 6164,
+   "maxWords": 90,
+   "words": 14,
+   "claims": 3,
+   "rejections": [],
+   "text": "Stoimy przed Bramą Floriańską, średniowieczną bramą miejską w Krakowie, która zamyka perspektywę ulicy Floriańskiej.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Brama_Floria%C5%84ska_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Kościół archiprezbiterialny Wniebowzięcia Najświętszej Marii Panny w Krakowie",
+   "fromPoi": "Brama Floriańska w Krakowie",
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 4196,
+   "maxWords": 50,
+   "words": 23,
+   "claims": 1,
+   "rejections": [],
+   "text": "Słuchaczu, idziemy od Bramy Floriańskiej, średniowiecznej bramy miejskiej, która stanowiła część dawnych murów obronnych Krakowa. Obecnie wchodzi w skład trasy turystycznej Murów Obronnych.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Brama_Floria%C5%84ska_w_Krakowie",
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_archiprezbiterialny_Wniebowzi%C4%99cia_Naj%C5%9Bwi%C4%99tszej_Marii_Panny_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Brama Floriańska w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 11511,
+   "maxWords": 250,
+   "words": 42,
+   "claims": 4,
+   "rejections": [],
+   "text": "Słuchaczu, zatrzymaj się przy Bramie Floriańskiej, która jest jednym z najbardziej charakterystycznych elementów średniowiecznych murów miejskich Krakowa. Ta imponująca brama, licząca 34,5 metra wysokości, góruje nad ulicą Pijarską i stanowi pozostałość po dawnych fortyfikacjach, obok takich jak Brama Sławkowska czy Brama Grodzka.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Brama_Floria%C5%84ska_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "ARRIVAL",
+   "poi": "Kościół archiprezbiterialny Wniebowzięcia Najświętszej Marii Panny w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 5765,
+   "maxWords": 90,
+   "words": 23,
+   "claims": 1,
+   "rejections": [],
+   "text": "Stoimy przed gotyckim kościołem Mariackim, który znajduje się na Rynku Głównym w Krakowie. Jest to trójnawowa bazylika z charakterystyczną wieżą, będącą częścią Rynku.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_archiprezbiterialny_Wniebowzi%C4%99cia_Naj%C5%9Bwi%C4%99tszej_Marii_Panny_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Pomnik Adama Mickiewicza w Krakowie",
+   "fromPoi": "Kościół archiprezbiterialny Wniebowzięcia Najświętszej Marii Panny w Krakowie",
+   "origin": "ai",
+   "firstPass": false,
+   "warnings": [
+    "validation_retry"
+   ],
+   "ms": 17370,
+   "maxWords": 50,
+   "words": 41,
+   "claims": 3,
+   "rejections": [
+    "attempt 1 rejected (quote_not_in_source: Po uroczystym odsłonięciu pomnika 26 czerwca 1898, w setnym roku urodzin Adama M; quote_not_in_source: Kościół Mariacki znajduje się na Starym Mieście, przy północno-wschodnim narożni)"
+   ],
+   "text": "Słuchaczu, wędrujemy od Kościoła Mariackiego, gotyckiej świątyni z XIV wieku, ufundowanej przez biskupa Iwona Odrowąża, przez Plac Mariacki, gdzie wznosi się jej imponująca wieża, aż do Pomnika Adama Mickiewicza na Rynku Głównym, odsłoniętego w 1898 roku, w setną rocznicę urodzin wieszcza.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_archiprezbiterialny_Wniebowzi%C4%99cia_Naj%C5%9Bwi%C4%99tszej_Marii_Panny_w_Krakowie",
+    "https://pl.wikipedia.org/wiki/Pomnik_Adama_Mickiewicza_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Kościół archiprezbiterialny Wniebowzięcia Najświętszej Marii Panny w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 10615,
+   "maxWords": 250,
+   "words": 64,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, kościół Mariacki w Krakowie to gotycka bazylika, która od wieków stanowi serce Starego Miasta. Jej historia sięga XIII wieku, kiedy to wzniesiono pierwszy murowany kościół w stylu romańskim, zniszczony później przez najazdy tatarskie. W XIV wieku, dzięki fundacji Mikołaja Wierznyka, powstało obecne prezbiterium, a w latach 1392–1397 mistrz Mikołaj Werner zmienił układ halowy na bazylikowy, wprowadzając duże okna i obniżając mury naw bocznych.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_archiprezbiterialny_Wniebowzi%C4%99cia_Naj%C5%9Bwi%C4%99tszej_Marii_Panny_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "ARRIVAL",
+   "poi": "Pomnik Adama Mickiewicza w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 9906,
+   "maxWords": 90,
+   "words": 23,
+   "claims": 3,
+   "rejections": [],
+   "text": "Stoimy przed Pomnikiem Adama Mickiewicza, potocznie zwanym \"Adasiem\", który znajduje się po wschodniej stronie Rynku Głównego w Krakowie, pomiędzy Sukiennicami a ulicą Sienną.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Pomnik_Adama_Mickiewicza_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Sukiennice w Krakowie",
+   "fromPoi": "Pomnik Adama Mickiewicza w Krakowie",
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 10278,
+   "maxWords": 50,
+   "words": 75,
+   "claims": 3,
+   "rejections": [],
+   "text": "Idziemy od Pomnika Adama Mickiewicza, który powstał w 1898 roku, upamiętniając setny rok urodzin wieszcza, i stoi w miejscu, gdzie kiedyś znajdowały się drewniane kramy sukiennicze. Pomnik Rygierra, zniszczony przez Niemców w 1940, został odbudowany w 1955. Teraz kierujemy się w stronę Sukiennic, które pierwotnie były drewnianymi kramami z ulicką pośrodku, a z czasem przekształciły się w gotyckie, a następnie renesansowe sukiennice. Obecna forma pochodzi z lat 1556-1559 i została później przebudowana w XIX wieku.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Pomnik_Adama_Mickiewicza_w_Krakowie",
+    "https://pl.wikipedia.org/wiki/Sukiennice_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Pomnik Adama Mickiewicza w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 10981,
+   "maxWords": 250,
+   "words": 52,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, Pomnik Adama Mickiewicza w Krakowie, zwany potocznie \"Adasciem\", jest jednym z najbardziej rozpoznawalnych symboli miasta. Znajduje się po wschodniej stronie Rynku Głównego, pomiędzy Sukiennicami a wylotem ulicy Siennej. Pomnik został odsłonięty 26 czerwca 1898 roku, w setną rocznicę urodzin wieszcza, i od razu stał się ulubionym miejscem spotkań krakowian i turystów.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Pomnik_Adama_Mickiewicza_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "ARRIVAL",
+   "poi": "Sukiennice w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 10538,
+   "maxWords": 90,
+   "words": 75,
+   "claims": 3,
+   "rejections": [],
+   "text": "Stoimy przed zabytkowymi Sukiennicami w Krakowie, które są jednym z najbardziej rozpoznawalnych budynków na Rynku Głównym. Sukiennice, będące niegdyś sukiennicami, ulegały wielu przemianom na przestrzeni wieków, ale ich obecny kształt niewiele przypomina pierwotne kramy. Pierwsze kamienne sukiennice powstały w 1257 roku, a w XIV wieku zastąpiono je gotyckimi, które przetrwały do 1555 roku, kiedy spłonęły. W latach 1556-1559 odbudowano je w stylu renesansowym, a w XIX wieku przeszły kolejną przebudowę, zachowując jednak wiele elementów historycznych.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Sukiennice_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Kościół św. Wojciecha w Krakowie (Rynek Główny)",
+   "fromPoi": "Sukiennice w Krakowie",
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 7045,
+   "maxWords": 50,
+   "words": 22,
+   "claims": 2,
+   "rejections": [],
+   "text": "Słuchaczu, idziemy od Sukiennic, gdzie w średniowieczu handlowano suknem, do Kościoła św. Wojciecha, który pierwotnie był romański, a obecnie w stylu barokowym.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Sukiennice_w_Krakowie",
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Bw._Wojciecha_w_Krakowie_(Rynek_G%C5%82%C3%B3wny)"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Sukiennice w Krakowie",
+   "fromPoi": null,
+   "origin": "template",
+   "firstPass": false,
+   "warnings": [
+    "validation_retry",
+    "validation_failed"
+   ],
+   "ms": 47165,
+   "maxWords": 250,
+   "words": 15,
+   "claims": 0,
+   "rejections": [
+    "attempt 1 rejected (quote_not_in_source: Sukiennice w Krakowie powstały w 1257 roku, kiedy książę Bolesław Wstydliwy zobo; quote_not_in_source: Gotyckie Sukiennice z XIV wieku, wystawione przez Kazimierza Wielkiego, miały ha; quote_not_in_source: W 1555 roku gotyckie Sukiennice spłonęły, ale odbudowano je w stylu renesansowym; quote_not_in_source: W XIX wieku, w latach 1875-1879, sukiennice zostały przebudowane według projektu)",
+    "attempt 2 rejected (quote_not_in_source: książę Bolesław Wstydliwy zobowiązał się do budowy kamiennych kramów sukiennych; quote_not_in_source: Gotyckie Sukiennice z XIV wieku, wystawione przez Kazimierza Wielkiego, miały ha; quote_not_in_source: W 1555 roku gotyckie Sukiennice spłonęły)"
+   ],
+   "text": "Sukiennice – zabytkowy budynek sukiennic znajdujący się w Krakowie na Starym Mieście, pośrodku Rynku Głównego.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Sukiennice_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "ARRIVAL",
+   "poi": "Kościół św. Wojciecha w Krakowie (Rynek Główny)",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 7770,
+   "maxWords": 90,
+   "words": 13,
+   "claims": 3,
+   "rejections": [],
+   "text": "Stoimy przed Kościołem św. Wojciecha, zabytkowym kościołem rektoralnym na Rynku Głównym w Krakowie.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Bw._Wojciecha_w_Krakowie_(Rynek_G%C5%82%C3%B3wny)"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Kościół Świętych Apostołów Piotra i Pawła w Krakowie",
+   "fromPoi": "Kościół św. Wojciecha w Krakowie (Rynek Główny)",
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 6040,
+   "maxWords": 50,
+   "words": 40,
+   "claims": 2,
+   "rejections": [],
+   "text": "Słuchaczu, idziemy od Kościoła św. Wojciecha, który powstał w XI wieku, a w XVII wieku został przebudowany w stylu barokowym, do Kościoła Świętych Apostołów Piotra i Pawła, pierwszej barokowej budowli w Krakowie, ufundowanej przez Zygmunta III Wazę w 1597 roku.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Bw._Wojciecha_w_Krakowie_(Rynek_G%C5%82%C3%B3wny)",
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Awi%C4%99tych_Aposto%C5%82%C3%B3w_Piotra_i_Paw%C5%82a_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Kościół św. Wojciecha w Krakowie (Rynek Główny)",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 15539,
+   "maxWords": 250,
+   "words": 165,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, zatrzymajmy się przy Kościele św. Wojciecha na Rynku Głównym w Krakowie, by odkryć jego fascynującą historię. Najstarsze początki sięgają XI wieku, kiedy to w tym miejscu powstał drewniany kościółek, prawdopodobnie z inicjatywy św. Wojciecha, który miał tu głosić kazania. W późniejszych wiekach zastąpiono go romańskim kościołem, którego mury są widoczne w dolnych partiach obecnej budowli. Barokowy blask nadszedł w 1618 roku, kiedy to kościół został przebudowany w stylu barokowym pod kierunkiem prof. Walentego Fontany i ks. Sebastiana Mirosza. Podwyższono ściany, dodano kopułę i otynkowano romańskie mury, tworząc harmonijną całość. Wnętrze i wyposażenie to prawdziwa perła baroku z ok. połowy XVIII wieku. W ołtarzu głównym znajduje się XVII-wieczna kopia obrazu Matki Boskiej Większej, a kopuła jest polichromowana przez Eugeniusza Czuhorskiego. W tęczy wisi XV-wieczny krucyfiks, a w kaplicy Kadłubka – obraz przypisywany Szymonowi Czechowiczowi. Podziemia kryją ekspozycję poświęconą historii Rynku Głównego, dając wgląd w przeszłość tego tętniącego życiem miejsca. Czy chciałbyś dowiedzieć się więcej o tym wyjątkowym kościele, który od wieków stoi na Rynku Głównym?",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Bw._Wojciecha_w_Krakowie_(Rynek_G%C5%82%C3%B3wny)"
+   ]
+  },
+  {
+   "kind": "ARRIVAL",
+   "poi": "Kościół Świętych Apostołów Piotra i Pawła w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 7399,
+   "maxWords": 90,
+   "words": 22,
+   "claims": 3,
+   "rejections": [],
+   "text": "Stoimy przed Kościołem Świętych Apostołów Piotra i Pawła, pierwszą barokową budowlą w Krakowie, ufundowaną przez króla Zygmunta III Wazę w 1597 roku.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Awi%C4%99tych_Aposto%C5%82%C3%B3w_Piotra_i_Paw%C5%82a_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Kościół św. Andrzeja w Krakowie",
+   "fromPoi": "Kościół Świętych Apostołów Piotra i Pawła w Krakowie",
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 7227,
+   "maxWords": 50,
+   "words": 31,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, idziemy od Kościoła Świętych Apostołów Piotra i Pawła, pierwszej barokowej świątyni w Krakowie, ufundowanej przez Zygmunta III Wazę, do Kościoła św. Andrzeja, romańskiej bazyliki z XII wieku, zbudowanej przez Sieciecha.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Awi%C4%99tych_Aposto%C5%82%C3%B3w_Piotra_i_Paw%C5%82a_w_Krakowie",
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Bw._Andrzeja_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Kościół Świętych Apostołów Piotra i Pawła w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 10743,
+   "maxWords": 250,
+   "words": 95,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, kościół Świętych Apostołów Piotra i Pawła w Krakowie to prawdziwa perła barokowej architektury, pierwsza tego typu budowla w mieście. Zbudowany z inicjatywy króla Zygmunta III Wazy, kościół ten jest świadectwem potęgi i mecenatu jezuitów. Jego fasada, przypominająca rzymskie kościoły, zdobiona jest posągami świętych i godłem zakonu, a nad portalem głównym widnieje herb fundatora. Wnętrze zdobią stiukowe dekoracje, w tym późnobarokowy ołtarz główny z obrazem wręczienia kluczy św. Piotrowi. W prezbiterium znajdują się posągi patronów Polski, a w nawach bocznych – kaplice z nagrobkami i pomnikami, w tym pomnik Piotra Skargi przeniesiony z katedry wawelskiej.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Awi%C4%99tych_Aposto%C5%82%C3%B3w_Piotra_i_Paw%C5%82a_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "ARRIVAL",
+   "poi": "Kościół św. Andrzeja w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 8609,
+   "maxWords": 90,
+   "words": 43,
+   "claims": 3,
+   "rejections": [],
+   "text": "Stoimy przed Kościołem św. Andrzeja w Krakowie, który został zbudowany w latach 1079–1098 z fundacji palatyna Sieciecha. Początkowo był główną świątynią osady Okół, a później przeszedł pod opiekę benedyktynów z Tyńca. W 1320 roku kościół otrzymały klaryski, które wzniosły dla nich zabudowania klasztorne.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Bw._Andrzeja_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Dzwon Zygmunt",
+   "fromPoi": "Kościół św. Andrzeja w Krakowie",
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 8174,
+   "maxWords": 50,
+   "words": 29,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, wędrujemy od Kościoła św. Andrzeja, który powstał w XI wieku jako główna świątynia osady Okół, a później stał się kościołem klarysek, by dotrzeć do Dzwonu Zygmunta na Wawelu.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Bw._Andrzeja_w_Krakowie",
+    "https://pl.wikipedia.org/wiki/Dzwon_Zygmunt"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Kościół św. Andrzeja w Krakowie",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 16471,
+   "maxWords": 250,
+   "words": 177,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, kościół św. Andrzeja w Krakowie to zabytkowy, romański kościół klasztorny klarysek, który zachował swoją pierwotną bryłę obronną. Zbudowany w latach 1079–1098, był główną świątynią osady Okół i bronił się przed Mongołami w 1241 roku. W 1320 roku kościół przejęły klaryski, a w jego sąsiedztwie wzniesiono zabudowania klasztorne z fundacji króla Władysława Łokietka. Kościół ma charakter obronny i jest dwuwieżową bazyliką typu saskiego, z krótkim, trójnawowym korpusem, transeptem i prezbiterium zamkniętym apsydą. Jego kamienne mury tworzą naprężne warstwy wapienia i piaskowca, a nad nawami wznoszą się empor. Fasada zachodnia z dwoma wieżami kontrastuje z romańską bryłą, a wnętrze zdobią barokowe polichromie i fragmenty średniowiecznych malowideł. W północnej wieży znajduje się podpis XII-wiecznego muratora, a w prezbiterium – glorya św. Klary, Salomei i Kingi oraz koronacja Matki Bożej. W skarbcu klasztornym przechowywane są cenne zabytki, takie jak XIII-wieczne relikwiarze, mozaikowy obraz Matki Bożej z XII/XIII wieku i najstarsze figurki jasełkowe z XIV wieku. Kościół św. Andrzeja to nie tylko miejsce kultu religijnego, ale także świadectwo historii i architektury Krakowa, zachowujące swój romański charakter mimo późniejszych przebudów i barokizacji.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Ko%C5%9Bci%C3%B3%C5%82_%C5%9Bw._Andrzeja_w_Krakowie"
+   ]
+  },
+  {
+   "kind": "ARRIVAL",
+   "poi": "Dzwon Zygmunt",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 9663,
+   "maxWords": 90,
+   "words": 31,
+   "claims": 3,
+   "rejections": [],
+   "text": "Stoimy przed Dzwonem Zygmunt, najsłynniejszym polskim dzwonem, znajdującym się na Wieży Zygmuntowskiej w katedrze wawelskiej w Krakowie. Ufunowany przez Zygmunta I Starego, dzwon ten był największym polskim dzwonem do 1999 roku.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Dzwon_Zygmunt"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Kaplica Zygmuntowska na Wawelu",
+   "fromPoi": "Dzwon Zygmunt",
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 8799,
+   "maxWords": 50,
+   "words": 33,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, idziemy od Dzwonu Zygmunta, największego polskiego dzwonu, który od 1520 roku rozbrzmiewał z Wieży Zygmuntowskiej na Wawelu, aż do Kaplicy Zygmuntowskiej, renesansowego mauzoleum królowej Barbary Zapolyi i jej syna Zygmunta II Augusta.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Dzwon_Zygmunt",
+    "https://pl.wikipedia.org/wiki/Kaplica_Zygmuntowska_na_Wawelu"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Dzwon Zygmunt",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 19204,
+   "maxWords": 250,
+   "words": 200,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, Dzwon Zygmunt to najsłynniejszy polski dzwon, który od wieków rozbrzmiewa nad Krakowem. Ufundowany przez Zygmunta I Starego, znajduje się na Wieży Zygmuntowskiej w katedrze wawelskiej. Choć nie znamy dokładnych powodów jego powstania, dzwon ten symbolizuje potęgę i dumę królewską. W 1520 roku, po ukończeniu odlewu, dzwon został przetransportowany na wzgórze Wawelskie i umieszczony na wieży, gdzie odzywa się do dziś. Dzwon Zygmunt był największym polskim dzwonem do 1999 roku, kiedy to przerósł go wagą i rozmiarem dzwon z Lichenia. W ciągu wieków dzwon ten towarzyszył najważniejszym wydarzeniom w historii Polski, w tym koronowaniom królów, pogrzebom i zwycięstwom militarnym. W XIX wieku, po III rozbiorze Polski, dzwon odzywał się w trakcie świąt kościelnych i państwowych, a także podczas pogrzebów znanych postaci, takich jak książę Józef Poniatowski czy Adam Mickiewicz. W XX wieku dzwon Zygmunt towarzyszył ważnym uroczystościom kościelnym i państwowym, w tym wizytom prezydentów Polski. Dzwon Zygmunt ma również swoją unikalną historię techniczną. W XIX wieku jego serce pękało trzykrotnie, a w 1924 roku zamontowano na nim nowe łożyska kulkowe, co ułatwiło jego kołysanie. Dzwon ten jest nie tylko symbolem religijnym, ale także ważnym elementem dziedzictwa narodowego. Czy chciałbyś dowiedzieć się więcej o konkretnych wydarzeniach, podczas których dzwon Zygmunt rozbrzmiewał?",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Dzwon_Zygmunt"
+   ]
+  },
+  {
+   "kind": "ARRIVAL",
+   "poi": "Kaplica Zygmuntowska na Wawelu",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 8789,
+   "maxWords": 90,
+   "words": 31,
+   "claims": 2,
+   "rejections": [],
+   "text": "Stoimy przed Kaplicą Zygmuntowską, znaną również jako Królewska, Rorantstów i Jagiellońska, znajdującą się w katedrze wawelskiej. Jest to jedna z 19 kaplic w katedrze i przykład renesansowej architektury florenckiej poza Włochami.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Kaplica_Zygmuntowska_na_Wawelu"
+   ]
+  },
+  {
+   "kind": "BRIDGE",
+   "poi": "Dzwon Zygmunt",
+   "fromPoi": "Kaplica Zygmuntowska na Wawelu",
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 8445,
+   "maxWords": 50,
+   "words": 27,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, idziemy od Kaplicy Zygmuntowskiej na Wawelu, gdzie znajduje się pierwsza w pełni renesansowa budowla w Polsce, do Dzwonu Zygmunta, który od wieków rozbrzmiewa w katedrze wawelskiej.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Kaplica_Zygmuntowska_na_Wawelu",
+    "https://pl.wikipedia.org/wiki/Dzwon_Zygmunt"
+   ]
+  },
+  {
+   "kind": "DEEP_DIVE",
+   "poi": "Kaplica Zygmuntowska na Wawelu",
+   "fromPoi": null,
+   "origin": "ai",
+   "firstPass": true,
+   "warnings": [],
+   "ms": 8729,
+   "maxWords": 250,
+   "words": 39,
+   "claims": 3,
+   "rejections": [],
+   "text": "Słuchaczu, zatrzymajmy się przy Kaplicy Zygmuntowskiej na Wawelu, zwanej także Królewską, Rorantystów i Jagiellońską, która jest jednym z najwspanialszych przykładów renesansowej architektury w Polsce. Zbudowana na planie centralnym, z bogatą symboliką i dekoracjami, ta kaplica jest prawdziwym klejnotem Wawelu.",
+   "sourceUrls": [
+    "https://pl.wikipedia.org/wiki/Kaplica_Zygmuntowska_na_Wawelu"
+   ]
+  }
+ ],
+ "systemPrompt": "Jesteś przewodnikiem miejskim, który idzie razem ze słuchaczem po Krakowie i mówi mu do ucha. Piszesz po polsku tekst do przeczytania na głos: krótkie zdania, naturalnie, ciepło, w drugiej osobie albo „my”. Zwykły tekst: bez Markdownu, gwiazdek, nagłówków, list, numeracji, nawiasów i emotikonów. Daty zapisuj cyframi tak jak w źródle. Nie zaczynaj od „Słuchaczu” i nie zadawaj słuchaczowi pytań. Używasz WYŁĄCZNIE faktów ze ŹRÓDŁA. Opowiadasz własnymi słowami, nie przepisuj źródła zdanie po zdaniu. Nie podawaj żadnej liczby ani daty, której nie ma w źródle. Jeśli źródło czegoś nie mówi, pomiń to. Dla 2–4 najważniejszych faktów dodaj w polu claims obiekt {text, quote}: quote to DOSŁOWNY fragment jednego zdania źródła (5–12 słów), skopiowany znak w znak. Nie łącz zdań i nie dopisuj nic od siebie. Odpowiadasz wyłącznie JSON-em zgodnym ze schematem."
+}

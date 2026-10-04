@@ -32,6 +32,5 @@ Only the tests use Node APIs (`node:fs`, `node:test`); `src/` does not.
 | `src/guide/GuideDirector.ts` | events in, actions out |
 | `src/viewmodel/WalkController.ts` | ports to server/player/clock, screen state |
 
-`test/fixtures/langlinks-krakow.json` is temporary: importance signals for the demo route until issue #40 adds them to `fixtures/`.
 
 The same files live in `Projekt/entry/src/main/ets/` as `.ets`; keep both in sync (copy, rename).
