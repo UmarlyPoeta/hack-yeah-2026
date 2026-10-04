@@ -1,144 +1,201 @@
-// "Mapa" tab: static map of the route with numbered stops, drawn on a Canvas in the style of
-// docs/design/w-drodze.html. Preview only (no Map Kit, no navigation).
+// "Mapa" tab: dark Leaflet map (rawfile/map/index.html in ArkWeb) with the queued and saved landmarks.
+// Tapping a dot selects the landmark: its name shows next to the dot and a card opens at the bottom.
+import { webview } from '@kit.ArkWeb';
+import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Fonts } from '../../common/Fonts';
-import { Route } from '../../model/Route';
+import { distanceM } from '../../guide/geo';
+import { distanceLabel, Place, placeImage, shortName } from '../../model/Place';
+import { PrimaryButton } from '../common/Controls';
 
-const PADDING: number = 48;
+interface MapPlace {
+  id: string;
+  name: string;
+  lat: number;
+  lon: number;
+}
+
+/** Object injected into the page as window.tourBridge. */
+class MapBridge {
+  onSelectId: (id: string) => void = () => {};
+
+  onSelect(id: string): void {
+    this.onSelectId(id);
+  }
+}
 
 @Component
 export struct MapView {
-  route: Route | null = null;
+  onOpen: (place: Place) => void = () => {};
+  @StorageLink('queue') @Watch('pushPlaces') queue: Place[] = [];
+  @StorageLink('saved') @Watch('pushPlaces') saved: Place[] = [];
+  @StorageProp('userLat') @Watch('pushUser') userLat: number = 0;
+  @StorageProp('userLon') userLon: number = 0;
   @StorageProp('topInset') topInset: number = 0;
-  private settings: RenderingContextSettings = new RenderingContextSettings(true);
-  private ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
+  @State selectedId: string = '';
+  private controller: webview.WebviewController = new webview.WebviewController();
+  private bridge: MapBridge = new MapBridge();
+  private ready: boolean = false;
+
+  aboutToAppear(): void {
+    this.bridge.onSelectId = (id: string) => {
+      this.selectedId = id;
+    };
+    // the landmark on the "Odkrywaj" photo is the one selected at first
+    this.selectedId = this.queue.length > 0 ? this.queue[0].id : '';
+  }
 
   build() {
-    Stack({ alignContent: Alignment.TopStart }) {
-      Canvas(this.ctx)
+    Stack({ alignContent: Alignment.Bottom }) {
+      Web({ src: $rawfile('map/index.html'), controller: this.controller })
         .width('100%')
         .height('100%')
-        .backgroundColor($r('app.color.map_bg'))
-        .onReady(() => this.draw())
+        .javaScriptAccess(true)
+        .domStorageAccess(true)
+        .backgroundColor($r('app.color.ink'))
+        .javaScriptProxy({
+          object: this.bridge,
+          name: 'tourBridge',
+          methodList: ['onSelect'],
+          controller: this.controller,
+        })
+        .onConsole((event) => {
+          hilog.info(0x0000, 'MapWeb', '%{public}s', event?.message.getMessage() ?? '');
+          return false;
+        })
+        .onPageEnd(() => {
+          this.ready = true;
+          this.pushUser();
+          this.pushPlaces();
+        })
 
-      Column({ space: 2 }) {
+      Row() {
         Text($r('app.string.map_title'))
           .fontSize($r('app.float.font_title'))
           .fontFamily(Fonts.EXTRABOLD)
-          .fontColor($r('app.color.text'))
-        Text(this.route !== null ? `${this.route.title} · ${this.route.distanceLabel()}` : '')
+          .fontColor($r('app.color.on_ink'))
+        Blank()
+        Text(this.countLabel())
           .fontSize($r('app.float.font_small'))
-          .fontFamily(Fonts.MEDIUM)
-          .fontColor($r('app.color.text_secondary'))
-        Text($r('app.string.map_hint'))
-          .fontSize($r('app.float.font_caption'))
-          .fontFamily(Fonts.REGULAR)
-          .fontColor($r('app.color.text_muted'))
+          .fontFamily(Fonts.SEMIBOLD)
+          .fontColor($r('app.color.on_ink_secondary'))
       }
-      .alignItems(HorizontalAlign.Start)
-      .padding({ left: 16, right: 16, top: 12, bottom: 12 })
-      .borderRadius(20)
-      .backgroundColor($r('app.color.surface'))
-      .shadow({ radius: 10, color: $r('app.color.shadow_card'), offsetY: 2 })
-      .margin({ left: 12, right: 12, top: this.topInset + 8 })
+      .width('100%')
+      .padding({ left: 20, right: 20, top: this.topInset + 12, bottom: 14 })
+      .backgroundColor($r('app.color.ink'))
+      .border({ width: { bottom: 1 }, color: { bottom: $r('app.color.ink_line') } })
+      .position({ x: 0, y: 0 })
+
+      Column({ space: 12 }) {
+        Row() {
+          Blank()
+          Button({ type: ButtonType.Normal }) {
+            Image($r('app.media.ic_my_location_light')).width(20).height(20)
+          }
+          .width($r('app.float.square_button_size'))
+          .height($r('app.float.square_button_size'))
+          .borderRadius($r('app.float.radius'))
+          .backgroundColor($r('app.color.ink_raised'))
+          .border({ width: 1, color: $r('app.color.ink_line'), radius: $r('app.float.radius') })
+          .accessibilityText($r('app.string.a11y_my_location'))
+          .onClick(() => this.run('window.tour.centerOnUser()'))
+        }
+        .width('100%')
+
+        if (this.selected() !== null) {
+          this.SelectedCard(this.selected() as Place)
+        }
+      }
+      .width('100%')
+      .padding({ left: 12, right: 12, bottom: 12 })
     }
     .width('100%')
     .height('100%')
+    .backgroundColor($r('app.color.ink'))
   }
 
-  private draw(): void {
-    const c = this.ctx;
-    const route = this.route;
-    if (route === null || c.width <= 0) {
+  @Builder
+  SelectedCard(place: Place) {
+    Column({ space: 12 }) {
+      Row({ space: 12 }) {
+        Image(placeImage(place))
+          .width($r('app.float.thumb_size'))
+          .height($r('app.float.thumb_size'))
+          .objectFit(ImageFit.Cover)
+          .borderRadius($r('app.float.radius'))
+          .backgroundColor($r('app.color.ink_line'))
+        Column({ space: 4 }) {
+          Text(shortName(place))
+            .fontSize($r('app.float.font_place'))
+            .fontFamily(Fonts.BOLD)
+            .fontColor($r('app.color.on_ink'))
+            .maxLines(2)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+          Text(this.distance(place))
+            .fontSize($r('app.float.font_small'))
+            .fontFamily(Fonts.MEDIUM)
+            .fontColor($r('app.color.on_ink_secondary'))
+        }
+        .alignItems(HorizontalAlign.Start)
+        .layoutWeight(1)
+      }
+      .width('100%')
+      PrimaryButton($r('app.string.listen'), false, () => this.onOpen(place))
+    }
+    .width('100%')
+    .padding(12)
+    .backgroundColor($r('app.color.ink_raised'))
+    .border({ width: { left: 2 }, color: { left: $r('app.color.accent_bright') } })
+    .transition(TransitionEffect.OPACITY.combine(TransitionEffect.translate({ y: 24 })).animation({ duration: 200 }))
+  }
+
+  private all(): Place[] {
+    const out: Place[] = this.queue.slice();
+    for (const p of this.saved) {
+      if (!out.some((q: Place) => q.id === p.id)) {
+        out.push(p);
+      }
+    }
+    return out;
+  }
+
+  private selected(): Place | null {
+    return this.all().find((p: Place) => p.id === this.selectedId) ?? null;
+  }
+
+  pushPlaces(): void {
+    const places: MapPlace[] = this.all().map((p: Place) => {
+      const m: MapPlace = { id: p.id, name: shortName(p), lat: p.lat, lon: p.lon };
+      return m;
+    });
+    this.run(`window.tour.setPlaces(${JSON.stringify(places)}, ${JSON.stringify(this.selectedId)})`);
+  }
+
+  pushUser(): void {
+    if (this.userLat !== 0 || this.userLon !== 0) {
+      this.run(`window.tour.setUser(${this.userLat}, ${this.userLon})`);
+    }
+  }
+
+  private run(script: string): void {
+    if (!this.ready) {
       return;
     }
-    const w = c.width;
-    const h = c.height;
-    c.clearRect(0, 0, w, h);
-
-    // background: a loose grid of town blocks like on the walk map
-    c.fillStyle = this.col($r('app.color.map_block'));
-    for (let x = -20; x < w; x += 74) {
-      for (let y = 0; y < h; y += 58) {
-        c.fillRect(x, y, 64, 48);
-      }
-    }
-
-    // project the stops into the free area below the title card
-    const top = this.topInset + 110;
-    const bottom = h - 40;
-    let minLat = 90;
-    let maxLat = -90;
-    let minLon = 180;
-    let maxLon = -180;
-    for (const s of route.stops) {
-      minLat = Math.min(minLat, s.lat);
-      maxLat = Math.max(maxLat, s.lat);
-      minLon = Math.min(minLon, s.lon);
-      maxLon = Math.max(maxLon, s.lon);
-    }
-    const k = Math.cos(maxLat * Math.PI / 180);
-    const spanX = Math.max((maxLon - minLon) * k, 1e-6);
-    const spanY = Math.max(maxLat - minLat, 1e-6);
-    const scale = Math.min((w - 2 * PADDING) / spanX, (bottom - top - PADDING) / spanY);
-    const offX = (w - spanX * scale) / 2;
-    const offY = top + (bottom - top - spanY * scale) / 2;
-    const xs: number[] = route.stops.map((s) => offX + (s.lon - minLon) * k * scale);
-    const ys: number[] = route.stops.map((s) => offY + (maxLat - s.lat) * scale);
-
-    // route: white casing, then the accent line
-    this.polyline(xs, ys, this.col($r('app.color.map_road')), 11);
-    this.polyline(xs, ys, this.col($r('app.color.accent')), 6);
-
-    // numbered stops with names
-    for (let i = 0; i < route.stops.length; i++) {
-      c.beginPath();
-      c.arc(xs[i], ys[i], 13, 0, Math.PI * 2);
-      c.fillStyle = this.col($r('app.color.map_road'));
-      c.fill();
-      c.lineWidth = 2.5;
-      c.strokeStyle = this.col($r('app.color.accent'));
-      c.stroke();
-      c.fillStyle = this.col($r('app.color.accent'));
-      c.font = `12vp ${Fonts.BOLD}`;
-      c.textAlign = 'center';
-      c.textBaseline = 'middle';
-      c.fillText(`${route.stops[i].num}`, xs[i], ys[i] + 0.5);
-
-      // label on the side away from the nearest other stop, so neighbouring labels do not collide
-      let nearest = -1;
-      let best = Number.MAX_VALUE;
-      for (let j = 0; j < xs.length; j++) {
-        const d = Math.hypot(xs[j] - xs[i], ys[j] - ys[i]);
-        if (j !== i && d < best) {
-          best = d;
-          nearest = j;
-        }
-      }
-      const labelLeft = nearest >= 0 && Math.abs(xs[nearest] - xs[i]) > 20 ? xs[nearest] > xs[i] : xs[i] > w * 0.55;
-      c.font = `12vp ${Fonts.SEMIBOLD}`;
-      c.textAlign = labelLeft ? 'right' : 'left';
-      c.fillStyle = this.col($r('app.color.map_label_place'));
-      c.fillText(route.stops[i].name, xs[i] + (labelLeft ? -20 : 20), ys[i]);
-    }
+    this.controller.runJavaScript(script).catch(() => {
+      // the page is reloading; onPageEnd pushes everything again
+    });
   }
 
-  private polyline(xs: number[], ys: number[], color: string, width: number): void {
-    const c = this.ctx;
-    c.strokeStyle = color;
-    c.lineWidth = width;
-    c.lineCap = 'round';
-    c.lineJoin = 'round';
-    c.beginPath();
-    c.moveTo(xs[0], ys[0]);
-    for (let i = 1; i < xs.length; i++) {
-      c.lineTo(xs[i], ys[i]);
+  private distance(place: Place): string {
+    if (this.userLat === 0 && this.userLon === 0) {
+      return '';
     }
-    c.stroke();
+    const ctx = this.getUIContext().getHostContext();
+    const d = distanceLabel(distanceM({ lat: this.userLat, lon: this.userLon }, place));
+    return ctx === undefined ? d : ctx.resourceManager.getStringSync($r('app.string.from_you').id, d);
   }
 
-  /** Colour token from resources as a Canvas colour string. */
-  private col(res: Resource): string {
-    const argb = this.getUIContext().getHostContext()?.resourceManager.getColorSync(res.id) ?? 0xFF000000;
-    return `rgba(${(argb >>> 16) & 0xFF}, ${(argb >>> 8) & 0xFF}, ${argb & 0xFF}, ${(((argb >>> 24) & 0xFF) / 255).toFixed(3)})`;
+  private countLabel(): string {
+    const ctx = this.getUIContext().getHostContext();
+    return ctx === undefined ? '' : ctx.resourceManager.getStringSync($r('app.string.map_nearby').id, this.queue.length);
   }
 }

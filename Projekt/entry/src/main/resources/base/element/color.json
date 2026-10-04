@@ -21,8 +21,8 @@
       "value": "#134E46"
     },
     {
-      "name": "accent_soft",
-      "value": "#8CCBC0"
+      "name": "accent_bright",
+      "value": "#2BB39F"
     },
     {
       "name": "text",
@@ -38,7 +38,7 @@
     },
     {
       "name": "separator",
-      "value": "#EDEDED"
+      "value": "#E4E4E4"
     },
     {
       "name": "surface",
@@ -49,48 +49,8 @@
       "value": "#F1F1F1"
     },
     {
-      "name": "handle",
-      "value": "#D6D6D6"
-    },
-    {
       "name": "progress_track",
       "value": "#E8E8E8"
-    },
-    {
-      "name": "map_bg",
-      "value": "#F2EFE9"
-    },
-    {
-      "name": "map_block",
-      "value": "#E5E0D6"
-    },
-    {
-      "name": "map_park",
-      "value": "#CFE3C3"
-    },
-    {
-      "name": "map_park_path",
-      "value": "#E8F0DF"
-    },
-    {
-      "name": "map_road",
-      "value": "#FFFFFF"
-    },
-    {
-      "name": "map_wall",
-      "value": "#CDB69C"
-    },
-    {
-      "name": "map_tower",
-      "value": "#C7AE92"
-    },
-    {
-      "name": "map_tower_stroke",
-      "value": "#A88E72"
-    },
-    {
-      "name": "map_label",
-      "value": "#77726A"
     },
     {
       "name": "button_primary",
@@ -101,12 +61,8 @@
       "value": "#FFFFFF"
     },
     {
-      "name": "round_button_bg",
-      "value": "#EBFFFFFF"
-    },
-    {
-      "name": "photo_badge_bg",
-      "value": "#59000000"
+      "name": "photo_button_bg",
+      "value": "#B3101113"
     },
     {
       "name": "photo_chip_bg",
@@ -114,11 +70,7 @@
     },
     {
       "name": "hero_gradient_end",
-      "value": "#8C000000"
-    },
-    {
-      "name": "scrim",
-      "value": "#66000000"
+      "value": "#99000000"
     },
     {
       "name": "danger",
@@ -129,44 +81,28 @@
       "value": "#E4DFD6"
     },
     {
-      "name": "map_road_dash",
-      "value": "#E2E2E2"
+      "name": "ink",
+      "value": "#0E0F11"
     },
     {
-      "name": "map_park_main_path",
-      "value": "#F4F1EA"
+      "name": "ink_raised",
+      "value": "#16181B"
     },
     {
-      "name": "map_barbakan_fill",
-      "value": "#DCC6AF"
+      "name": "ink_line",
+      "value": "#2A2D31"
     },
     {
-      "name": "map_barbakan_stroke",
-      "value": "#B39A80"
+      "name": "on_ink",
+      "value": "#F2F2F0"
     },
     {
-      "name": "map_barbakan_inner",
-      "value": "#EDE2D3"
-    },
-    {
-      "name": "map_label_park",
-      "value": "#55804A"
-    },
-    {
-      "name": "map_label_place",
-      "value": "#6B5642"
+      "name": "on_ink_secondary",
+      "value": "#8A8F96"
     },
     {
       "name": "shadow_card",
       "value": "#1F000000"
-    },
-    {
-      "name": "shadow_button",
-      "value": "#2E000000"
-    },
-    {
-      "name": "shadow_sheet",
-      "value": "#14000000"
     }
   ]
 }

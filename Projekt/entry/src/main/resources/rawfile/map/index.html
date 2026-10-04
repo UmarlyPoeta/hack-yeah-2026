@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!-- "Mapa" tab: Leaflet with Esri Dark Gray Canvas raster tiles (no API key) (no WebGL: the emulator GPU cannot run it),
+     loaded by components/map/MapView.ets.
+     ArkTS calls window.tour.*; taps on places go back through the injected tourBridge.onSelect(id). -->
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="leaflet.css">
+  <style>
+    @font-face { font-family: Manrope; font-weight: 600; src: url('../fonts/Manrope-SemiBold.ttf'); }
+    :root {
+      --accent: #2BB39F;
+      --bg: #2B2B2B;
+      --label-bg: #16181B;
+      --label-text: #F2F2F0;
+      --muted: #8A8F96;
+    }
+    html, body, #map { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); }
+    body { font-family: Manrope, sans-serif; -webkit-tap-highlight-color: transparent; }
+    .leaflet-container { background: var(--bg); font-family: Manrope, sans-serif; }
+    .leaflet-control-attribution { background: rgba(14, 15, 17, 0.7) !important; color: var(--muted) !important; font-size: 9px; }
+    .leaflet-control-attribution a { color: var(--muted) !important; }
+    .leaflet-div-icon { background: none; border: none; }
+
+    .place { position: relative; width: 28px; height: 28px; }
+    .place .dot {
+      position: absolute; left: 50%; top: 50%;
+      width: 10px; height: 10px; margin: -5px 0 0 -5px;
+      border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 0 2px #0E0F11;
+      transition: transform 160ms ease-out;
+    }
+    .place .label {
+      position: absolute; left: 22px; top: 50%; transform: translateY(-50%);
+      white-space: nowrap; max-width: 180px; overflow: hidden; text-overflow: ellipsis;
+      padding: 5px 8px 5px 7px;
+      background: var(--label-bg); color: var(--label-text);
+      border-left: 2px solid var(--accent);
+      font-size: 12px; font-weight: 600; letter-spacing: 0.1px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 160ms ease-out;
+    }
+    .place.selected .dot { transform: scale(1.5); box-shadow: 0 0 0 2px #0E0F11, 0 0 0 6px rgba(43, 179, 159, 0.28); }
+    .place.selected .label { opacity: 1; }
+    .place.left .label { left: auto; right: 22px; border-left: none; border-right: 2px solid var(--accent); padding: 5px 7px 5px 8px; }
+    .place.selected { z-index: 2; }
+
+    .user { position: relative; width: 16px; height: 16px; }
+    .user .core {
+      width: 12px; height: 12px; margin: 2px;
+      border-radius: 50%; background: #FFFFFF; box-shadow: 0 0 0 2px var(--accent);
+    }
+    .user .halo {
+      position: absolute; left: -12px; top: -12px; width: 40px; height: 40px;
+      border-radius: 50%; background: rgba(255, 255, 255, 0.10);
+      animation: pulse 2.4s ease-out infinite;
+    }
+    @keyframes pulse { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="leaflet.js"></script>
+<script>
+  (function () {
+    var map = L.map('map', { zoomControl: false, attributionControl: true }).setView([50.0614, 19.9383], 15);
+    var esri = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
+    L.tileLayer(esri + 'World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      maxNativeZoom: 16, maxZoom: 19,
+      attribution: 'Esri, HERE, Garmin, &copy; OpenStreetMap contributors'
+    }).addTo(map);
+    L.tileLayer(esri + 'World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+      maxNativeZoom: 16, maxZoom: 19, opacity: 0.8
+    }).addTo(map);
+    map.attributionControl.setPrefix(false);
+
+    var markers = {};
+    var userMarker = null;
+    var selectedId = '';
+    var fitted = false;
+
+    function notify(id) {
+      if (window.tourBridge && window.tourBridge.onSelect) {
+        window.tourBridge.onSelect(id);
+      }
+    }
+
+    function escapeHtml(text) {
+      var d = document.createElement('div');
+      d.textContent = text;
+      return d.innerHTML;
+    }
+
+    function select(id, pan) {
+      selectedId = id || '';
+      var width = map.getSize().x;
+      Object.keys(markers).forEach(function (key) {
+        var el = markers[key].getElement();
+        if (el) {
+          var place = el.querySelector('.place');
+          place.classList.toggle('selected', key === selectedId);
+          // label on the side with more room, so it never runs off the screen
+          place.classList.toggle('left', map.latLngToContainerPoint(markers[key].getLatLng()).x > width * 0.55);
+          markers[key].setZIndexOffset(key === selectedId ? 1000 : 0);
+        }
+      });
+      if (pan && markers[selectedId]) {
+        map.panTo(markers[selectedId].getLatLng(), { animate: true, duration: 0.4 });
+      }
+    }
+
+    // places: [{ id, name, lat, lon }]
+    function setPlaces(places, selected) {
+      Object.keys(markers).forEach(function (key) { markers[key].remove(); });
+      markers = {};
+      var bounds = [];
+      places.forEach(function (p) {
+        var icon = L.divIcon({
+          className: '', iconSize: [28, 28], iconAnchor: [14, 14],
+          html: '<div class="place"><div class="dot"></div><div class="label">' + escapeHtml(p.name) + '</div></div>'
+        });
+        var m = L.marker([p.lat, p.lon], { icon: icon, keyboard: false }).addTo(map);
+        m.on('click', function (e) {
+          L.DomEvent.stopPropagation(e);
+          select(p.id, true);
+          notify(p.id);
+        });
+        markers[p.id] = m;
+        bounds.push([p.lat, p.lon]);
+      });
+      if (userMarker) {
+        bounds.push(userMarker.getLatLng());
+      }
+      if (!fitted && bounds.length > 0) {
+        fitted = true;
+        map.fitBounds(bounds, { paddingTopLeft: [40, 100], paddingBottomRight: [40, 260], maxZoom: 17 });
+      }
+      select(selected, false);
+    }
+
+    map.on('moveend', function () { select(selectedId, false); });
+
+    function setUser(lat, lon) {
+      if (!userMarker) {
+        var icon = L.divIcon({
+          className: '', iconSize: [16, 16], iconAnchor: [8, 8],
+          html: '<div class="user"><div class="halo"></div><div class="core"></div></div>'
+        });
+        userMarker = L.marker([lat, lon], { icon: icon, interactive: false, keyboard: false }).addTo(map);
+      } else {
+        userMarker.setLatLng([lat, lon]);
+      }
+    }
+
+    function centerOnUser() {
+      if (userMarker) {
+        map.setView(userMarker.getLatLng(), Math.max(map.getZoom(), 16), { animate: true });
+      }
+    }
+
+    map.on('click', function () {
+      select('', false);
+      notify('');
+    });
+
+    window.tour = { setPlaces: setPlaces, setUser: setUser, select: select, centerOnUser: centerOnUser };
+  })();
+</script>
+</body>
+</html>

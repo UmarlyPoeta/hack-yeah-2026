@@ -1,7 +1,8 @@
 {
   "src": [
     "pages/MainPage",
-    "pages/WalkPage",
+    "pages/OnboardingPage",
+    "pages/PlacePage",
     "pages/Index",
     "pages/GuideDebugPage"
   ]

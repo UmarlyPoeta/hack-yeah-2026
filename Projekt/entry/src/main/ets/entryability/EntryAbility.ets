@@ -1,6 +1,10 @@
 import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import { PlaceQueue } from '../store/PlaceQueue';
+import { SavedPlaces } from '../store/SavedPlaces';
+import { Services } from '../store/Services';
+import { Settings } from '../store/Settings';
 
 const DOMAIN = 0x0000;
 
@@ -19,10 +23,15 @@ export default class EntryAbility extends UIAbility {
   }
 
   onWindowStageCreate(windowStage: window.WindowStage): void {
-    // Main window: tabs (MainPage). Full-screen layout so photos and maps go under the status bar.
+    // First launch: OnboardingPage, afterwards the tabs (MainPage). The saved landmark queue is restored
+    // before the first frame. Full-screen layout so photos and maps go under the status bar.
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+    Services.init(this.context);
+    Settings.init(this.context);
+    PlaceQueue.init(this.context);
+    SavedPlaces.init(this.context);
 
-    windowStage.loadContent('pages/MainPage', (err) => {
+    windowStage.loadContent(Settings.onboarded() ? 'pages/MainPage' : 'pages/OnboardingPage', (err) => {
       if (err.code) {
         hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
         return;

@@ -1,6 +1,6 @@
 // Server address and timeouts. Empty API_BASE_URL = offline mode (bundled data + local templates only).
 // Example: 'http://192.168.1.20:8787' (the laptop's LAN address printed by `npm start` in server/).
-export const API_BASE_URL: string = '';
+export const API_BASE_URL: string = 'http://10.0.2.2:8787';   // emulator -> server on this laptop
 
 export const REQUEST_TIMEOUT_MS: number = 20000;
 

@@ -1,0 +1,45 @@
+{
+  "strarray": [
+    {
+      "name": "tour_facts",
+      "value": [
+        {
+          "value": "Hejnał mariacki gra się co godzinę z wyższej wieży Kościoła Mariackiego. Melodia urywa się w połowie."
+        },
+        {
+          "value": "Sukiennice mają ponad 100 metrów długości. Kiedyś handlowano tu suknem, stąd nazwa."
+        },
+        {
+          "value": "Rynek Główny w Krakowie ma około 4 hektarów. To jeden z największych średniowiecznych placów w Europie."
+        },
+        {
+          "value": "Barbakan zbudowano pod koniec XV wieku. Bronił wjazdu do miasta przez Bramę Floriańską."
+        },
+        {
+          "value": "Planty powstały w XIX wieku w miejscu rozebranych murów miejskich."
+        },
+        {
+          "value": "Ołtarz Wita Stwosza powstawał 12 lat, od 1477 do 1489 roku."
+        },
+        {
+          "value": "Stare Miasto w Krakowie trafiło na pierwszą listę światowego dziedzictwa UNESCO w 1978 roku."
+        },
+        {
+          "value": "Uniwersytet Jagielloński założono w 1364 roku. To najstarsza uczelnia w Polsce."
+        },
+        {
+          "value": "Kopiec Kościuszki usypano w latach 1820–1823, na pamiątkę Naczelnika."
+        },
+        {
+          "value": "Zanim domy miały numery, rozpoznawano je po godłach: rzeźbionych lub malowanych znakach nad wejściem."
+        },
+        {
+          "value": "Gotyk poznasz po ostrych łukach okien i portali. Romańskie łuki są półokrągłe."
+        },
+        {
+          "value": "Dzwon Zygmunt na Wawelu waży prawie 10 ton i bije tylko w wyjątkowe dni."
+        }
+      ]
+    }
+  ]
+}

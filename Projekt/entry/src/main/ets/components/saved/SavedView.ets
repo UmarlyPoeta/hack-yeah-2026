@@ -1,13 +1,12 @@
-// "Zapisane" tab: preview of saved routes on mock data. Nothing is actually saved yet;
-// the switch at the bottom shows the empty state.
+// "Zapisane" tab: landmarks saved for later (SavedPlaces), newest first.
 import { Fonts } from '../../common/Fonts';
-import { placesLabel } from '../../common/Labels';
-import { Route } from '../../model/Route';
+import { Place, placeImage, shortName } from '../../model/Place';
+import { SavedPlaces } from '../../store/SavedPlaces';
 
 @Component
 export struct SavedView {
-  routes: Route[] = [];
-  @State showEmpty: boolean = false;
+  onOpen: (place: Place) => void = () => {};
+  @StorageLink('saved') saved: Place[] = [];
   @StorageProp('topInset') topInset: number = 0;
 
   build() {
@@ -23,31 +22,23 @@ export struct SavedView {
         .fontColor($r('app.color.text_secondary'))
         .margin({ top: 4 })
 
-      if (this.showEmpty || this.routes.length === 0) {
+      if (this.saved.length === 0) {
         this.Empty()
       } else {
-        List({ space: 12 }) {
-          ForEach(this.routes, (route: Route) => {
+        List() {
+          ForEach(this.saved, (place: Place) => {
             ListItem() {
-              this.RouteRow(route)
+              this.Row(place)
             }
-          }, (route: Route) => route.id)
+            .transition(TransitionEffect.OPACITY.animation({ duration: 200 }))
+          }, (place: Place) => place.id)
         }
         .width('100%')
         .layoutWeight(1)
-        .margin({ top: 20 })
+        .margin({ top: 16 })
         .scrollBar(BarState.Off)
+        .divider({ strokeWidth: 1, color: $r('app.color.separator') })
       }
-
-      Text(this.showEmpty ? $r('app.string.saved_show_list') : $r('app.string.saved_show_empty'))
-        .fontSize($r('app.float.font_label'))
-        .fontFamily(Fonts.BOLD)
-        .fontColor($r('app.color.accent'))
-        .constraintSize({ minHeight: $r('app.float.touch_min') })
-        .alignSelf(ItemAlign.Center)
-        .onClick(() => {
-          this.showEmpty = !this.showEmpty;
-        })
     }
     .width('100%')
     .height('100%')
@@ -57,63 +48,50 @@ export struct SavedView {
   }
 
   @Builder
-  RouteRow(route: Route) {
+  Row(place: Place) {
     Row({ space: 14 }) {
-      Image(route.cover)
-        .width(72)
-        .height(72)
-        .borderRadius($r('app.float.stop_card_radius'))
+      Image(placeImage(place))
+        .width($r('app.float.thumb_size'))
+        .height($r('app.float.thumb_size'))
+        .borderRadius($r('app.float.radius'))
         .objectFit(ImageFit.Cover)
-        .accessibilityText(route.coverLabel)
+        .backgroundColor($r('app.color.placeholder'))
+        .accessibilityText(place.name)
       Column({ space: 3 }) {
-        Text(route.title)
+        Text(shortName(place))
           .fontSize($r('app.float.font_place'))
           .fontFamily(Fonts.BOLD)
           .fontColor($r('app.color.text'))
-        Text(route.subtitle)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+        Text(place.summary)
           .fontSize($r('app.float.font_small'))
           .fontFamily(Fonts.REGULAR)
           .fontColor($r('app.color.text_secondary'))
-          .maxLines(1)
+          .maxLines(2)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
-        Row({ space: 12 }) {
-          this.Meta($r('app.media.ic_route'), route.distanceLabel())
-          this.Meta($r('app.media.ic_clock'), $r('app.string.metric_time', route.durationMin))
-          this.Meta($r('app.media.ic_pin'), placesLabel(this.getUIContext(), route.stops.length))
-        }
-        .margin({ top: 2 })
       }
       .alignItems(HorizontalAlign.Start)
       .layoutWeight(1)
+      Button({ type: ButtonType.Normal }) {
+        Image($r('app.media.ic_close')).width(18).height(18)
+      }
+      .width($r('app.float.touch_min'))
+      .height($r('app.float.touch_min'))
+      .borderRadius($r('app.float.radius'))
+      .backgroundColor(Color.Transparent)
+      .accessibilityText($r('app.string.a11y_remove'))
+      .onClick(() => SavedPlaces.remove(place.id))
     }
     .width('100%')
-    .padding(12)
-    .borderRadius($r('app.float.card_radius'))
-    .border({ width: 1, color: $r('app.color.separator'), radius: $r('app.float.card_radius') })
-  }
-
-  @Builder
-  Meta(icon: Resource, label: ResourceStr) {
-    Row({ space: 4 }) {
-      Image(icon).width(14).height(14)
-      Text(label)
-        .fontSize($r('app.float.font_caption'))
-        .fontFamily(Fonts.SEMIBOLD)
-        .fontColor($r('app.color.text'))
-    }
+    .padding({ top: 12, bottom: 12 })
+    .onClick(() => this.onOpen(place))
   }
 
   @Builder
   Empty() {
     Column({ space: 10 }) {
-      Column() {
-        Image($r('app.media.ic_saved_empty')).width(28).height(28)
-      }
-      .width(64)
-      .height(64)
-      .borderRadius(32)
-      .backgroundColor($r('app.color.accent_bg'))
-      .justifyContent(FlexAlign.Center)
+      Image($r('app.media.ic_saved_empty')).width(28).height(28)
       Text($r('app.string.saved_empty_title'))
         .fontSize($r('app.float.font_title'))
         .fontFamily(Fonts.EXTRABOLD)

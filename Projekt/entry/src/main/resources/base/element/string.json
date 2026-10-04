@@ -10,7 +10,11 @@
     },
     {
       "name": "EntryAbility_label",
-      "value": "Spacer z historią"
+      "value": "tour"
+    },
+    {
+      "name": "brand_name",
+      "value": "tour"
     },
     {
       "name": "tab_discover",
@@ -25,40 +29,108 @@
       "value": "Zapisane"
     },
     {
-      "name": "badge_narrated",
-      "value": "Spacer z narracją"
+      "name": "ob_tagline",
+      "value": "Historia miejsc wokół ciebie, opowiedziana na głos."
     },
     {
-      "name": "on_the_way",
-      "value": "Po drodze"
+      "name": "ob_welcome_body",
+      "value": "Wybierz zabytek w pobliżu. tour pokaże jego zdjęcia i opowie o nim po polsku, głosem."
     },
     {
-      "name": "route_map",
-      "value": "Mapa trasy"
+      "name": "ob_next",
+      "value": "Dalej"
     },
     {
-      "name": "start_walk",
-      "value": "Rozpocznij spacer"
+      "name": "ob_step",
+      "value": "%d / 3"
     },
     {
-      "name": "location_hint",
-      "value": "Z lokalizacją opowieść startuje sama, gdy dojdziesz na miejsce."
+      "name": "ob_interests_title",
+      "value": "Co cię ciekawi?"
     },
     {
-      "name": "metric_time",
-      "value": "ok. %d min"
+      "name": "ob_interests_body",
+      "value": "Opowieści skupią się na tych tematach. Możesz wybrać kilka albo żaden."
+    },
+    {
+      "name": "ob_location_title",
+      "value": "Zabytki w pobliżu"
+    },
+    {
+      "name": "ob_location_body",
+      "value": "Lokalizacja służy tylko do znalezienia zabytków wokół ciebie. Nie śledzimy, gdzie chodzisz."
+    },
+    {
+      "name": "ob_allow",
+      "value": "Udostępnij lokalizację"
+    },
+    {
+      "name": "ob_searching",
+      "value": "Szukam zabytków w pobliżu…"
+    },
+    {
+      "name": "ob_denied",
+      "value": "Bez lokalizacji pokażę zabytki Starego Miasta w Krakowie."
+    },
+    {
+      "name": "interest_architektura",
+      "value": "Architektura"
+    },
+    {
+      "name": "interest_historia",
+      "value": "Historia"
+    },
+    {
+      "name": "interest_sztuka",
+      "value": "Sztuka"
+    },
+    {
+      "name": "interest_ludzie",
+      "value": "Ludzie"
+    },
+    {
+      "name": "interest_legendy",
+      "value": "Legendy"
+    },
+    {
+      "name": "discover_nearby",
+      "value": "W pobliżu"
+    },
+    {
+      "name": "discover_queue",
+      "value": "Następne"
+    },
+    {
+      "name": "listen",
+      "value": "Posłuchaj historii"
+    },
+    {
+      "name": "discover_empty_title",
+      "value": "Szukam zabytków"
+    },
+    {
+      "name": "discover_empty_body",
+      "value": "Pierwsze miejsca pojawią się za chwilę."
+    },
+    {
+      "name": "discover_updating",
+      "value": "Aktualizuję"
+    },
+    {
+      "name": "from_you",
+      "value": "%s od ciebie"
+    },
+    {
+      "name": "a11y_save",
+      "value": "Zapisz na później"
+    },
+    {
+      "name": "a11y_unsave",
+      "value": "Usuń z zapisanych"
     },
     {
       "name": "a11y_back",
       "value": "Wróć"
-    },
-    {
-      "name": "a11y_save",
-      "value": "Zapisz trasę"
-    },
-    {
-      "name": "a11y_share",
-      "value": "Udostępnij"
     },
     {
       "name": "a11y_my_location",
@@ -73,36 +145,56 @@
       "value": "Pauza"
     },
     {
-      "name": "stop_of",
-      "value": "przystanek %d z %d"
-    },
-    {
       "name": "more_about_place",
       "value": "Więcej o tym miejscu"
     },
     {
-      "name": "skip",
-      "value": "Pomiń"
+      "name": "narration_ai",
+      "value": "Opowiada Bielik"
     },
     {
-      "name": "finish",
-      "value": "Zakończ"
+      "name": "narration_template",
+      "value": "Tekst z Wikipedii"
     },
     {
-      "name": "then",
-      "value": "Potem: %s, %s"
+      "name": "no_audio",
+      "value": "Bez nagrania"
     },
     {
-      "name": "last_stop",
-      "value": "To ostatni przystanek"
+      "name": "source_wikipedia",
+      "value": "Na podstawie Wikipedii · CC BY-SA 4.0"
+    },
+    {
+      "name": "photo_credit",
+      "value": "Zdjęcia: Wikimedia Commons"
+    },
+    {
+      "name": "loading_fact",
+      "value": "Ciekawostka"
+    },
+    {
+      "name": "loading_wait",
+      "value": "Przygotowuję opowieść"
+    },
+    {
+      "name": "close",
+      "value": "Zamknij"
+    },
+    {
+      "name": "map_title",
+      "value": "Mapa"
+    },
+    {
+      "name": "map_nearby",
+      "value": "W pobliżu: %d"
     },
     {
       "name": "saved_title",
-      "value": "Zapisane trasy"
+      "value": "Zapisane"
     },
     {
       "name": "saved_hint",
-      "value": "Podgląd: zapisywanie tras będzie dostępne wkrótce."
+      "value": "Zabytki odłożone na później."
     },
     {
       "name": "saved_empty_title",
@@ -110,51 +202,15 @@
     },
     {
       "name": "saved_empty_body",
-      "value": "Trasy, które zapiszesz, pojawią się tutaj."
+      "value": "Zapisz zabytek ikoną zakładki, a pojawi się tutaj."
     },
     {
-      "name": "saved_show_empty",
-      "value": "Pokaż stan pusty"
+      "name": "a11y_remove",
+      "value": "Usuń"
     },
     {
-      "name": "saved_show_list",
-      "value": "Pokaż listę"
-    },
-    {
-      "name": "map_title",
-      "value": "Mapa trasy"
-    },
-    {
-      "name": "map_hint",
-      "value": "Podgląd trasy, bez nawigacji"
-    },
-    {
-      "name": "close",
-      "value": "Zamknij"
-    },
-    {
-      "name": "source_wikipedia",
-      "value": "Na podstawie Wikipedii · CC BY-SA 4.0"
-    },
-    {
-      "name": "enable",
-      "value": "Włącz"
-    },
-    {
-      "name": "a11y_walk_map",
-      "value": "Mapa: jesteś między Barbakanem a Bramą Floriańską"
-    },
-    {
-      "name": "places_one",
-      "value": "%d miejsce"
-    },
-    {
-      "name": "places_few",
-      "value": "%d miejsca"
-    },
-    {
-      "name": "places_many",
-      "value": "%d miejsc"
+      "name": "perm_location_reason",
+      "value": "Do znalezienia zabytków w pobliżu."
     }
   ]
 }
