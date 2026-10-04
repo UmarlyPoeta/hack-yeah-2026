@@ -13,7 +13,7 @@ import { UserLocation } from '../store/UserLocation';
 import { setStatusBarLight } from '../common/StatusBar';
 
 // Used only when location is refused or unavailable, and said so on screen (ob_denied).
-const FALLBACK_FIX: GeoFix = { lat: 50.0614, lon: 19.9372, accuracyM: 1000, t: 0 };
+const FALLBACK_FIX: GeoFix = { lat: 52.4083, lon: 16.9335, accuracyM: 1000, t: 0 };   // Stary Rynek, Poznań
 const PLACES_TO_START: number = 3;
 
 const INTERESTS: Interest[] = [Interest.HISTORY, Interest.ARCHITECTURE, Interest.ART, Interest.PEOPLE, Interest.LEGENDS];
