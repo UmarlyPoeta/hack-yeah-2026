@@ -20,7 +20,7 @@ export function poiAt(id: string, north: number, east: number, importance: numbe
   const p: Poi = {
     id: id, name: id, summary: 'Zdanie pierwsze o ' + id + '. Zdanie drugie. Zdanie trzecie.',
     lat: ORIGIN_LAT + north * M_LAT, lon: ORIGIN_LON + east * M_LON,
-    kind: null, wikidataId: null, imageUrl: null, sourceUrl: 'u',
+    kind: 'building', wikidataId: null, imageUrl: null, sourceUrl: 'u',
     importance: importance, role: role, partOfId: null
   };
   return p;

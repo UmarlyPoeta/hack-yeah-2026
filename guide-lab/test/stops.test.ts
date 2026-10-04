@@ -23,12 +23,16 @@ test('partOfId joins the parent stop even when far away; a missing parent is ign
   assert.deepEqual(stops.map((s) => s.members.map((p) => p.id).join('+')).sort(), ['hall+gallery', 'orphan']);
 });
 
-test('demo data: Mariacki absorbs its parish, Sukiennice the gallery', () => {
+test('demo data: parts join their main sight; events and organisations are never stops', () => {
   const stops = buildStops(demoPoisWithSignals());
-  const mariacki = stops.find((s) => s.anchor.name.startsWith('Kościół archiprezbiterialny'));
-  assert.ok(mariacki?.members.some((p) => p.name.startsWith('Parafia')));
   const sukiennice = stops.find((s) => s.anchor.name.startsWith('Sukiennice'));
   assert.ok(sukiennice?.members.some((p) => p.name.startsWith('Galeria')));
+  const castle = stops.find((s) => s.anchor.name.startsWith('Zamek Królewski na Wawelu'));
+  assert.ok(castle?.members.some((p) => p.name.startsWith('Bazylika Archikatedralna')), 'Wawel castle + cathedral');
+  const all = stops.flatMap((s) => s.members.map((p) => p.name));
+  for (const event of ['Sonderaktion Krakau', 'Strajk w Sempericie', 'Fundacja Książąt Czartoryskich']) {
+    assert.ok(!all.includes(event), event + ' should not be a place');
+  }
 });
 
 test('threshold is relative: a small town with modest sights still gets main stops', () => {

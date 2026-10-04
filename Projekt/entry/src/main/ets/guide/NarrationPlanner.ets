@@ -4,7 +4,7 @@ import { Interest, Segment, SegmentKind } from '../model/Segment';
 import { relativePosition } from './geo';
 import { ItineraryView, Side, UpcomingPoi } from './Itinerary';
 import { MotionSnapshot, MotionState } from './MotionTracker';
-import { buildStops, distanceToStop, localThreshold, MIN_IMPORTANCE, Stop } from './Stops';
+import { buildStops, distanceToStop, localThreshold, Stop } from './Stops';
 import {
   approachText, arrivalText, bridgeText, deepDiveText, estimateDurationMs, missedText, segmentKey,
   templateSegment, welcomeText, WORDS_PER_SECOND
@@ -47,6 +47,8 @@ export const APPROACH_MIN_ETA_S: number = 8;
 export const BRIDGE_MIN_ETA_S: number = 25;
 export const FILLER_MIN_GAP_S: number = 90;     // a minor stop is narrated only if the next main one is this far
 export const FILLER_QUIET_MS: number = 30000;   // ...and the guide has been quiet this long since the last stop
+export const FILLER_MIN_IMPORTANCE: number = 0.3;   // ~3 language versions: a famous-enough minor place
+export const FILLER_INTERVAL_MS: number = 180000;   // at most one minor stop every 3 minutes
 export const BRIDGE_WINDOW_MS: number = 30000;  // a BRIDGE only right after the stop's story, never much later
 export const LATE_ARRIVAL_M: number = 60;       // a main stop passed this close still gets its story
 export const MISSED_MAX_M: number = 120;        // "we passed X" only for places that were in sight
@@ -75,6 +77,18 @@ interface Pending {
   waitUntilT: number;           // play only with an AI segment until then (deep dive)
   side: Side;
   distanceM: number;            // APPROACH / WELCOME wording
+}
+
+// What one device has told so far. Moved to the other device on a handoff (and in App Continuation),
+// so the new narrator goes on without repeating anything. Only stop ids: no position, no text.
+export interface GuideProgress {
+  arrived: string[];          // stops whose story was queued or told
+  announced: string[];
+  bridged: string[];
+  missedSaid: string[];
+  offered: string[];
+  spoken: string[];           // stops told, in order
+  lastArrivalId: string | null;
 }
 
 // What the planner currently thinks; read by the view model for the screen.
@@ -111,6 +125,7 @@ export class NarrationPlanner {
   private missedSaid: Set<string> = new Set<string>();
   private minDistance: Map<string, number> = new Map<string, number>();   // closest we came to each stop
   private lastMissedT: number = -MISSED_INTERVAL_MS;
+  private lastFillerT: number = -FILLER_INTERVAL_MS;
   private offered: Set<string> = new Set<string>();
   private requested: Set<string> = new Set<string>();
   private ready: Map<string, Segment> = new Map<string, Segment>();
@@ -126,6 +141,8 @@ export class NarrationPlanner {
   private threshold: number = 0;
   private spokenOrder: string[] = [];
   private upcomingMain: Stop[] = [];
+  private muted: boolean = false;             // FOLLOW device or user pause: plan, but play nothing
+  private lastPlayed: Segment | null = null;
 
   constructor(pois: Poi[], interests: Interest[], voice: boolean) {
     this.stops = buildStops(pois);
@@ -150,6 +167,63 @@ export class NarrationPlanner {
       upcomingMain: this.upcomingMain.slice()
     };
     return s;
+  }
+
+  exportProgress(): GuideProgress {
+    const p: GuideProgress = {
+      arrived: Array.from(this.arrived), announced: Array.from(this.announced), bridged: Array.from(this.bridged),
+      missedSaid: Array.from(this.missedSaid), offered: Array.from(this.offered), spoken: this.spokenOrder.slice(),
+      lastArrivalId: this.lastArrival !== null ? this.lastArrival.id : null
+    };
+    return p;
+  }
+
+  // Take over from another device: what it told counts as told here. Unknown ids (other data) are kept
+  // in the sets harmlessly. The queue is dropped: the other device was the one speaking.
+  importProgress(p: GuideProgress): void {
+    this.arrived = new Set<string>(p.arrived);
+    this.announced = new Set<string>(p.announced);
+    this.bridged = new Set<string>(p.bridged);
+    this.missedSaid = new Set<string>(p.missedSaid);
+    this.offered = new Set<string>(p.offered);
+    this.spokenOrder = p.spoken.slice();
+    const last = p.lastArrivalId !== null ? this.stopOfPoi.get(p.lastArrivalId) : undefined;
+    this.lastArrival = last !== undefined ? last : null;
+    this.lastArrivalEndT = 0;       // no late BRIDGE from a story told on the other device
+    this.welcomed = true;
+    this.queue = [];
+    this.speaking = null;
+    this.speakingUntilT = 0;
+    this.offerStop = null;
+  }
+
+  // Muted: everything is still tracked (arrivals, next stop), but nothing new starts playing.
+  setMuted(muted: boolean): void {
+    this.muted = muted;
+  }
+
+  isMuted(): boolean {
+    return this.muted;
+  }
+
+  // Play the current (or last) segment again from the start.
+  replay(t: number): GuideAction[] {
+    const actions: GuideAction[] = [];
+    const s = this.speaking !== null ? this.speaking : this.lastPlayed;
+    if (s === null || this.muted) {
+      return actions;
+    }
+    this.speaking = s;
+    this.speakingUntilT = t + (s.durationMs !== null ? s.durationMs : estimateDurationMs(s.text));
+    actions.push(this.action(GuideActionKind.PLAY_SEGMENT, t, s, null, 0, null));
+    return actions;
+  }
+
+  // Skip what is playing now: the narrator is free, the next segment can start.
+  skip(t: number): void {
+    if (this.speaking !== null) {
+      this.playbackFinished(this.speaking.id, t);
+    }
   }
 
   stopList(): Stop[] {
@@ -283,8 +357,13 @@ export class NarrationPlanner {
       // a minor stop only when the narrator has had nothing to say for a while and will not soon
       const nextGapS = this.nextStop !== null && this.nextStop.id !== stop.id ? this.nextEtaS : FILLER_MIN_GAP_S;
       const quiet = !this.isSpeaking(t) && this.queue.length === 0 && t - this.lastArrivalEndT >= FILLER_QUIET_MS;
-      if (!this.isMain(stop) && (stop.importance < MIN_IMPORTANCE || !quiet || nextGapS < FILLER_MIN_GAP_S)) {
+      const main = this.isMain(stop);
+      if (!main && (stop.importance < FILLER_MIN_IMPORTANCE || !quiet || nextGapS < FILLER_MIN_GAP_S
+        || t - this.lastFillerT < FILLER_INTERVAL_MS)) {
         continue;
+      }
+      if (!main) {
+        this.lastFillerT = t;
       }
       this.arrived.add(stop.id);
       // time until the following main stop starts: that is how long this story may last
@@ -429,6 +508,9 @@ export class NarrationPlanner {
       return;
     }
     this.speaking = null;
+    if (this.muted) {
+      return;
+    }
     let best = -1;
     for (let i = 0; i < this.queue.length; i++) {
       const p = this.queue[i];
@@ -447,6 +529,7 @@ export class NarrationPlanner {
     const segment = this.segmentFor(p);
     const duration = segment.durationMs !== null ? segment.durationMs : estimateDurationMs(segment.text);
     this.speaking = segment;
+    this.lastPlayed = segment;
     this.speakingUntilT = t + duration;
     actions.push(this.action(GuideActionKind.PLAY_SEGMENT, t, segment, null, 0, null));
     if (p.kind === SegmentKind.ARRIVAL && p.stop !== null) {

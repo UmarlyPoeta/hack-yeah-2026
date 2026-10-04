@@ -92,13 +92,12 @@ test('demo route: places are passed in the order they lie along the route', () =
   const view = walk(route, pois);
   assert.ok(view.passedIds.length > 30, `only ${view.passedIds.length} passed`);
   const byId = new Map<string, Poi>(pois.map((p: Poi) => [p.id, p] as [string, Poi]));
-  // Areas (a square, a street, the walls) are passed somewhere else than their centre point.
-  // Filtering them out of the data is still to be agreed with P3, so they are skipped here.
-  const AREAS = ['Rynek Główny', 'Stare Miasto', 'Ulica ', 'Mury miejskie', 'Planty'];
+  // Only places passed close by (not "missed") matter for the guide: with 331 POIs many far ones count
+  // as passed only when the route turns around the Main Square.
   let prev = -1;
   for (const id of view.passedIds) {
     const poi = byId.get(id) as Poi;
-    if (AREAS.some((a: string) => poi.name.startsWith(a))) {
+    if (view.missedIds.includes(id)) {
       continue;
     }
     const idx = routeIndex(route, poi);
