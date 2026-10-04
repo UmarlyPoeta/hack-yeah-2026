@@ -16,15 +16,32 @@ export function loadConfig(env = process.env) {
     cacheDir: path.resolve(SERVER_DIR, env.CACHE_DIR || './.cache'),
     fixturePoisPath: path.resolve(SERVER_DIR, env.FIXTURE_POIS || '../fixtures/pois-krakow.json'),
     wikiApiUrl: env.WIKI_API_URL || 'https://pl.wikipedia.org/w/api.php',
+    wikidataApiUrl: env.WIKIDATA_API_URL || 'https://www.wikidata.org/w/api.php',
     wikiTimeoutMs: intOr(env.WIKI_TIMEOUT_MS, 8000),
     poiCacheTtlMs: intOr(env.POI_CACHE_TTL_MS, 24 * 3600 * 1000),
     // read by P4 modules (LLM, TTS); kept here so there is one config object.
     // Bielik runs in Ollama on Modal (server/modal/): every LLM request needs the Modal-Key / Modal-Secret headers.
     ollamaUrl: env.OLLAMA_URL || 'http://localhost:11434',
     llmModel: env.LLM_MODEL || '',
+    // Claude (Anthropic API) by default; LLM_PROVIDER=ollama switches to Bielik on Modal.
+    // Same prompts, validator and cache layout for both.
+    llmProvider: env.LLM_PROVIDER === 'ollama' ? 'ollama' : 'claude',
+    anthropicApiKey: env.ANTHROPIC_API_KEY || '',
+    claudeModel: env.CLAUDE_MODEL || 'claude-haiku-4-5-20251001',
     modalKey: env.MODAL_KEY || '',
     modalSecret: env.MODAL_SECRET || '',
     ttsProvider: env.TTS_PROVIDER || 'none',
+    elevenLabsApiKey: env.ELEVENLABS_API_KEY || '',
+    elevenLabsVoiceId: env.ELEVENLABS_VOICE_ID || '',
+    elevenLabsModelId: env.ELEVENLABS_MODEL_ID || 'eleven_multilingual_v2',
+    piperBin: env.PIPER_BIN || 'piper',
+    piperVoice: path.resolve(SERVER_DIR, env.PIPER_VOICE || './voices/pl_PL-gosia-medium.onnx'),
+    ffmpegBin: env.FFMPEG_BIN || 'ffmpeg',
+    ttsTimeoutMs: intOr(env.TTS_TIMEOUT_MS, 20_000),
+    // false: template segments get Piper only, ElevenLabs characters go to AI text (free plan: 10k/month)
+    ttsCloudForTemplates: env.TTS_CLOUD_FOR_TEMPLATES === 'true',
+    llmTimeoutMs: intOr(env.LLM_TIMEOUT_MS, 45_000),
+    llmDeepDiveTimeoutMs: intOr(env.LLM_DEEP_DIVE_TIMEOUT_MS, 90_000),
   };
 }
 
