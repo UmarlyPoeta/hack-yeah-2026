@@ -25,6 +25,9 @@
         "usedScene": { "abilities": ["EntryAbility"], "when": "inuse" }
       },
       {
+        "name": "ohos.permission.VIBRATE"
+      },
+      {
         "name": "ohos.permission.KEEP_BACKGROUND_RUNNING",
         "reason": "$string:perm_background_reason",
         "usedScene": { "abilities": ["EntryAbility"], "when": "always" }

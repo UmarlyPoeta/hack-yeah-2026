@@ -26,7 +26,7 @@
     },
     {
       "name": "tab_saved",
-      "value": "Zapisane"
+      "value": "Moje"
     },
     {
       "name": "ob_tagline",
@@ -182,11 +182,11 @@
     },
     {
       "name": "saved_title",
-      "value": "Zapisane"
+      "value": "Moje"
     },
     {
       "name": "saved_hint",
-      "value": "Zabytki odłożone na później."
+      "value": "Zapisane miejsca i ustawienia."
     },
     {
       "name": "saved_empty_title",
@@ -247,6 +247,26 @@
     {
       "name": "widget_listen",
       "value": "Posłuchaj"
+    },
+    {
+      "name": "section_saved",
+      "value": "Zapisane"
+    },
+    {
+      "name": "section_settings",
+      "value": "Ustawienia"
+    },
+    {
+      "name": "hands_free",
+      "value": "Tryb bez patrzenia na ekran"
+    },
+    {
+      "name": "hands_free_body",
+      "value": "Przy zabytku opowieść startuje sama, z wibracją. Przycisk „Rozpocznij” w powiadomieniu, także na zegarku, od razu włącza dźwięk w telefonie. Dla osób niewidomych i spacerów z telefonem w kieszeni."
+    },
+    {
+      "name": "saved_empty_short",
+      "value": "Zapisz zabytek ikoną zakładki, a pojawi się tutaj."
     }
   ]
 }

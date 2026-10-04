@@ -1,4 +1,5 @@
-// "Zabytek w pobliżu" notification: photo, name and a "Rozpocznij" button that opens the place.
+// "Zabytek w pobliżu" notification: photo and name; tapping it opens the place, "Rozpocznij" plays the story
+// on the phone right away (HandsFree), also when pressed on a paired watch.
 // At most one notification every 2 minutes; each new one replaces the previous (same id), and it stays
 // in the notification centre (isOngoing) until the next one or until the user opens the app.
 import { common, wantAgent, WantAgent } from '@kit.AbilityKit';
@@ -8,6 +9,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { distanceM } from '../guide/geo';
 import { GeoFix } from '../model/GeoPoint';
 import { distanceLabel, Place, shortName } from '../model/Place';
+import { playEventName } from './HandsFree';
 
 const DOMAIN: number = 0x0000;
 const TAG: string = 'Notifier';
@@ -67,6 +69,7 @@ export class Notifier {
   private static async publish(context: common.Context, place: Place, fix: GeoFix | null): Promise<void> {
     try {
       const agent = await Notifier.openPlaceAgent(context, place.id);
+      const play = await Notifier.playAgent(context, place.id);
       const title = shortName(place);
       const text = fix !== null ? `${distanceLabel(distanceM(fix, place))} od ciebie` : 'Zabytek w pobliżu';
       const picture = await Notifier.pixelMap(place.imageFile);
@@ -90,7 +93,14 @@ export class Notifier {
         isOngoing: true,
         tapDismissed: true,
         wantAgent: agent,
-        actionButtons: [{ title: 'Rozpocznij', wantAgent: agent }],
+        // "Rozpocznij" plays on the phone without opening the app, so it works from a watch or the lock screen
+        actionButtons: [{ title: 'Rozpocznij', wantAgent: play }],
+        // shown on and operable from a paired watch (relayed by the system, e.g. Huawei Health)
+        distributedOption: {
+          isDistributed: true,
+          supportDisplayDevices: ['phone', 'wearable', 'liteWearable'],
+          supportOperateDevices: ['phone', 'wearable', 'liteWearable'],
+        },
       };
       if (picture !== null) {
         request.largeIcon = picture;
@@ -111,6 +121,17 @@ export class Notifier {
       }],
       actionType: wantAgent.OperationType.START_ABILITY,
       requestCode: 1,
+      actionFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG],
+    };
+    return wantAgent.getWantAgent(info);
+  }
+
+  /** Common event received by HandsFree: the phone starts the story, the screen stays as it is. */
+  private static async playAgent(context: common.Context, placeId: string): Promise<WantAgent> {
+    const info: wantAgent.WantAgentInfo = {
+      wants: [{ action: playEventName(context), parameters: { placeId: placeId } }],
+      actionType: wantAgent.OperationType.SEND_COMMON_EVENT,
+      requestCode: 4,
       actionFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG],
     };
     return wantAgent.getWantAgent(info);

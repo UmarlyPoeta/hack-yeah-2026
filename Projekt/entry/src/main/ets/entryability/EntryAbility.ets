@@ -7,6 +7,7 @@ import { Services } from '../store/Services';
 import { Settings } from '../store/Settings';
 import { CityInfo } from '../store/CityInfo';
 import { Guide } from '../store/Guide';
+import { HandsFree } from '../store/HandsFree';
 
 const DOMAIN = 0x0000;
 
@@ -56,6 +57,7 @@ export default class EntryAbility extends UIAbility {
     PlaceQueue.init(this.context);
     SavedPlaces.init(this.context);
     CityInfo.init(this.context);
+    HandsFree.init(this.context);
 
     windowStage.loadContent(Settings.onboarded() ? 'pages/MainPage' : 'pages/OnboardingPage', (err) => {
       if (err.code) {

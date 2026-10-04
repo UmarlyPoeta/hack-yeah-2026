@@ -1,8 +1,10 @@
-// "Zapisane" tab: landmarks saved for later (SavedPlaces), newest first.
+// "Moje" tab: landmarks saved for later (SavedPlaces, newest first) and the settings:
+// hands-free mode (off by default, someone switches it on for the person) and the reset.
 import { Fonts } from '../../common/Fonts';
 import { Place, placeImage, shortName } from '../../model/Place';
 import { CityInfo } from '../../store/CityInfo';
 import { Guide } from '../../store/Guide';
+import { HandsFree } from '../../store/HandsFree';
 import { Notifier } from '../../store/Notifier';
 import { PlaceQueue } from '../../store/PlaceQueue';
 import { SavedPlaces } from '../../store/SavedPlaces';
@@ -13,6 +15,7 @@ import { Widgets } from '../../store/Widgets';
 export struct SavedView {
   onOpen: (place: Place) => void = () => {};
   @StorageLink('saved') saved: Place[] = [];
+  @StorageProp('handsFree') handsFree: boolean = false;
   @StorageProp('topInset') topInset: number = 0;
 
   build() {
@@ -28,23 +31,34 @@ export struct SavedView {
         .fontColor($r('app.color.text_secondary'))
         .margin({ top: 4 })
 
-      if (this.saved.length === 0) {
-        this.Empty()
-      } else {
-        List() {
-          ForEach(this.saved, (place: Place) => {
-            ListItem() {
+      Scroll() {
+        Column() {
+          this.SectionTitle($r('app.string.section_saved'))
+          if (this.saved.length === 0) {
+            Text($r('app.string.saved_empty_short'))
+              .fontSize($r('app.float.font_label'))
+              .fontFamily(Fonts.REGULAR)
+              .fontColor($r('app.color.text_secondary'))
+              .padding({ top: 8, bottom: 8 })
+          } else {
+            ForEach(this.saved, (place: Place) => {
               this.Row(place)
-            }
-            .transition(TransitionEffect.OPACITY.animation({ duration: 200 }))
-          }, (place: Place) => place.id)
+              Divider().color($r('app.color.separator'))
+            }, (place: Place) => place.id)
+          }
+
+          this.SectionTitle($r('app.string.section_settings'))
+          this.HandsFreeRow()
         }
+        .alignItems(HorizontalAlign.Start)
         .width('100%')
-        .layoutWeight(1)
-        .margin({ top: 16 })
-        .scrollBar(BarState.Off)
-        .divider({ strokeWidth: 1, color: $r('app.color.separator') })
       }
+      .width('100%')
+      .layoutWeight(1)
+      .align(Alignment.Top)
+      .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.None)
+      .margin({ top: 8 })
 
       Text($r('app.string.reset'))
         .fontSize($r('app.float.font_caption'))
@@ -100,6 +114,7 @@ export struct SavedView {
     }
     .width('100%')
     .padding({ top: 12, bottom: 12 })
+    .accessibilityText(shortName(place))
     .onClick(() => this.onOpen(place))
   }
 
@@ -120,6 +135,7 @@ export struct SavedView {
   /** Everything back to the first launch: settings, queue with photos, saved places, town, notification. */
   private reset(): void {
     Guide.stop();
+    HandsFree.reset();
     Notifier.reset();
     SavedPlaces.reset();
     PlaceQueue.reset();
@@ -135,22 +151,47 @@ export struct SavedView {
   }
 
   @Builder
-  Empty() {
-    Column({ space: 10 }) {
-      Image($r('app.media.ic_saved_empty')).width(28).height(28)
-      Text($r('app.string.saved_empty_title'))
-        .fontSize($r('app.float.font_title'))
-        .fontFamily(Fonts.EXTRABOLD)
-        .fontColor($r('app.color.text'))
-        .margin({ top: 6 })
-      Text($r('app.string.saved_empty_body'))
-        .fontSize($r('app.float.font_label'))
-        .fontFamily(Fonts.REGULAR)
-        .fontColor($r('app.color.text_secondary'))
-        .textAlign(TextAlign.Center)
+  SectionTitle(title: Resource) {
+    Text(title)
+      .fontSize($r('app.float.font_caption'))
+      .fontFamily(Fonts.BOLD)
+      .fontColor($r('app.color.accent'))
+      .letterSpacing(1.5)
+      .textCase(TextCase.UpperCase)
+      .margin({ top: 24, bottom: 4 })
+      .accessibilityLevel('yes')
+  }
+
+  // Off by default: someone switches it on for the person who will not look at the screen.
+  @Builder
+  HandsFreeRow() {
+    Row({ space: 16 }) {
+      Column({ space: 4 }) {
+        Text($r('app.string.hands_free'))
+          .fontSize($r('app.float.font_body'))
+          .fontFamily(Fonts.BOLD)
+          .fontColor($r('app.color.text'))
+        Text($r('app.string.hands_free_body'))
+          .fontSize($r('app.float.font_small'))
+          .lineHeight(18)
+          .fontFamily(Fonts.REGULAR)
+          .fontColor($r('app.color.text_secondary'))
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+      Toggle({ type: ToggleType.Switch, isOn: this.handsFree })
+        .selectedColor($r('app.color.accent'))
+        .accessibilityText($r('app.string.hands_free'))
+        .onChange((on: boolean) => {
+          Settings.setHandsFree(on);
+          if (!on) {
+            HandsFree.stop();
+          }
+          Guide.restartTimer();
+        })
     }
     .width('100%')
-    .layoutWeight(1)
-    .justifyContent(FlexAlign.Center)
+    .padding({ top: 12, bottom: 12 })
   }
+
 }

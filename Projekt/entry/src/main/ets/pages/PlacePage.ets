@@ -14,6 +14,7 @@ import { Place, placeImage, shortName } from '../model/Place';
 import { Segment } from '../model/Segment';
 import { fetchText } from '../store/LocalFiles';
 import { PlaceQueue } from '../store/PlaceQueue';
+import { HandsFree } from '../store/HandsFree';
 import { narrationWithVoice } from '../store/Narration';
 import { setStatusBarLight } from '../common/StatusBar';
 
@@ -60,6 +61,7 @@ struct PlacePage {
   aboutToAppear(): void {
     setStatusBarLight(this.getUIContext().getHostContext(), true);
     AppStorage.setOrCreate<boolean>('listening', true);   // no notifications while a place is open
+    HandsFree.stop();   // the place screen plays its own story
     const params = this.getUIContext().getRouter().getParams() as PlaceParams;
     this.place = params?.place ?? null;
     if (this.place !== null) {

@@ -6,6 +6,7 @@ import { Interest } from '../model/Segment';
 
 const KEY_ONBOARDED: string = 'onboarded';
 const KEY_INTERESTS: string = 'interests';
+const KEY_HANDS_FREE: string = 'handsFree';
 
 export class Settings {
   private static prefs: preferences.Preferences | null = null;
@@ -15,6 +16,7 @@ export class Settings {
       Settings.prefs = preferences.getPreferencesSync(context, { name: 'tour' });
     }
     AppStorage.setOrCreate<string[]>('interests', Settings.interests());
+    AppStorage.setOrCreate<boolean>('handsFree', Settings.prefs?.getSync(KEY_HANDS_FREE, false) as boolean ?? false);
   }
 
   static onboarded(): boolean {
@@ -35,11 +37,19 @@ export class Settings {
     AppStorage.setOrCreate<string[]>('interests', interests);
   }
 
+  /** "Tryb bez patrzenia": off unless someone switches it on in "Moje". */
+  static setHandsFree(on: boolean): void {
+    Settings.prefs?.putSync(KEY_HANDS_FREE, on);
+    Settings.prefs?.flushSync();
+    AppStorage.setOrCreate<boolean>('handsFree', on);
+  }
+
   /** Back to the first launch: onboarding and interests are asked again. */
   static reset(): void {
     Settings.prefs?.clearSync();
     Settings.prefs?.flushSync();
     AppStorage.setOrCreate<string[]>('interests', []);
+    AppStorage.setOrCreate<boolean>('handsFree', false);
   }
 
   static finishOnboarding(): void {

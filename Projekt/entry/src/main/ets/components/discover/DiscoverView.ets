@@ -178,6 +178,9 @@ export struct DiscoverView {
       .width('100%')
     }
     .width($r('app.float.queue_card_width'))
+    // screen reader: one element per card, read as "name, distance"
+    .accessibilityGroup(true)
+    .accessibilityText(`${shortName(place)}, ${this.distance(place)}`)
     .onClick(() => this.onOpen(place))
   }
 

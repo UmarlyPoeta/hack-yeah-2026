@@ -7,6 +7,7 @@ import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Place } from '../model/Place';
 import { CityInfo } from './CityInfo';
+import { HandsFree } from './HandsFree';
 import { preloadNarration } from './Narration';
 import { MIN_INTERVAL_MS, Notifier } from './Notifier';
 import { PlaceQueue } from './PlaceQueue';
@@ -15,6 +16,8 @@ import { Widgets } from './Widgets';
 
 const DOMAIN: number = 0x0000;
 const TAG: string = 'Guide';
+// hands-free mode checks more often, so the story starts close to the landmark
+const HANDS_FREE_INTERVAL_MS: number = 30000;
 
 export class Guide {
   private static context: common.UIAbilityContext | null = null;
@@ -23,10 +26,14 @@ export class Guide {
 
   static start(context: common.UIAbilityContext): void {
     Guide.context = context;
-    if (Guide.timer === -1) {
-      Guide.timer = setInterval(() => Guide.refresh(), MIN_INTERVAL_MS);
-    }
+    Guide.restartTimer();
     Guide.refresh();
+  }
+
+  /** Interval follows the mode: 30 s in hands-free mode, otherwise 2 minutes. */
+  static restartTimer(): void {
+    clearInterval(Guide.timer);
+    Guide.timer = setInterval(() => Guide.refresh(), HandsFree.enabled() ? HANDS_FREE_INTERVAL_MS : MIN_INTERVAL_MS);
   }
 
   static stop(): void {
@@ -45,6 +52,7 @@ export class Guide {
     }
     CityInfo.update(fix);
     await PlaceQueue.refill(fix);
+    await HandsFree.checkArrival(AppStorage.get<Place[]>('queue') ?? [], fix);
     preloadNarration(AppStorage.get<Place[]>('queue') ?? []);
     Widgets.update(context);
     await Notifier.maybeNotify(context, AppStorage.get<Place[]>('queue') ?? [], fix);
@@ -65,8 +73,14 @@ export class Guide {
         actionFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG],
       });
       // narration playing (with its media session) keeps sounding behind the lock screen
-      const modes: string[] = AppStorage.get<boolean>('audioPlaying') === true ? ['location', 'audioPlayback'] : ['location'];
-      await backgroundTaskManager.startBackgroundRunning(context, modes, agent);
+      // audio: a story is playing, or may start by itself (hands-free) or from the notification
+      const withAudio = AppStorage.get<boolean>('audioPlaying') === true || HandsFree.enabled();
+      try {
+        await backgroundTaskManager.startBackgroundRunning(context, withAudio ? ['location', 'audioPlayback'] : ['location'],
+          agent);
+      } catch (e) {
+        await backgroundTaskManager.startBackgroundRunning(context, ['location'], agent);
+      }
       Guide.background = true;
     } catch (e) {
       hilog.warn(DOMAIN, TAG, 'background running refused: %{public}s', JSON.stringify(e));
