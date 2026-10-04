@@ -59,7 +59,9 @@ Odpowiedzi to JSON w UTF-8 (poza `/v1/audio`). Błędy mają format `{ "error": 
 
 ### `GET /v1/pois?lat=&lon=&radius=`
 - `radius` 50–1000 m, domyślnie 300.
-- `200 { "pois": Poi[], "source": "live"|"cache"|"fixture" }`, posortowane po `distanceM`, maks. 50.
+- `200 { "pois": Poi[], "source": "live"|"cache"|"fixture", "warnings": string[] }`, posortowane po `distanceM`, maks. 50.
+- Serwer szuka w dwóch zasięgach wokół środka komórki ~150 m (#40): najbliższe miejsca (150 m, do 50) oraz ważne miejsca dalej (600 m, tylko `importance ≥ 0.6`), połączone bez duplikatów. Dzięki temu Wawel i katedra nie przegrywają z kamienicami. Parafie, diecezje i organizacje bez budynku są odrzucane (Wikidata P31). Reguły: `server/src/pois/poi-rules.json` (te same w `tools/gen_fixtures.py`).
+- `warnings`: `"wikidata_unavailable"` (role z prefiksów nazw, `partOfId: null`), `"importance_fallback"` (importance z długości streszczenia, bez wyszukiwania dalekiego). Wynik z ostrzeżeniem nie jest zapamiętywany jako świeży.
 - `400 invalid_params`. Gdy upstream nie działa: `200` z `source: "cache"|"fixture"`, nigdy 5xx, jeśli są jakiekolwiek dane.
 
 ### `POST /v1/segment`
