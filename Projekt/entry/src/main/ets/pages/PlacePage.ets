@@ -9,15 +9,13 @@ import { LoadingView } from '../components/place/LoadingView';
 import { BookmarkButton } from '../components/common/BookmarkButton';
 import { splitSentences } from '../guide/Templates';
 import { Place, placeImage, shortName } from '../model/Place';
-import { Segment, SegmentKind, SegmentOrigin } from '../model/Segment';
+import { Segment, SegmentOrigin } from '../model/Segment';
 import { fetchText } from '../store/LocalFiles';
 import { PlaceQueue } from '../store/PlaceQueue';
-import { NARRATION_TIMEOUT_MS, Services } from '../store/Services';
+import { narrationWithVoice } from '../store/Narration';
 import { setStatusBarLight } from '../common/StatusBar';
-import { Settings } from '../store/Settings';
 
 const MAX_PHOTOS: number = 5;
-const NARRATION_WORDS: number = 90;
 
 interface PlaceParams {
   place?: Place;
@@ -326,14 +324,7 @@ struct PlacePage {
   }
 
   private async loadNarration(place: Place): Promise<Segment> {
-    return Services.narration().request({
-      kind: SegmentKind.ARRIVAL,
-      poiId: place.id,
-      fromPoiId: null,
-      interests: Settings.interestList(),
-      maxWords: NARRATION_WORDS,
-      voice: true,
-    }, NARRATION_TIMEOUT_MS);
+    return narrationWithVoice(place);   // the text was preloaded with the queue: this waits for the voice
   }
 
   /** The queue photo first, then other photos of the article (Wikimedia Commons, maps and icons skipped). */

@@ -81,7 +81,7 @@ export class SegmentService {
 
   /** Starts fetching in the background; a later request() with the same input reuses it. */
   prefetch(req: SegmentRequest, deadlineMs: number): void {
-    if (this.isOnline()) {
+    if (this.isOnline() && !this.ready.has(SegmentService.keyOf(req))) {
       this.ensureJob(req, deadlineMs);
     }
   }

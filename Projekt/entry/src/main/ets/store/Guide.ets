@@ -7,6 +7,7 @@ import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Place } from '../model/Place';
 import { CityInfo } from './CityInfo';
+import { preloadNarration } from './Narration';
 import { MIN_INTERVAL_MS, Notifier } from './Notifier';
 import { PlaceQueue } from './PlaceQueue';
 import { UserLocation } from './UserLocation';
@@ -43,6 +44,7 @@ export class Guide {
     }
     CityInfo.update(fix);
     await PlaceQueue.refill(fix);
+    preloadNarration(AppStorage.get<Place[]>('queue') ?? []);
     await Notifier.maybeNotify(context, AppStorage.get<Place[]>('queue') ?? [], fix);
   }
 

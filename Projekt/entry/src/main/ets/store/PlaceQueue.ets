@@ -11,6 +11,7 @@ import { GeoFix } from '../model/GeoPoint';
 import { Poi, PoiRole } from '../model/Poi';
 import { Place, placeFromPoi, poiFromPlace } from '../model/Place';
 import { download, ensureDir, readText, removeFile, writeText } from './LocalFiles';
+import { preloadNarration } from './Narration';
 import { Services } from './Services';
 
 const DOMAIN: number = 0x0000;
@@ -97,6 +98,7 @@ export class PlaceQueue {
         }
         PlaceQueue.places.push(place);
         Services.remember(poi);
+        preloadNarration([place]);   // the text is ready before the user opens the place
         wanted--;
         PlaceQueue.save(fix);   // after every photo, so the screen fills up one card at a time
       }
