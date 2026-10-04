@@ -5,6 +5,8 @@ import { PlaceQueue } from '../store/PlaceQueue';
 import { SavedPlaces } from '../store/SavedPlaces';
 import { Services } from '../store/Services';
 import { Settings } from '../store/Settings';
+import { CityInfo } from '../store/CityInfo';
+import { Guide } from '../store/Guide';
 
 const DOMAIN = 0x0000;
 
@@ -16,6 +18,20 @@ export default class EntryAbility extends UIAbility {
       hilog.error(DOMAIN, 'testTag', 'Failed to set colorMode. Cause: %{public}s', JSON.stringify(err));
     }
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onCreate');
+    this.takePlaceId(want);
+  }
+
+  // tapping the notification while the app is running
+  onNewWant(want: Want, launchParam: AbilityConstant.LaunchParam): void {
+    this.takePlaceId(want);
+  }
+
+  /** Notification "Rozpocznij": MainPage opens AppStorage 'openPlaceId'. */
+  private takePlaceId(want: Want): void {
+    const id = want.parameters?.placeId;
+    if (typeof id === 'string' && id.length > 0) {
+      AppStorage.setOrCreate<string>('openPlaceId', id);
+    }
   }
 
   onDestroy(): void {
@@ -30,6 +46,7 @@ export default class EntryAbility extends UIAbility {
     Settings.init(this.context);
     PlaceQueue.init(this.context);
     SavedPlaces.init(this.context);
+    CityInfo.init(this.context);
 
     windowStage.loadContent(Settings.onboarded() ? 'pages/MainPage' : 'pages/OnboardingPage', (err) => {
       if (err.code) {
@@ -62,9 +79,11 @@ export default class EntryAbility extends UIAbility {
 
   onForeground(): void {
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onForeground');
+    Guide.enterForeground();
   }
 
   onBackground(): void {
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onBackground');
+    Guide.enterBackground();
   }
 }

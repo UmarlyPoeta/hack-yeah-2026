@@ -2,28 +2,36 @@
 import { Fonts } from '../../common/Fonts';
 import { distanceM } from '../../guide/geo';
 import { distanceLabel, Place, placeImage, shortName } from '../../model/Place';
-import { SavedPlaces } from '../../store/SavedPlaces';
-import { Logo, PhotoIconButton, PrimaryButton } from '../common/Controls';
+import { City } from '../../store/CityInfo';
+import { setStatusBarLight } from '../../common/StatusBar';
+import { Logo, PrimaryButton } from '../common/Controls';
+import { BookmarkButton } from '../common/BookmarkButton';
 
 @Component
 export struct DiscoverView {
   onOpen: (place: Place) => void = () => {};
   @StorageLink('queue') queue: Place[] = [];
-  @StorageLink('saved') saved: Place[] = [];
+  @StorageProp('city') city: City | null = null;
+  @State cityExpanded: boolean = false;
   @StorageProp('queueLoading') loading: boolean = false;
   @StorageProp('userLat') userLat: number = 0;
   @StorageProp('userLon') userLon: number = 0;
   @StorageProp('topInset') topInset: number = 0;
+  private scroller: Scroller = new Scroller();
+  private overPhoto: boolean = true;
 
   build() {
     if (this.queue.length === 0) {
       this.Empty()
     } else {
-      Scroll() {
+      Scroll(this.scroller) {
         Column() {
           this.Hero(this.queue[0])
           if (this.queue.length > 1) {
             this.Queue()
+          }
+          if (this.city !== null) {
+            this.CityCard(this.city)
           }
         }
         .width('100%')
@@ -35,6 +43,18 @@ export struct DiscoverView {
       .edgeEffect(EdgeEffect.None)
       .align(Alignment.Top)
       .backgroundColor($r('app.color.surface'))
+      .onDidScroll(() => this.updateStatusBar())
+    }
+  }
+
+  // white status bar icons over the photo, dark ones once white content is under them
+  private updateStatusBar(): void {
+    const ui = this.getUIContext();
+    // hero_height (420 vp) minus the status bar: below that, white content is under the icons
+    const overPhoto = this.scroller.currentOffset().yOffset < 420 - this.topInset - 24;
+    if (overPhoto !== this.overPhoto) {
+      this.overPhoto = overPhoto;
+      setStatusBarLight(ui.getHostContext(), overPhoto);
     }
   }
 
@@ -84,9 +104,7 @@ export struct DiscoverView {
       Row() {
         Logo($r('app.float.font_title'), $r('app.color.on_primary'))
         Blank()
-        PhotoIconButton(this.isSaved(place.id) ? $r('app.media.ic_bookmark_light_on') : $r('app.media.ic_bookmark_light'),
-          this.isSaved(place.id) ? $r('app.string.a11y_unsave') : $r('app.string.a11y_save'),
-          () => SavedPlaces.toggle(place))
+        BookmarkButton({ place: place })
       }
       .width('100%')
       .padding({ left: 20, right: 16 })
@@ -163,6 +181,72 @@ export struct DiscoverView {
     .onClick(() => this.onOpen(place))
   }
 
+  // "Jesteś w": the town from Wikipedia, photo on top, intro that unfolds on tap
+  @Builder
+  CityCard(city: City) {
+    Column() {
+      if (city.imageUrl.length > 0) {
+        Image(city.imageUrl)
+          .width('100%')
+          .height(180)
+          .objectFit(ImageFit.Cover)
+          .borderRadius($r('app.float.radius'))
+          .backgroundColor($r('app.color.placeholder'))
+          .accessibilityText(city.name)
+      }
+      Text($r('app.string.city_label'))
+        .fontSize($r('app.float.font_caption'))
+        .fontFamily(Fonts.BOLD)
+        .fontColor($r('app.color.accent'))
+        .letterSpacing(1.5)
+        .textCase(TextCase.UpperCase)
+        .margin({ top: 16 })
+      Text(city.name)
+        .fontSize($r('app.float.font_hero_title'))
+        .fontFamily(Fonts.EXTRABOLD)
+        .fontColor($r('app.color.text'))
+        .letterSpacing(-0.6)
+        .margin({ top: 4 })
+      if (city.description.length > 0) {
+        Text(city.description)
+          .fontSize($r('app.float.font_small'))
+          .fontFamily(Fonts.MEDIUM)
+          .fontColor($r('app.color.text_secondary'))
+          .margin({ top: 2 })
+      }
+      Text(city.extract)
+        .fontSize($r('app.float.font_body'))
+        .fontFamily(Fonts.REGULAR)
+        .lineHeight(23)
+        .fontColor($r('app.color.text'))
+        .maxLines(this.cityExpanded ? 40 : 4)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .margin({ top: 12 })
+        .animation({ duration: 250, curve: Curve.EaseOut })
+      Row() {
+        Text(this.cityExpanded ? $r('app.string.read_less') : $r('app.string.read_more'))
+          .fontSize($r('app.float.font_label'))
+          .fontFamily(Fonts.BOLD)
+          .fontColor($r('app.color.accent'))
+        Blank()
+        Text($r('app.string.source_wikipedia'))
+          .fontSize($r('app.float.font_caption'))
+          .fontFamily(Fonts.REGULAR)
+          .fontColor($r('app.color.text_muted'))
+      }
+      .width('100%')
+      .constraintSize({ minHeight: $r('app.float.touch_min') })
+      .onClick(() => {
+        this.cityExpanded = !this.cityExpanded;
+      })
+    }
+    .width('100%')
+    .alignItems(HorizontalAlign.Start)
+    .padding({ left: 20, right: 20, top: 28, bottom: 24 })
+    .border({ width: { top: 1 }, color: { top: $r('app.color.separator') } })
+    .margin({ top: 12 })
+  }
+
   @Builder
   Empty() {
     Column({ space: 10 }) {
@@ -181,10 +265,6 @@ export struct DiscoverView {
     .height('100%')
     .justifyContent(FlexAlign.Center)
     .backgroundColor($r('app.color.surface'))
-  }
-
-  private isSaved(id: string): boolean {
-    return this.saved.some((p: Place) => p.id === id);
   }
 
   private distance(place: Place): string {

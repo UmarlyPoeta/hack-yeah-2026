@@ -1,18 +1,19 @@
 // App shell: bottom bar with three tabs (Odkrywaj, Mapa, Zapisane).
-// While the app is open, the landmark queue is refreshed from the user's position every few minutes.
+// Starts the Guide heartbeat (queue, town, notifications) and opens places from notification taps.
 import { Fonts, registerFonts } from '../common/Fonts';
 import { DiscoverView } from '../components/discover/DiscoverView';
 import { MapView } from '../components/map/MapView';
 import { SavedView } from '../components/saved/SavedView';
 import { Place } from '../model/Place';
+import { common } from '@kit.AbilityKit';
+import { Guide } from '../store/Guide';
 import { PlaceQueue } from '../store/PlaceQueue';
-import { UserLocation } from '../store/UserLocation';
+import { SavedPlaces } from '../store/SavedPlaces';
 import { setStatusBarLight } from '../common/StatusBar';
 
 const TAB_DISCOVER: number = 0;
 const TAB_MAP: number = 1;
 const TAB_SAVED: number = 2;
-const REFRESH_INTERVAL_MS: number = 120000;
 
 @Entry
 @Component
@@ -20,23 +21,31 @@ struct MainPage {
   @State tab: number = TAB_DISCOVER;
   @StorageProp('bottomInset') bottomInset: number = 0;
   private tabs: TabsController = new TabsController();
-  private timer: number = -1;
+  @StorageLink('openPlaceId') @Watch('openFromNotification') openPlaceId: string = '';
 
   aboutToAppear(): void {
     registerFonts(this.getUIContext());
+    Guide.start(this.getUIContext().getHostContext() as common.UIAbilityContext);
   }
 
   // back from a place (or from the background): one landmark may have left the queue, so fill it up
   onPageShow(): void {
     setStatusBarLight(this.getUIContext().getHostContext(), this.tab !== TAB_SAVED);
-    this.refresh();
-    clearInterval(this.timer);
-    this.timer = setInterval(() => this.refresh(), REFRESH_INTERVAL_MS);
+    Guide.refresh();
+    this.openFromNotification();
   }
 
-  onPageHide(): void {
-    clearInterval(this.timer);
-    this.timer = -1;
+  /** "Rozpocznij" in the notification: EntryAbility put the place id into AppStorage. */
+  openFromNotification(): void {
+    const id = this.openPlaceId;
+    if (id.length === 0) {
+      return;
+    }
+    this.openPlaceId = '';
+    const place = PlaceQueue.get(id) ?? SavedPlaces.get(id);
+    if (place !== null) {
+      this.open(place);
+    }
   }
 
   build() {
@@ -89,12 +98,5 @@ struct MainPage {
 
   private open(place: Place): void {
     this.getUIContext().getRouter().pushUrl({ url: 'pages/PlacePage', params: { place: place } });
-  }
-
-  private async refresh(): Promise<void> {
-    const fix = (await UserLocation.current()) ?? UserLocation.known();
-    if (fix !== null) {
-      await PlaceQueue.refill(fix);
-    }
   }
 }

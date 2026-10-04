@@ -6,6 +6,7 @@ import { Logo, PrimaryButton } from '../components/common/Controls';
 import { GeoFix } from '../model/GeoPoint';
 import { Place } from '../model/Place';
 import { Interest } from '../model/Segment';
+import { Notifier } from '../store/Notifier';
 import { PlaceQueue } from '../store/PlaceQueue';
 import { Settings } from '../store/Settings';
 import { UserLocation } from '../store/UserLocation';
@@ -240,6 +241,7 @@ struct OnboardingPage {
   private async locate(): Promise<void> {
     const ctx = this.getUIContext().getHostContext() as common.UIAbilityContext;
     const granted = await UserLocation.requestPermission(ctx);
+    await Notifier.enable(ctx);
     this.searching = true;
     let fix: GeoFix | null = granted ? await UserLocation.current() : null;
     if (fix === null) {

@@ -117,6 +117,17 @@ export class PlaceQueue {
     }
   }
 
+  /** Forgets the queue, its photos and the places already shown. */
+  static reset(): void {
+    PlaceQueue.places.forEach((p: Place) => removeFile(p.imageFile));
+    PlaceQueue.places = [];
+    PlaceQueue.seen = [];
+    removeFile(`${PlaceQueue.dir}/queue.json`);
+    AppStorage.setOrCreate<number>('userLat', 0);
+    AppStorage.setOrCreate<number>('userLon', 0);
+    PlaceQueue.publish();
+  }
+
   private static isCandidate(poi: Poi): boolean {
     return poi.role === PoiRole.SIGHT && poi.imageUrl !== null && poi.summary.length > 0 &&
       PlaceQueue.get(poi.id) === null && !PlaceQueue.seen.includes(poi.id);

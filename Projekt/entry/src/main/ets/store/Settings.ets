@@ -35,6 +35,13 @@ export class Settings {
     AppStorage.setOrCreate<string[]>('interests', interests);
   }
 
+  /** Back to the first launch: onboarding and interests are asked again. */
+  static reset(): void {
+    Settings.prefs?.clearSync();
+    Settings.prefs?.flushSync();
+    AppStorage.setOrCreate<string[]>('interests', []);
+  }
+
   static finishOnboarding(): void {
     Settings.prefs?.putSync(KEY_ONBOARDED, true);
     Settings.prefs?.flushSync();

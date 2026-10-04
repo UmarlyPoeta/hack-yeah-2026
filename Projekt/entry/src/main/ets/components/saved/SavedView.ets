@@ -1,7 +1,12 @@
 // "Zapisane" tab: landmarks saved for later (SavedPlaces), newest first.
 import { Fonts } from '../../common/Fonts';
 import { Place, placeImage, shortName } from '../../model/Place';
+import { CityInfo } from '../../store/CityInfo';
+import { Guide } from '../../store/Guide';
+import { Notifier } from '../../store/Notifier';
+import { PlaceQueue } from '../../store/PlaceQueue';
 import { SavedPlaces } from '../../store/SavedPlaces';
+import { Settings } from '../../store/Settings';
 
 @Component
 export struct SavedView {
@@ -39,6 +44,20 @@ export struct SavedView {
         .scrollBar(BarState.Off)
         .divider({ strokeWidth: 1, color: $r('app.color.separator') })
       }
+
+      Button({ type: ButtonType.Normal }) {
+        Text($r('app.string.reset'))
+          .fontSize($r('app.float.font_label'))
+          .fontFamily(Fonts.BOLD)
+          .fontColor($r('app.color.danger'))
+      }
+      .width('100%')
+      .height($r('app.float.button_secondary_height'))
+      .borderRadius($r('app.float.radius'))
+      .backgroundColor(Color.Transparent)
+      .border({ width: 1, color: $r('app.color.separator'), radius: $r('app.float.radius') })
+      .margin({ top: 12, bottom: 16 })
+      .onClick(() => this.confirmReset())
     }
     .width('100%')
     .height('100%')
@@ -86,6 +105,33 @@ export struct SavedView {
     .width('100%')
     .padding({ top: 12, bottom: 12 })
     .onClick(() => this.onOpen(place))
+  }
+
+  private confirmReset(): void {
+    this.getUIContext().showAlertDialog({
+      title: $r('app.string.reset_title'),
+      message: $r('app.string.reset_body'),
+      autoCancel: true,
+      primaryButton: { value: $r('app.string.cancel'), action: () => {} },
+      secondaryButton: {
+        value: $r('app.string.reset_confirm'),
+        fontColor: $r('app.color.danger'),
+        action: () => this.reset(),
+      },
+    });
+  }
+
+  /** Everything back to the first launch: settings, queue with photos, saved places, town, notification. */
+  private reset(): void {
+    Guide.stop();
+    Notifier.reset();
+    SavedPlaces.reset();
+    PlaceQueue.reset();
+    CityInfo.reset();
+    Settings.reset();
+    const router = this.getUIContext().getRouter();
+    router.clear();
+    router.replaceUrl({ url: 'pages/OnboardingPage' });
   }
 
   @Builder

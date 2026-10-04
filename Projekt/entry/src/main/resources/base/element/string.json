@@ -211,6 +211,42 @@
     {
       "name": "perm_location_reason",
       "value": "Do znalezienia zabytków w pobliżu."
+    },
+    {
+      "name": "city_label",
+      "value": "Jesteś w"
+    },
+    {
+      "name": "read_more",
+      "value": "Czytaj dalej"
+    },
+    {
+      "name": "read_less",
+      "value": "Zwiń"
+    },
+    {
+      "name": "reset",
+      "value": "Zresetuj aplikację"
+    },
+    {
+      "name": "reset_title",
+      "value": "Zresetować aplikację?"
+    },
+    {
+      "name": "reset_body",
+      "value": "Znikną zapisane miejsca, kolejka zabytków i ustawienia. Aplikacja zacznie od powitania."
+    },
+    {
+      "name": "reset_confirm",
+      "value": "Zresetuj"
+    },
+    {
+      "name": "cancel",
+      "value": "Anuluj"
+    },
+    {
+      "name": "perm_background_reason",
+      "value": "Szukanie zabytków w pobliżu, gdy aplikacja działa w tle."
     }
   ]
 }

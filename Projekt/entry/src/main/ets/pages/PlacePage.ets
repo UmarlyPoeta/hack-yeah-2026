@@ -6,12 +6,12 @@ import { NarratorPlayer, PlaybackListener } from '../audio/NarratorPlayer';
 import { Fonts } from '../common/Fonts';
 import { PhotoIconButton, PrimaryButton } from '../components/common/Controls';
 import { LoadingView } from '../components/place/LoadingView';
+import { BookmarkButton } from '../components/common/BookmarkButton';
 import { splitSentences } from '../guide/Templates';
 import { Place, placeImage, shortName } from '../model/Place';
 import { Segment, SegmentKind, SegmentOrigin } from '../model/Segment';
 import { fetchText } from '../store/LocalFiles';
 import { PlaceQueue } from '../store/PlaceQueue';
-import { SavedPlaces } from '../store/SavedPlaces';
 import { NARRATION_TIMEOUT_MS, Services } from '../store/Services';
 import { setStatusBarLight } from '../common/StatusBar';
 import { Settings } from '../store/Settings';
@@ -51,7 +51,6 @@ struct PlacePage {
   @State positionMs: number = 0;
   @State durationMs: number = 0;
   @State showMore: boolean = false;
-  @StorageLink('saved') saved: Place[] = [];
   @StorageProp('topInset') topInset: number = 0;
   @StorageProp('bottomInset') bottomInset: number = 0;
   private player: NarratorPlayer = new NarratorPlayer();
@@ -59,6 +58,7 @@ struct PlacePage {
 
   aboutToAppear(): void {
     setStatusBarLight(this.getUIContext().getHostContext(), true);
+    AppStorage.setOrCreate<boolean>('listening', true);   // no notifications while a place is open
     const params = this.getUIContext().getRouter().getParams() as PlaceParams;
     this.place = params?.place ?? null;
     if (this.place !== null) {
@@ -71,6 +71,7 @@ struct PlacePage {
   // leaving the place (back button or system back) stops the narration
   aboutToDisappear(): void {
     this.player.release();
+    AppStorage.setOrCreate<boolean>('listening', false);
     setStatusBarLight(this.getUIContext().getHostContext(), true);   // back to the photo on "Odkrywaj"
     if (this.place !== null && !this.loading) {
       PlaceQueue.visited(this.place.id);
@@ -165,9 +166,7 @@ struct PlacePage {
           this.getUIContext().getRouter().back();
         })
         Blank()
-        PhotoIconButton(this.isSaved(place.id) ? $r('app.media.ic_bookmark_light_on') : $r('app.media.ic_bookmark_light'),
-          this.isSaved(place.id) ? $r('app.string.a11y_unsave') : $r('app.string.a11y_save'),
-          () => SavedPlaces.toggle(place))
+        BookmarkButton({ place: place })
       }
       .width('100%')
       .padding({ left: 16, right: 16 })
@@ -405,10 +404,6 @@ struct PlacePage {
       return $r('app.string.narration_ai');
     }
     return $r('app.string.narration_template');
-  }
-
-  private isSaved(id: string): boolean {
-    return this.saved.some((p: Place) => p.id === id);
   }
 
   private progress(): number {

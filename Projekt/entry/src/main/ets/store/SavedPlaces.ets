@@ -80,6 +80,12 @@ export class SavedPlaces {
     SavedPlaces.save();
   }
 
+  static reset(): void {
+    SavedPlaces.places.forEach((p: Place) => removeFile(p.imageFile));
+    SavedPlaces.places = [];
+    SavedPlaces.save();
+  }
+
   private static save(): void {
     writeText(`${SavedPlaces.dir}/saved.json`, JSON.stringify(SavedPlaces.places));
     SavedPlaces.publish();
