@@ -40,7 +40,7 @@ interface Segment {
   claims: Claim[];            // [] dla szablonów
   origin: "ai" | "template";
   llmModel: string | null;    // np. "bielik-4.5b-v3.0-instruct:Q8_0"
-  audioUrl: string | null;    // "/v1/audio/<id>.mp3" albo null (brak TTS)
+  audioUrl: string | null;    // "/v1/audio/<audioId>.mp3" (audioId = hash głosu i tekstu) albo null (brak TTS)
   durationMs: number | null;  // prawdziwa długość audio
   voice: string | null;       // "elevenlabs:<voice>" | "piper:pl_PL-gosia-medium"
   sourceUrls: string[];
@@ -59,7 +59,9 @@ Odpowiedzi to JSON w UTF-8 (poza `/v1/audio`). Błędy mają format `{ "error": 
 
 ### `GET /v1/pois?lat=&lon=&radius=`
 - `radius` 50–1000 m, domyślnie 300.
-- `200 { "pois": Poi[], "source": "live"|"cache"|"fixture" }`, posortowane po `distanceM`, maks. 50.
+- `200 { "pois": Poi[], "source": "live"|"cache"|"fixture", "warnings": string[] }`, posortowane po `distanceM`, maks. 50.
+- Serwer szuka w dwóch zasięgach wokół środka komórki ~150 m (#40): najbliższe miejsca (150 m, do 50) oraz ważne miejsca dalej (600 m, tylko `importance ≥ 0.6`), połączone bez duplikatów. Dzięki temu Wawel i katedra nie przegrywają z kamienicami. Parafie, diecezje i organizacje bez budynku są odrzucane (Wikidata P31). Reguły: `server/src/pois/poi-rules.json` (te same w `tools/gen_fixtures.py`).
+- `warnings`: `"wikidata_unavailable"` (role z prefiksów nazw, `partOfId: null`), `"importance_fallback"` (importance z długości streszczenia, bez wyszukiwania dalekiego). Wynik z ostrzeżeniem nie jest zapamiętywany jako świeży.
 - `400 invalid_params`. Gdy upstream nie działa: `200` z `source: "cache"|"fixture"`, nigdy 5xx, jeśli są jakiekolwiek dane.
 
 ### `POST /v1/segment`
@@ -70,11 +72,13 @@ Odpowiedzi to JSON w UTF-8 (poza `/v1/audio`). Błędy mają format `{ "error": 
 - Serwer sam bierze tekst źródłowy z cache POI. **Nie przyjmuje tekstu źródłowego od klienta** (ochrona przed prompt injection).
 - `APPROACH` i `MISSED` są generowane z szablonu (krótkie, deterministyczne), a TTS jest opcjonalny.
 - `200 Segment` także przy awarii LLM albo TTS, wtedy z `origin`/`warnings` odpowiednio.
+- `maxWords` serwer zaokrągla w górę do wielokrotności 10 (cache i `npm run warm` działają na tych przedziałach).
+- `voice: true`: tekst AI czyta ElevenLabs (zapasowo Piper), tekst z szablonu tylko Piper (oszczędza limit znaków ElevenLabs). `warnings`: `tts_fallback_piper`, `tts_unavailable`.
 - `404 unknown_poi`, `400 invalid_params`.
 - Timeouty serwera: LLM 45 s (`DEEP_DIVE` 90 s), TTS 20 s. Klient ma deadline z plannera; po nim używa szablonu lokalnie.
 
-### `GET /v1/audio/<segmentId>.mp3`
-`200 audio/mpeg` z cache albo `404`.
+### `GET /v1/audio/<audioId>.mp3`
+`200 audio/mpeg` z cache albo `404`. Adres bierzemy wyłącznie z `Segment.audioUrl`; ten sam tekst tym samym głosem ma zawsze ten sam `audioId`.
 
 ## Łącze między urządzeniami (`link/DeviceLink.ets`, #50, #51)
 
@@ -110,6 +114,8 @@ Przekaźnik na serwerze (#51) przenosi `LinkMessage` bez zaglądania do środka.
 | BRIDGE | „Idziemy dalej. Przed nami {next.name}.” |
 | DEEP_DIVE | pierwsze ~6 zdań `summary` |
 | MISSED | „Po {lewej/prawej} minęliśmy {name}.” |
+
+Nazwy miejsc są w mianowniku, więc szablon nie może ich odmieniać („minęliśmy {name}” daje „minęliśmy Kamienica Czyncielów”). Serwer (nie zna pozycji, #25) używa form z dwukropkiem: BRIDGE „Za nami: {from.name}. Idziemy dalej, przed nami: {name}.”, MISSED „Właśnie minęliśmy: {name}.”, APPROACH „Tuż przed nami: {name}.”. Aplikacja powinna przejść na ten sam wzorzec.
 
 ## Konfiguracja aplikacji
 `Projekt/entry/src/main/ets/data/ApiConfig.ets`: `API_BASE_URL` (np. `http://192.168.x.y:8787`; pusty = tryb offline), `REQUEST_TIMEOUT_MS = 20000` (`/v1/pois`), `SEGMENT_TIMEOUT_MS = 50000` i `DEEP_DIVE_TIMEOUT_MS = 95000` (`/v1/segment`: dłuższe niż timeouty LLM serwera, żeby spóźniona odpowiedź mogła jeszcze zastąpić szablon). Deadline z plannera jest krótszy: po nim `SegmentService` od razu oddaje lokalny szablon. `SegmentService` zamienia względny `audioUrl` na pełny adres (`API_BASE_URL + audioUrl`), gotowy dla AVPlayera. HTTP bez TLS działa w modelu Stage bez dodatkowej konfiguracji (FAQ Network Kit), wystarczy uprawnienie `INTERNET`.

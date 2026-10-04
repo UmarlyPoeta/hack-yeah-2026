@@ -85,8 +85,8 @@ function poisHandler(poiService) {
     if (radius === null || radius < RADIUS_MIN || radius > RADIUS_MAX) {
       throw invalid(`radius must be a number in [${RADIUS_MIN}, ${RADIUS_MAX}]`);
     }
-    const { pois, source } = await poiService.near(lat, lon, Math.round(radius));
-    sendJson(res, 200, { pois, source });
+    const { pois, source, warnings } = await poiService.near(lat, lon, Math.round(radius));
+    sendJson(res, 200, { pois, source, warnings });
   };
 }
 

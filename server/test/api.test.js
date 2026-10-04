@@ -2,9 +2,9 @@
 import assert from 'node:assert/strict';
 import { after, before, describe, it } from 'node:test';
 import { createApp } from '../src/http/app.js';
-import { BARBAKAN, failingFetch, listen, makeService, recorded, replayFetch } from './helpers.js';
+import { BARBAKAN, failingFetch, listen, makeService, recorded, routedFetch, WAWEL } from './helpers.js';
 
-const POI_KEYS = ['distanceM', 'id', 'imageUrl', 'kind', 'lat', 'lon', 'name', 'sourceUrl', 'summary', 'wikidataId'];
+const POI_KEYS = ['distanceM', 'id', 'imageUrl', 'importance', 'kind', 'lat', 'lon', 'name', 'partOfId', 'role', 'sourceUrl', 'summary', 'wikidataId'];
 
 function assertError(body, code) {
   assert.deepEqual(Object.keys(body), ['error']);
@@ -19,7 +19,7 @@ describe('HTTP API', () => {
 
   before(async () => {
     logs = [];
-    svc = makeService({ fetch: replayFetch(recorded('geosearch-barbakan.json')) });
+    svc = makeService({ fetch: routedFetch(recorded('area-wawel.json')) });
     app = await listen(createApp({ poiService: svc, log: (m) => logs.push(m) }));
   });
   after(() => app.close());
@@ -37,9 +37,11 @@ describe('HTTP API', () => {
   });
 
   it('GET /v1/pois returns Poi[] per contract', async () => {
-    const { status, body } = await get(`/v1/pois?lat=${BARBAKAN.lat}&lon=${BARBAKAN.lon}&radius=300`);
+    const { status, body } = await get(`/v1/pois?lat=${WAWEL.lat}&lon=${WAWEL.lon}&radius=300`);
     assert.equal(status, 200);
     assert.ok(['live', 'cache', 'fixture'].includes(body.source));
+    assert.deepEqual(Object.keys(body).sort(), ['pois', 'source', 'warnings']);
+    assert.ok(Array.isArray(body.warnings));
     assert.ok(body.pois.length > 0 && body.pois.length <= 50);
     for (const p of body.pois) {
       assert.deepEqual(Object.keys(p).sort(), POI_KEYS);
@@ -53,11 +55,14 @@ describe('HTTP API', () => {
       assert.ok(p.imageUrl === null || p.imageUrl.startsWith('https://'));
       assert.ok(p.sourceUrl.startsWith('https://pl.wikipedia.org/'));
       assert.ok(Number.isInteger(p.distanceM) && p.distanceM <= 300);
+      assert.ok(typeof p.importance === 'number' && p.importance >= 0 && p.importance <= 1);
+      assert.ok(p.role === 'sight' || p.role === 'area');
+      assert.ok(p.partOfId === null || /^plwiki:\d+$/.test(p.partOfId));
     }
   });
 
   it('radius defaults to 300', async () => {
-    const { body } = await get(`/v1/pois?lat=${BARBAKAN.lat}&lon=${BARBAKAN.lon}`);
+    const { body } = await get(`/v1/pois?lat=${WAWEL.lat}&lon=${WAWEL.lon}`);
     assert.ok(body.pois.every((p) => p.distanceM <= 300));
     assert.ok(body.pois.some((p) => p.distanceM > 150));
   });
@@ -94,9 +99,9 @@ describe('HTTP API', () => {
   });
 
   it('never logs the query string (user position)', async () => {
-    await get(`/v1/pois?lat=${BARBAKAN.lat}&lon=${BARBAKAN.lon}`);
+    await get(`/v1/pois?lat=${WAWEL.lat}&lon=${WAWEL.lon}`);
     assert.ok(logs.length > 0);
-    assert.ok(logs.every((l) => !l.includes(String(BARBAKAN.lat)) && !l.includes('lat=')), logs.join('\n'));
+    assert.ok(logs.every((l) => !l.includes(String(WAWEL.lat)) && !l.includes('lat=')), logs.join('\n'));
   });
 });
 

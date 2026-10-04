@@ -25,8 +25,9 @@ export class JsonCache {
     return this.entries.get(key)?.value;
   }
 
-  set(key, value) {
-    this.entries.set(key, { at: this.now(), value });
+  /** `stale: true` stores the value for getStale() only, so get() still misses and the caller retries. */
+  set(key, value, { stale = false } = {}) {
+    this.entries.set(key, { at: stale ? Number.MIN_SAFE_INTEGER : this.now(), value });
     this.#save();
   }
 

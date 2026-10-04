@@ -11,6 +11,9 @@
     "start": "node --env-file-if-exists=.env src/index.js",
     "dev": "node --watch --env-file-if-exists=.env src/index.js",
     "test": "node --test test/*.test.js",
-    "record-fixtures": "node scripts/record-wiki-fixtures.js"
+    "record-fixtures": "node scripts/record-wiki-fixtures.js",
+    "warm": "node --env-file-if-exists=.env scripts/warm.js",
+    "tts-smoke": "node --env-file-if-exists=.env scripts/tts-smoke.js",
+    "eval": "node --env-file-if-exists=.env eval/run.js"
   }
 }
